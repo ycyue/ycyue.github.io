@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>plong&#39;s blog</title>
+  
+  <subtitle>记录 AI 学习、技术实践与日常思考</subtitle>
+  <link href="https://ycyue.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://ycyue.github.io/"/>
+  <updated>2026-08-29T09:48:40.611Z</updated>
+  <id>https://ycyue.github.io/</id>
+  
+  <author>
+    <name>plong</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>博客发布流程已打通</title>
+    <link href="https://ycyue.github.io/2026/08/29/blog-pipeline-ready/"/>
+    <id>https://ycyue.github.io/2026/08/29/blog-pipeline-ready/</id>
+    <published>2026-08-29T10:00:00.000Z</published>
+    <updated>2026-08-29T09:48:40.611Z</updated>
+    
+    <content type="html"><![CDATA[<p>这是一篇用于验证完整发布链路的文章。</p><p>现在只要在 <code>source/_posts/</code> 中新增或修改 Markdown 文件并推送到 GitHub，系统就会自动生成网页并更新博客。无需手工编辑 HTML。</p><p>完整流程是：</p><ol><li>使用 Markdown 编写文章；</li><li>提交到 GitHub 仓库；</li><li>GitHub Actions 自动运行 Hexo；</li><li>生成后的页面更新到 GitHub Pages；</li><li>任何人都可以通过公开链接阅读。</li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;这是一篇用于验证完整发布链路的文章。&lt;/p&gt;
+&lt;p&gt;现在只要在 &lt;code&gt;source/_posts/&lt;/code&gt; 中新增或修改 Markdown 文件并推送到 GitHub，系统就会自动生成网页并更新博客。无需手工编辑 HTML。&lt;/p&gt;
+&lt;p&gt;完整流程是：&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    <category term="博客" scheme="https://ycyue.github.io/categories/%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="GitHub Pages" scheme="https://ycyue.github.io/tags/GitHub-Pages/"/>
+    
+    <category term="Hexo" scheme="https://ycyue.github.io/tags/Hexo/"/>
+    
+  </entry>
+  
+</feed>
