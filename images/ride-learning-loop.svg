@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">RIDE 学习法四阶段</title>
+  <desc id="desc">从侦察、定位、深钻到执行与萃取的循环学习流程</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f3eb"/>
+      <stop offset="1" stop-color="#e8eef0"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#253238" flood-opacity=".12"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" rx="30" fill="url(#bg)"/>
+  <text x="76" y="92" fill="#243238" font-size="50" font-weight="700" font-family="system-ui, -apple-system, 'Noto Sans SC', sans-serif">RIDE 学习法</text>
+  <text x="78" y="137" fill="#607178" font-size="24" font-family="system-ui, -apple-system, 'Noto Sans SC', sans-serif">从“知道”走向“能够完成真实任务”</text>
+  <path d="M205 330 C280 220 420 220 495 330 S710 440 785 330 S1000 220 1065 330" fill="none" stroke="#90a2a8" stroke-width="5" stroke-dasharray="10 13"/>
+  <g filter="url(#shadow)" font-family="system-ui, -apple-system, 'Noto Sans SC', sans-serif">
+    <g transform="translate(90 225)">
+      <rect width="230" height="230" rx="26" fill="#ffffff"/>
+      <circle cx="50" cy="52" r="28" fill="#d96b45"/>
+      <text x="50" y="62" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">R</text>
+      <text x="28" y="112" fill="#243238" font-size="30" font-weight="700">侦察</text>
+      <text x="28" y="151" fill="#607178" font-size="20">先看全景，建立地图</text>
+      <text x="28" y="184" fill="#607178" font-size="20">不急着钻进细节</text>
+    </g>
+    <g transform="translate(365 225)">
+      <rect width="230" height="230" rx="26" fill="#ffffff"/>
+      <circle cx="50" cy="52" r="28" fill="#d6a23f"/>
+      <text x="50" y="62" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">I</text>
+      <text x="28" y="112" fill="#243238" font-size="30" font-weight="700">定位</text>
+      <text x="28" y="151" fill="#607178" font-size="20">选择一个突破点</text>
+      <text x="28" y="184" fill="#607178" font-size="20">优先解除最大阻塞</text>
+    </g>
+    <g transform="translate(640 225)">
+      <rect width="230" height="230" rx="26" fill="#ffffff"/>
+      <circle cx="50" cy="52" r="28" fill="#4f8f8b"/>
+      <text x="50" y="62" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">D</text>
+      <text x="28" y="112" fill="#243238" font-size="30" font-weight="700">深钻</text>
+      <text x="28" y="151" fill="#607178" font-size="20">先尝试，再精准求助</text>
+      <text x="28" y="184" fill="#607178" font-size="20">用复述检验理解</text>
+    </g>
+    <g transform="translate(915 225)">
+      <rect width="230" height="230" rx="26" fill="#ffffff"/>
+      <circle cx="50" cy="52" r="28" fill="#5c7396"/>
+      <text x="50" y="62" text-anchor="middle" fill="#fff" font-size="30" font-weight="700">E</text>
+      <text x="28" y="112" fill="#243238" font-size="30" font-weight="700">执行与萃取</text>
+      <text x="28" y="151" fill="#607178" font-size="20">用产出获得反馈</text>
+      <text x="28" y="184" fill="#607178" font-size="20">更新地图，进入下一轮</text>
+    </g>
+  </g>
+  <text x="600" y="540" text-anchor="middle" fill="#44575e" font-size="24" font-weight="600" font-family="system-ui, -apple-system, 'Noto Sans SC', sans-serif">真实任务 → 反馈 → 反思 → 下一轮</text>
+  <text x="600" y="580" text-anchor="middle" fill="#7b8a8f" font-size="18" font-family="system-ui, -apple-system, 'Noto Sans SC', sans-serif">最小启动知识 · 主动提取 · 间隔复习</text>
+</svg>
