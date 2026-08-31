@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "source/**"
+      - "scripts/**"
       - "_config.yml"
       - "_config.typography.yml"
       - "package.json"

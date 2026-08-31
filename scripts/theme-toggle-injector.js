@@ -2,6 +2,7 @@
 
 const headMarkup = `
 <link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
 <script>
 (function () {
   var storageKey = 'plong-theme';
@@ -37,7 +38,12 @@ hexo.extend.filter.register('after_render:html', function (html) {
   }
 
   return html
+    .replace(/<li><a href="\/(?:css|js)\/[^\"]+"><\/a><\/li>/g, '')
+    .replace(
+      /<p class="post-abstract">([\s\S]*?)<\/p><\/div><div class="share">/,
+      '<div class="post-abstract">$1</div></div><div class="share">'
+    )
     .replace('</head>', `${headMarkup}</head>`)
     .replace('<li class="soc">', `${toggleMarkup}<li class="soc">`)
-    .replace('</body>', '<script src="/js/theme-toggle.js"></script></body>');
+    .replace('</body>', '<script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body>');
 });
