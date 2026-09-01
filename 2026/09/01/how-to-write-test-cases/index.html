@@ -1,0 +1,340 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>怎么写测试用例？从需求分析到完整用例表 · plong's blog</title><meta name="description" content="面向零基础学习者，讲清楚如何从需求中提取测试点，使用正常、异常、边界、空值和场景思维，写出可执行、可判断的测试用例。"><meta name="og:description" content="面向零基础学习者，讲清楚如何从需求中提取测试点，使用正常、异常、边界、空值和场景思维，写出可执行、可判断的测试用例。"><meta name="twitter:site" content="plong's blog"><meta name="twitter:title" content="怎么写测试用例？从需求分析到完整用例表"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>怎么写测试用例？从需求分析到完整用例表</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-02</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/软件测试/" title="软件测试">软件测试</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/软件测试/" title="软件测试">软件测试</a><span>&nbsp;</span><a class="a-tag" href="/tags/测试用例/" title="测试用例">测试用例</a><span>&nbsp;</span><a class="a-tag" href="/tags/黑盒测试/" title="黑盒测试">黑盒测试</a><span>&nbsp;</span></span></p><div class="post-abstract"><p>刚开始学习软件测试时，很多人知道要写测试用例，却不知道面对一句需求该从哪里下手。要么只写“输入正确账号可以登录”这种正常情况，要么列了很多测试点，却没有写清操作步骤和预期结果。</p>
+<p>写测试用例的核心并不复杂：</p>
+<blockquote>
+<p>把需求拆成可以执行、可以观察、可以判断结果的检查项。</p>
+</blockquote>
+<p>一条完整的测试用例，需要回答四个问题：<strong>测试什么、在什么条件下测试、怎么操作、什么结果才算正确。</strong></p>
+<h2 id="一、测试用例是什么"><a href="#一、测试用例是什么" class="headerlink" title="一、测试用例是什么"></a>一、测试用例是什么</h2><p>测试用例是为了验证某个功能或业务规则而设计的一组条件、步骤、数据和预期结果。</p>
+<p>例如需求是：</p>
+<blockquote>
+<p>已注册用户输入正确的手机号和密码后，可以成功登录。</p>
+</blockquote>
+<p>“测试登录功能”只是一个笼统的测试任务，不是一条可以直接执行的用例。把它写成下面这样，执行者才知道具体怎么测：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用例编号</td>
+<td>LOGIN_001</td>
+</tr>
+<tr>
+<td>用例标题</td>
+<td>使用正确手机号和密码登录成功</td>
+</tr>
+<tr>
+<td>前置条件</td>
+<td>测试账号已注册且未被禁用</td>
+</tr>
+<tr>
+<td>测试数据</td>
+<td>手机号：13800000000；密码：Abc123456</td>
+</tr>
+<tr>
+<td>操作步骤</td>
+<td>1. 打开登录页；2. 输入手机号和密码；3. 点击“登录”</td>
+</tr>
+<tr>
+<td>预期结果</td>
+<td>登录成功，进入首页，并显示当前用户信息</td>
+</tr>
+</tbody></table>
+<p>好的测试用例应该让另一个没有参与设计的人也能照着执行，并对结果作出相同判断。</p>
+<h2 id="二、一条测试用例通常包含哪些字段"><a href="#二、一条测试用例通常包含哪些字段" class="headerlink" title="二、一条测试用例通常包含哪些字段"></a>二、一条测试用例通常包含哪些字段</h2><p>实际公司的模板会有差异，但常用字段基本相同：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用例编号</td>
+<td>唯一标识用例，例如 <code>LOGIN_001</code></td>
+</tr>
+<tr>
+<td>所属模块</td>
+<td>表明用例属于登录、注册或购物车等模块</td>
+</tr>
+<tr>
+<td>用例标题</td>
+<td>用一句话说明测试条件和预期行为</td>
+</tr>
+<tr>
+<td>优先级</td>
+<td>表示用例的重要程度，常用 P0、P1、P2</td>
+</tr>
+<tr>
+<td>前置条件</td>
+<td>执行前必须满足的账号、数据和环境条件</td>
+</tr>
+<tr>
+<td>测试数据</td>
+<td>本次测试实际使用的输入值</td>
+</tr>
+<tr>
+<td>操作步骤</td>
+<td>按顺序写出可执行的操作</td>
+</tr>
+<tr>
+<td>预期结果</td>
+<td>每一步或最终应该出现的可观察结果</td>
+</tr>
+<tr>
+<td>实际结果</td>
+<td>执行测试后记录系统的真实表现</td>
+</tr>
+<tr>
+<td>执行结果</td>
+<td>Pass、Fail 或 Blocked</td>
+</tr>
+</tbody></table>
+<p>初学时不需要追求字段越多越好。最重要的是标题、前置条件、步骤、数据和预期结果都明确。</p>
+<h2 id="三、从需求到测试用例的四个步骤"><a href="#三、从需求到测试用例的四个步骤" class="headerlink" title="三、从需求到测试用例的四个步骤"></a>三、从需求到测试用例的四个步骤</h2><h3 id="第一步：读懂需求，找出规则"><a href="#第一步：读懂需求，找出规则" class="headerlink" title="第一步：读懂需求，找出规则"></a>第一步：读懂需求，找出规则</h3><p>不要看到页面就立刻开始写用例。先圈出需求中的对象、条件、限制、动作和结果。</p>
+<p>例如：</p>
+<blockquote>
+<p>用户使用中国大陆手机号登录。手机号必须为 11 位；密码为 8～20 个字符；连续输错 5 次后，账号锁定 30 分钟。</p>
+</blockquote>
+<p>可以拆出四条规则：</p>
+<ol>
+<li>手机号只能使用规定格式；</li>
+<li>手机号长度必须为 11 位；</li>
+<li>密码长度为 8～20 个字符；</li>
+<li>密码连续错误 5 次会触发账号锁定，30 分钟后解除。</li>
+</ol>
+<p>如果需求中有不明确的地方，例如“连续输错”是否跨设备累计、锁定期间输入正确密码是否允许登录，就应该先向产品或需求负责人确认，而不是自己猜测。</p>
+<h3 id="第二步：把每条规则拆成测试点"><a href="#第二步：把每条规则拆成测试点" class="headerlink" title="第二步：把每条规则拆成测试点"></a>第二步：把每条规则拆成测试点</h3><p>初学阶段可以使用“正、反、边、空、异”检查是否遗漏：</p>
+<ul>
+<li><strong>正</strong>：符合规则的正常情况；</li>
+<li><strong>反</strong>：不符合规则的错误情况；</li>
+<li><strong>边</strong>：刚好位于限制边界及边界两侧的情况；</li>
+<li><strong>空</strong>：必填项为空、只输入空格或未选择；</li>
+<li><strong>异</strong>：网络中断、重复点击、服务异常等特殊情况。</li>
+</ul>
+<p>继续以上面的登录需求为例，可以得到这些测试点：</p>
+<ul>
+<li>正确手机号和正确密码；</li>
+<li>正确手机号和错误密码；</li>
+<li>未注册手机号；</li>
+<li>手机号为空、密码为空、两者都为空；</li>
+<li>手机号为 10 位、11 位、12 位；</li>
+<li>密码为 7 位、8 位、20 位、21 位；</li>
+<li>手机号包含字母、空格或特殊字符；</li>
+<li>密码连续错误第 4 次、第 5 次和锁定后的登录行为；</li>
+<li>锁定 30 分钟前后分别尝试登录；</li>
+<li>点击登录时断网；</li>
+<li>快速连续点击登录按钮。</li>
+</ul>
+<h3 id="第三步：选择合适的设计方法"><a href="#第三步：选择合适的设计方法" class="headerlink" title="第三步：选择合适的设计方法"></a>第三步：选择合适的设计方法</h3><p>“正、反、边、空、异”适合帮助新手建立检查意识，但要系统设计用例，还需要使用正式方法。</p>
+<h4 id="1-等价类划分"><a href="#1-等价类划分" class="headerlink" title="1. 等价类划分"></a>1. 等价类划分</h4><p>把大量输入划分为具有相同行为的类别，每类选择有代表性的数据，不需要穷举所有值。</p>
+<p>以“密码长度为 8～20 位”为例：</p>
+<ul>
+<li>有效等价类：8～20 位；</li>
+<li>无效等价类：少于 8 位；</li>
+<li>无效等价类：多于 20 位；</li>
+<li>无效等价类：空值。</li>
+</ul>
+<h4 id="2-边界值分析"><a href="#2-边界值分析" class="headerlink" title="2. 边界值分析"></a>2. 边界值分析</h4><p>错误最容易出现在范围边缘，所以要检查边界本身和边界相邻值。</p>
+<p>密码长度为 8～20 位时，重点数据是：</p>
+<table>
+<thead>
+<tr>
+<th align="right">长度</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">7</td>
+<td>提示密码长度不合法</td>
+</tr>
+<tr>
+<td align="right">8</td>
+<td>允许输入并提交</td>
+</tr>
+<tr>
+<td align="right">9</td>
+<td>允许输入并提交</td>
+</tr>
+<tr>
+<td align="right">19</td>
+<td>允许输入并提交</td>
+</tr>
+<tr>
+<td align="right">20</td>
+<td>允许输入并提交</td>
+</tr>
+<tr>
+<td align="right">21</td>
+<td>提示密码长度不合法</td>
+</tr>
+</tbody></table>
+<p>也可以记成“边界内、边界上、边界外”。</p>
+<h4 id="3-场景法"><a href="#3-场景法" class="headerlink" title="3. 场景法"></a>3. 场景法</h4><p>按用户完成业务的过程设计用例，既覆盖主流程，也覆盖中断和失败流程。</p>
+<p>登录的主流程是“输入账号密码—校验成功—进入首页”；异常流程可能包括密码错误、账号锁定、验证码失效和网络中断。</p>
+<h4 id="4-判定表"><a href="#4-判定表" class="headerlink" title="4. 判定表"></a>4. 判定表</h4><p>当多个条件组合会产生不同结果时，可以先列条件组合，再转成用例。例如“账号是否存在、密码是否正确、账号是否锁定”三个条件同时影响登录结果，使用判定表比凭感觉组合更不容易遗漏。</p>
+<h3 id="第四步：把测试点写成可执行用例"><a href="#第四步：把测试点写成可执行用例" class="headerlink" title="第四步：把测试点写成可执行用例"></a>第四步：把测试点写成可执行用例</h3><p>测试点只说明“要测什么”，测试用例还必须说明“怎么测”和“如何判断”。下面是一组简化后的登录用例：</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例标题</th>
+<th>前置条件</th>
+<th>测试数据</th>
+<th>操作步骤</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LOGIN_001</td>
+<td>正确手机号和密码登录成功</td>
+<td>账号已注册且正常</td>
+<td>正确手机号、正确密码</td>
+<td>输入数据并点击登录</td>
+<td>登录成功并进入首页</td>
+</tr>
+<tr>
+<td>LOGIN_002</td>
+<td>正确手机号配错误密码登录失败</td>
+<td>账号已注册且正常</td>
+<td>正确手机号、错误密码</td>
+<td>输入数据并点击登录</td>
+<td>登录失败，提示账号或密码错误，不进入首页</td>
+</tr>
+<tr>
+<td>LOGIN_003</td>
+<td>手机号为空时不能登录</td>
+<td>无</td>
+<td>手机号为空、有效密码</td>
+<td>输入密码并点击登录</td>
+<td>提示手机号不能为空，不发送登录请求</td>
+</tr>
+<tr>
+<td>LOGIN_004</td>
+<td>10 位手机号不能登录</td>
+<td>无</td>
+<td>10 位数字、有效密码</td>
+<td>输入数据并点击登录</td>
+<td>提示手机号格式错误</td>
+</tr>
+<tr>
+<td>LOGIN_005</td>
+<td>密码长度刚好为 8 位</td>
+<td>存在密码为 8 位的账号</td>
+<td>正确手机号、8 位正确密码</td>
+<td>输入数据并点击登录</td>
+<td>登录成功并进入首页</td>
+</tr>
+<tr>
+<td>LOGIN_006</td>
+<td>连续第 5 次输错密码后锁定账号</td>
+<td>账号已连续输错 4 次</td>
+<td>正确手机号、错误密码</td>
+<td>再次输入错误密码并登录</td>
+<td>登录失败，提示账号已锁定 30 分钟</td>
+</tr>
+<tr>
+<td>LOGIN_007</td>
+<td>锁定期间输入正确密码仍不能登录</td>
+<td>账号处于锁定状态</td>
+<td>正确手机号、正确密码</td>
+<td>输入数据并点击登录</td>
+<td>登录失败，提示账号仍处于锁定状态</td>
+</tr>
+<tr>
+<td>LOGIN_008</td>
+<td>网络中断时提交登录</td>
+<td>设备已断网</td>
+<td>正确手机号、正确密码</td>
+<td>输入数据并点击登录</td>
+<td>页面给出网络异常提示，不出现无限加载或崩溃</td>
+</tr>
+</tbody></table>
+<h2 id="四、怎样写好用例标题、步骤和预期结果"><a href="#四、怎样写好用例标题、步骤和预期结果" class="headerlink" title="四、怎样写好用例标题、步骤和预期结果"></a>四、怎样写好用例标题、步骤和预期结果</h2><h3 id="标题要包含条件和结果"><a href="#标题要包含条件和结果" class="headerlink" title="标题要包含条件和结果"></a>标题要包含条件和结果</h3><p>不推荐：</p>
+<blockquote>
+<p>测试登录功能</p>
+</blockquote>
+<p>推荐：</p>
+<blockquote>
+<p>已注册用户使用正确手机号和密码登录成功</p>
+</blockquote>
+<p>标题应该让人不打开详情，也能知道这条用例在验证什么。</p>
+<h3 id="步骤要具体，但不要写无意义动作"><a href="#步骤要具体，但不要写无意义动作" class="headerlink" title="步骤要具体，但不要写无意义动作"></a>步骤要具体，但不要写无意义动作</h3><p>“正常操作并登录”太模糊；“启动电脑、打开浏览器”在大多数网页测试中又过于琐碎。</p>
+<p>步骤应该从当前前置条件之后开始，并写清关键操作：</p>
+<ol>
+<li>打开登录页；</li>
+<li>在手机号输入框输入指定号码；</li>
+<li>在密码输入框输入指定密码；</li>
+<li>点击“登录”。</li>
+</ol>
+<h3 id="预期结果必须可观察、可判断"><a href="#预期结果必须可观察、可判断" class="headerlink" title="预期结果必须可观察、可判断"></a>预期结果必须可观察、可判断</h3><p>不推荐：</p>
+<blockquote>
+<p>系统正常。</p>
+</blockquote>
+<p>推荐：</p>
+<blockquote>
+<p>登录成功，页面跳转到首页；右上角显示当前用户昵称；刷新页面后仍保持登录状态。</p>
+</blockquote>
+<p>“正常”“正确”“没有问题”都缺少判断标准。预期结果应描述页面、数据、提示、状态或请求发生了什么变化。</p>
+<h2 id="五、写完以后怎样检查"><a href="#五、写完以后怎样检查" class="headerlink" title="五、写完以后怎样检查"></a>五、写完以后怎样检查</h2><p>可以从以下几个方面做一次自查：</p>
+<ol>
+<li><strong>需求覆盖</strong>：每条明确的业务规则是否至少有一条用例验证；</li>
+<li><strong>正反覆盖</strong>：既有成功流程，也有失败流程；</li>
+<li><strong>边界覆盖</strong>：长度、数量、时间和金额等限制是否检查了边界内外；</li>
+<li><strong>步骤可执行</strong>：其他人是否能在不询问你的情况下完成操作；</li>
+<li><strong>结果可判断</strong>：Pass 和 Fail 是否有清楚标准；</li>
+<li><strong>用例独立</strong>：执行顺序改变后，是否仍能得到稳定结果；</li>
+<li><strong>数据明确</strong>：手机号、账号状态和次数等数据是否写清楚。</li>
+</ol>
+<p>用例并不是越多越好。大量重复用例会提高维护成本，却不一定增加有效覆盖。应该优先保证核心业务、常用流程、高风险功能和历史缺陷得到充分验证。</p>
+<h2 id="六、初学者常见错误"><a href="#六、初学者常见错误" class="headerlink" title="六、初学者常见错误"></a>六、初学者常见错误</h2><h3 id="只测试正常流程"><a href="#只测试正常流程" class="headerlink" title="只测试正常流程"></a>只测试正常流程</h3><p>真实缺陷往往出现在错误输入、边界条件、状态切换和异常操作中。每看到一条规则，都要问一句：“不满足它会怎样？”</p>
+<h3 id="把测试点当成完整用例"><a href="#把测试点当成完整用例" class="headerlink" title="把测试点当成完整用例"></a>把测试点当成完整用例</h3><p>“密码为空”“手机号错误”可以作为测试点，但缺少前置条件、数据、步骤和预期结果时，还不能直接交给别人执行。</p>
+<h3 id="一条用例验证太多事情"><a href="#一条用例验证太多事情" class="headerlink" title="一条用例验证太多事情"></a>一条用例验证太多事情</h3><p>如果一条用例同时验证手机号格式、密码边界、账号锁定和网络异常，失败后很难判断是哪条规则出了问题。一般让一条用例有一个明确的主要验证目标。</p>
+<h3 id="预期结果照抄需求"><a href="#预期结果照抄需求" class="headerlink" title="预期结果照抄需求"></a>预期结果照抄需求</h3><p>需求写“登录成功”，用例也只写“登录成功”，仍然不够具体。需要说明跳转页面、用户状态、提示信息以及必要的数据变化。</p>
+<h3 id="不记录测试数据"><a href="#不记录测试数据" class="headerlink" title="不记录测试数据"></a>不记录测试数据</h3><p>只写“输入正确账号”会导致用例无法复现。应该写明账号本身，或者写清可以从哪里取得满足条件的测试账号。</p>
+<h2 id="七、适合新手的练习方法"><a href="#七、适合新手的练习方法" class="headerlink" title="七、适合新手的练习方法"></a>七、适合新手的练习方法</h2><p>可以依次选择登录、注册、搜索、购物车和订单提交五个常见模块练习。每个模块都按同一个过程完成：</p>
+<ol>
+<li>写出一段简短需求；</li>
+<li>圈出其中的业务规则；</li>
+<li>使用等价类、边界值和场景法列测试点；</li>
+<li>把测试点整理成正式用例表；</li>
+<li>用需求逐条检查覆盖情况；</li>
+<li>让别人只看用例执行一次，找出不清楚的地方。</li>
+</ol>
+<p>写测试用例不是套模板，而是把需求转化为可验证的规则。真正需要掌握的流程是：</p>
+<blockquote>
+<p><strong>读需求 → 拆规则 → 找测试点 → 选设计方法 → 写步骤和预期结果 → 检查覆盖。</strong></p>
+</blockquote>
+<p>先把一个登录模块写清楚，再逐步扩展到注册、购物车和订单流程，比一次背完所有测试方法更有效。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io/2026/09/01/how-to-write-test-cases/%20plong's blog%20怎么写测试用例？从需求分析到完整用例表"></a></span></div><div class="pagination"><p class="clearfix"><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/08/30/ride-learning-method-principles-and-practice/" title="RIDE Learning Coach：原理、边界与 Chat ↔ Work 完整使用流程">下一篇: RIDE Learning Coach：原理、边界与 Chat ↔ Work 完整使用流程&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>
