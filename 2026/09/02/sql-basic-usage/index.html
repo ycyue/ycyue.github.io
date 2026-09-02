@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>SQL 基础用法：从查询到增删改的入门指南 · plong's blog</title><meta name="description" content="SQL 是操作关系型数据库的通用语言。MySQL、PostgreSQL、SQLite 和 SQL Server 的细节略有差异，但核心查询思路基本一致。对于开发和软件测试岗位，重点是能够读取数据、构造测试数据、验证业务结果，并安全地执行修改操作。
+
+
+1. 表、行、列与主键关系型数据库以表保存数据："><meta name="og:description" content="SQL 是操作关系型数据库的通用语言。MySQL、PostgreSQL、SQLite 和 SQL Server 的细节略有差异，但核心查询思路基本一致。对于开发和软件测试岗位，重点是能够读取数据、构造测试数据、验证业务结果，并安全地执行修改操作。
+
+
+1. 表、行、列与主键关系型数据库以表保存数据："><meta name="twitter:site" content="plong's blog"><meta name="twitter:title" content="SQL 基础用法：从查询到增删改的入门指南"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>SQL 基础用法：从查询到增删改的入门指南</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-02</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/数据库/" title="数据库">数据库</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/软件测试/" title="软件测试">软件测试</a><span>&nbsp;</span><a class="a-tag" href="/tags/SQL/" title="SQL">SQL</a><span>&nbsp;</span><a class="a-tag" href="/tags/MySQL/" title="MySQL">MySQL</a><span>&nbsp;</span><a class="a-tag" href="/tags/数据库/" title="数据库">数据库</a><span>&nbsp;</span></span></p><div class="post-abstract"><p>SQL 是操作关系型数据库的通用语言。MySQL、PostgreSQL、SQLite 和 SQL Server 的细节略有差异，但核心查询思路基本一致。对于开发和软件测试岗位，重点是能够读取数据、构造测试数据、验证业务结果，并安全地执行修改操作。</p>
+<span id="more"></span>
+
+<h2 id="1-表、行、列与主键"><a href="#1-表、行、列与主键" class="headerlink" title="1. 表、行、列与主键"></a>1. 表、行、列与主键</h2><p>关系型数据库以表保存数据：</p>
+<ul>
+<li>表：一类数据的集合，例如用户表。</li>
+<li>行：一条完整记录，例如一个用户。</li>
+<li>列：记录的某个属性，例如用户名。</li>
+<li>主键：唯一标识一行数据的字段。</li>
+<li>外键：建立两张表之间的关联。</li>
+</ul>
+<p>本文使用两张示例表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> users (</span><br><span class="line">    id <span class="type">INTEGER</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    email <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">UNIQUE</span>,</span><br><span class="line">    age <span class="type">INTEGER</span>,</span><br><span class="line">    city <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    created_at <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> orders (</span><br><span class="line">    id <span class="type">INTEGER</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    user_id <span class="type">INTEGER</span> <span class="keyword">NOT NULL</span>,</span><br><span class="line">    amount <span class="type">DECIMAL</span>(<span class="number">10</span>, <span class="number">2</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    status <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    created_at <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span>,</span><br><span class="line">    <span class="keyword">FOREIGN KEY</span> (user_id) <span class="keyword">REFERENCES</span> users(id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>不同数据库的自增主键写法不同。例如 MySQL 常用 <code>AUTO_INCREMENT</code>，PostgreSQL 可使用 identity 列。</p>
+<h2 id="2-查询数据：SELECT"><a href="#2-查询数据：SELECT" class="headerlink" title="2. 查询数据：SELECT"></a>2. 查询数据：SELECT</h2><p>查询全部列：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users;</span><br></pre></td></tr></table></figure>
+
+<p>生产项目中更推荐明确写出需要的列：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, name, email</span><br><span class="line"><span class="keyword">FROM</span> users;</span><br></pre></td></tr></table></figure>
+
+<p>使用别名提高结果可读性：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> name <span class="keyword">AS</span> user_name, created_at <span class="keyword">AS</span> register_time</span><br><span class="line"><span class="keyword">FROM</span> users;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-筛选数据：WHERE"><a href="#3-筛选数据：WHERE" class="headerlink" title="3. 筛选数据：WHERE"></a>3. 筛选数据：WHERE</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, name, age</span><br><span class="line"><span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">WHERE</span> age <span class="operator">&gt;=</span> <span class="number">18</span>;</span><br></pre></td></tr></table></figure>
+
+<p>多个条件：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">WHERE</span> age <span class="operator">&gt;=</span> <span class="number">18</span></span><br><span class="line">  <span class="keyword">AND</span> city <span class="operator">=</span> <span class="string">&#x27;西安&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>常用筛选方式：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 多个候选值</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> city <span class="keyword">IN</span> (<span class="string">&#x27;西安&#x27;</span>, <span class="string">&#x27;北京&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 范围，包含两端</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> age <span class="keyword">BETWEEN</span> <span class="number">18</span> <span class="keyword">AND</span> <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 模糊匹配：% 表示任意长度字符</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> name <span class="keyword">LIKE</span> <span class="string">&#x27;张%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 判断空值</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> email <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>NULL</code> 表示未知或缺失，不能写成 <code>email = NULL</code>，应使用 <code>IS NULL</code> 或 <code>IS NOT NULL</code>。</p>
+<h2 id="4-排序与限制结果数量"><a href="#4-排序与限制结果数量" class="headerlink" title="4. 排序与限制结果数量"></a>4. 排序与限制结果数量</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, name, age</span><br><span class="line"><span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> age <span class="keyword">DESC</span>, id <span class="keyword">ASC</span></span><br><span class="line">LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>ASC</code>：升序，默认值。</li>
+<li><code>DESC</code>：降序。</li>
+<li><code>LIMIT 10</code>：最多返回 10 行。</li>
+</ul>
+<p>分页查询常见写法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> id</span><br><span class="line">LIMIT <span class="number">10</span> <span class="keyword">OFFSET</span> <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这表示跳过前 20 行，再返回 10 行。数据量很大时，应考虑基于主键的分页方式。</p>
+<h2 id="5-去重：DISTINCT"><a href="#5-去重：DISTINCT" class="headerlink" title="5. 去重：DISTINCT"></a>5. 去重：DISTINCT</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> city</span><br><span class="line"><span class="keyword">FROM</span> users;</span><br></pre></td></tr></table></figure>
+
+<p><code>DISTINCT</code> 对所选列的组合进行去重。</p>
+<h2 id="6-聚合函数"><a href="#6-聚合函数" class="headerlink" title="6. 聚合函数"></a>6. 聚合函数</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> user_count,</span><br><span class="line">    <span class="built_in">AVG</span>(age) <span class="keyword">AS</span> average_age,</span><br><span class="line">    <span class="built_in">MIN</span>(age) <span class="keyword">AS</span> minimum_age,</span><br><span class="line">    <span class="built_in">MAX</span>(age) <span class="keyword">AS</span> maximum_age</span><br><span class="line"><span class="keyword">FROM</span> users;</span><br></pre></td></tr></table></figure>
+
+<p>统计订单总额：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(amount) <span class="keyword">AS</span> total_amount</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">WHERE</span> status <span class="operator">=</span> <span class="string">&#x27;paid&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>COUNT(*)</code> 统计行数，<code>COUNT(email)</code> 只统计 <code>email</code> 不为 <code>NULL</code> 的行。</p>
+<h2 id="7-分组：GROUP-BY-与-HAVING"><a href="#7-分组：GROUP-BY-与-HAVING" class="headerlink" title="7. 分组：GROUP BY 与 HAVING"></a>7. 分组：GROUP BY 与 HAVING</h2><p>按城市统计用户数量：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> city, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> user_count</span><br><span class="line"><span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> city</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> user_count <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>只保留用户数不少于 2 的城市：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> city, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> user_count</span><br><span class="line"><span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> city</span><br><span class="line"><span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="operator">&gt;=</span> <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>WHERE</code> 在分组前筛选行，<code>HAVING</code> 在分组后筛选聚合结果。</p>
+<h2 id="8-多表连接：JOIN"><a href="#8-多表连接：JOIN" class="headerlink" title="8. 多表连接：JOIN"></a>8. 多表连接：JOIN</h2><p>查询订单及其用户信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    o.id <span class="keyword">AS</span> order_id,</span><br><span class="line">    u.name <span class="keyword">AS</span> user_name,</span><br><span class="line">    o.amount,</span><br><span class="line">    o.status</span><br><span class="line"><span class="keyword">FROM</span> orders <span class="keyword">AS</span> o</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> users <span class="keyword">AS</span> u</span><br><span class="line">    <span class="keyword">ON</span> o.user_id <span class="operator">=</span> u.id;</span><br></pre></td></tr></table></figure>
+
+<p>常见连接：</p>
+<ul>
+<li><code>INNER JOIN</code>：只保留两边能匹配的记录。</li>
+<li><code>LEFT JOIN</code>：保留左表全部记录，右表无法匹配时显示 <code>NULL</code>。</li>
+</ul>
+<p>查询从未下单的用户：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> u.id, u.name</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o</span><br><span class="line">    <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">WHERE</span> o.id <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-子查询"><a href="#9-子查询" class="headerlink" title="9. 子查询"></a>9. 子查询</h2><p>查询订单总额高于平均值的订单：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, user_id, amount</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">WHERE</span> amount <span class="operator">&gt;</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">AVG</span>(amount)</span><br><span class="line">    <span class="keyword">FROM</span> orders</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>子查询有助于表达分步骤逻辑，但复杂场景也可以考虑连接或公共表表达式。</p>
+<h2 id="10-新增数据：INSERT"><a href="#10-新增数据：INSERT" class="headerlink" title="10. 新增数据：INSERT"></a>10. 新增数据：INSERT</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT INTO</span> users (id, name, email, age, city)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="string">&#x27;小明&#x27;</span>, <span class="string">&#x27;xiaoming@example.com&#x27;</span>, <span class="number">22</span>, <span class="string">&#x27;西安&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>一次插入多行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT INTO</span> users (id, name, email, age, city)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">    (<span class="number">2</span>, <span class="string">&#x27;小红&#x27;</span>, <span class="string">&#x27;xiaohong@example.com&#x27;</span>, <span class="number">24</span>, <span class="string">&#x27;北京&#x27;</span>),</span><br><span class="line">    (<span class="number">3</span>, <span class="string">&#x27;小李&#x27;</span>, <span class="string">&#x27;xiaoli@example.com&#x27;</span>, <span class="number">20</span>, <span class="string">&#x27;西安&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>应明确列名，避免表结构变化导致数据错位。</p>
+<h2 id="11-修改数据：UPDATE"><a href="#11-修改数据：UPDATE" class="headerlink" title="11. 修改数据：UPDATE"></a>11. 修改数据：UPDATE</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> users</span><br><span class="line"><span class="keyword">SET</span> city <span class="operator">=</span> <span class="string">&#x27;上海&#x27;</span>, age <span class="operator">=</span> <span class="number">23</span></span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>执行修改前，先用相同条件查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果忘记 <code>WHERE</code>，所有行都可能被更新。</p>
+<h2 id="12-删除数据：DELETE"><a href="#12-删除数据：DELETE" class="headerlink" title="12. 删除数据：DELETE"></a>12. 删除数据：DELETE</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>同样应先执行对应的 <code>SELECT</code>，确认目标行准确无误。</p>
+<p><code>DELETE</code> 删除数据行；<code>DROP TABLE users</code> 会删除整张表及其结构，风险完全不同。</p>
+<h2 id="13-事务"><a href="#13-事务" class="headerlink" title="13. 事务"></a>13. 事务</h2><p>事务让一组操作要么全部成功，要么全部失败。以转账为例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> accounts</span><br><span class="line"><span class="keyword">SET</span> balance <span class="operator">=</span> balance <span class="operator">-</span> <span class="number">100</span></span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> accounts</span><br><span class="line"><span class="keyword">SET</span> balance <span class="operator">=</span> balance <span class="operator">+</span> <span class="number">100</span></span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果中途发现问题，可以执行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ROLLBACK</span>;</span><br></pre></td></tr></table></figure>
+
+<p>不同数据库的事务语法和自动提交设置可能不同，在修改生产数据前必须确认当前环境。</p>
+<h2 id="14-约束"><a href="#14-约束" class="headerlink" title="14. 约束"></a>14. 约束</h2><p>约束用于保证数据质量：</p>
+<ul>
+<li><code>PRIMARY KEY</code>：主键，唯一且非空。</li>
+<li><code>NOT NULL</code>：不允许空值。</li>
+<li><code>UNIQUE</code>：不允许重复。</li>
+<li><code>DEFAULT</code>：设置默认值。</li>
+<li><code>CHECK</code>：限制数据范围。</li>
+<li><code>FOREIGN KEY</code>：维护表之间的引用关系。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> products (</span><br><span class="line">    id <span class="type">INTEGER</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    price <span class="type">DECIMAL</span>(<span class="number">10</span>, <span class="number">2</span>) <span class="keyword">CHECK</span> (price <span class="operator">&gt;=</span> <span class="number">0</span>),</span><br><span class="line">    status <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="string">&#x27;active&#x27;</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h2 id="15-索引基础"><a href="#15-索引基础" class="headerlink" title="15. 索引基础"></a>15. 索引基础</h2><p>索引可以加速查询，但会占用空间，并增加写入成本。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX idx_users_email</span><br><span class="line"><span class="keyword">ON</span> users(email);</span><br></pre></td></tr></table></figure>
+
+<p>通常适合为经常出现在 <code>WHERE</code>、<code>JOIN</code> 和 <code>ORDER BY</code> 中的列设计索引。不要看到查询慢就随意添加大量索引，应先查看执行计划。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> email <span class="operator">=</span> <span class="string">&#x27;xiaoming@example.com&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="16-SQL-执行顺序"><a href="#16-SQL-执行顺序" class="headerlink" title="16. SQL 执行顺序"></a>16. SQL 执行顺序</h2><p>理解逻辑执行顺序有助于读懂复杂查询：</p>
+<ol>
+<li><code>FROM</code> &#x2F; <code>JOIN</code></li>
+<li><code>WHERE</code></li>
+<li><code>GROUP BY</code></li>
+<li><code>HAVING</code></li>
+<li><code>SELECT</code></li>
+<li><code>DISTINCT</code></li>
+<li><code>ORDER BY</code></li>
+<li><code>LIMIT</code></li>
+</ol>
+<p>这也解释了为什么聚合后的条件通常写在 <code>HAVING</code> 中。</p>
+<h2 id="17-安全与常见错误"><a href="#17-安全与常见错误" class="headerlink" title="17. 安全与常见错误"></a>17. 安全与常见错误</h2><h3 id="防止-SQL-注入"><a href="#防止-SQL-注入" class="headerlink" title="防止 SQL 注入"></a>防止 SQL 注入</h3><p>应用程序中不要直接拼接用户输入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不安全示例</span></span><br><span class="line">sql = <span class="string">f&quot;SELECT * FROM users WHERE name = &#x27;<span class="subst">&#123;name&#125;</span>&#x27;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>应使用数据库驱动提供的参数化查询。占位符写法因驱动而异：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cursor.execute(</span><br><span class="line">    <span class="string">&quot;SELECT * FROM users WHERE name = %s&quot;</span>,</span><br><span class="line">    (name,),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他常见问题"><a href="#其他常见问题" class="headerlink" title="其他常见问题"></a>其他常见问题</h3><ul>
+<li>字符串通常使用单引号。</li>
+<li><code>NULL</code> 需要用 <code>IS NULL</code> 判断。</li>
+<li>多表查询应明确列属于哪张表。</li>
+<li>修改或删除前先执行对应的查询。</li>
+<li>测试环境与生产环境要明确区分。</li>
+<li>业务代码中的数据库账户应遵循最小权限原则。</li>
+</ul>
+<h2 id="18-软件测试中的-SQL-场景"><a href="#18-软件测试中的-SQL-场景" class="headerlink" title="18. 软件测试中的 SQL 场景"></a>18. 软件测试中的 SQL 场景</h2><h3 id="验证注册结果"><a href="#验证注册结果" class="headerlink" title="验证注册结果"></a>验证注册结果</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, name, email, created_at</span><br><span class="line"><span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">WHERE</span> email <span class="operator">=</span> <span class="string">&#x27;xiaoming@example.com&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证订单状态和金额"><a href="#验证订单状态和金额" class="headerlink" title="验证订单状态和金额"></a>验证订单状态和金额</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, user_id, amount, status</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">10001</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="查找重复数据"><a href="#查找重复数据" class="headerlink" title="查找重复数据"></a>查找重复数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> email, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> count</span><br><span class="line"><span class="keyword">FROM</span> users</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> email</span><br><span class="line"><span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="operator">&gt;</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="检查孤立订单"><a href="#检查孤立订单" class="headerlink" title="检查孤立订单"></a>检查孤立订单</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> o.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> orders <span class="keyword">AS</span> o</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> users <span class="keyword">AS</span> u</span><br><span class="line">    <span class="keyword">ON</span> o.user_id <span class="operator">=</span> u.id</span><br><span class="line"><span class="keyword">WHERE</span> u.id <span class="keyword">IS</span> <span class="keyword">NULL</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="19-入门练习"><a href="#19-入门练习" class="headerlink" title="19. 入门练习"></a>19. 入门练习</h2><ol>
+<li>查询年龄在 18 到 25 岁之间的西安用户。</li>
+<li>统计每种订单状态的数量和总金额。</li>
+<li>查询订单总金额最高的三个用户。</li>
+<li>查询最近 7 天注册但没有下单的用户。</li>
+<li>在事务中创建订单并扣减库存，任一步失败时回滚。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>SQL 学习的主线是 <code>SELECT → WHERE → ORDER BY → GROUP BY → JOIN → 增删改 → 事务与索引</code>。初学阶段应多写查询，并养成修改前先查询、明确环境、控制权限的习惯。掌握这些内容后，就可以继续学习数据库设计、执行计划、性能优化和在 Python 中访问数据库。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io/2026/09/02/sql-basic-usage/%20plong's blog%20SQL 基础用法：从查询到增删改的入门指南"></a></span></div><div class="pagination"><p class="clearfix"><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/02/linux-basic-usage/" title="Linux 基础用法：开发与测试常用命令入门">下一篇: Linux 基础用法：开发与测试常用命令入门&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

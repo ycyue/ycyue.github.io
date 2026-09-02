@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author"><title>Linux 基础用法：开发与测试常用命令入门 · plong's blog</title><meta name="description" content="Linux 广泛用于服务器、云平台、容器和开发环境。初学者不需要立刻学习系统底层，只要先掌握文件操作、权限、进程、日志和网络排查，就能完成大部分开发与软件测试任务。
+
+
+1. 终端、Shell 与命令终端是输入命令的界面，Shell 是解释并执行命令的程序，常见 Shell 有 Bash 和 Zsh"><meta name="og:description" content="Linux 广泛用于服务器、云平台、容器和开发环境。初学者不需要立刻学习系统底层，只要先掌握文件操作、权限、进程、日志和网络排查，就能完成大部分开发与软件测试任务。
+
+
+1. 终端、Shell 与命令终端是输入命令的界面，Shell 是解释并执行命令的程序，常见 Shell 有 Bash 和 Zsh"><meta name="twitter:site" content="plong's blog"><meta name="twitter:title" content="Linux 基础用法：开发与测试常用命令入门"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>Linux 基础用法：开发与测试常用命令入门</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-02</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/开发工具/" title="开发工具">开发工具</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/软件测试/" title="软件测试">软件测试</a><span>&nbsp;</span><a class="a-tag" href="/tags/Linux/" title="Linux">Linux</a><span>&nbsp;</span><a class="a-tag" href="/tags/命令行/" title="命令行">命令行</a><span>&nbsp;</span></span></p><div class="post-abstract"><p>Linux 广泛用于服务器、云平台、容器和开发环境。初学者不需要立刻学习系统底层，只要先掌握文件操作、权限、进程、日志和网络排查，就能完成大部分开发与软件测试任务。</p>
+<span id="more"></span>
+
+<h2 id="1-终端、Shell-与命令"><a href="#1-终端、Shell-与命令" class="headerlink" title="1. 终端、Shell 与命令"></a>1. 终端、Shell 与命令</h2><p>终端是输入命令的界面，Shell 是解释并执行命令的程序，常见 Shell 有 Bash 和 Zsh。</p>
+<p>一条命令通常由“命令 + 选项 + 参数”组成：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -la /var/log</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>ls</code>：命令。</li>
+<li><code>-la</code>：选项。</li>
+<li><code>/var/log</code>：操作目标。</li>
+</ul>
+<p>可以使用帮助了解陌生命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">man <span class="built_in">ls</span></span><br><span class="line"><span class="built_in">ls</span> --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Linux-目录结构"><a href="#2-Linux-目录结构" class="headerlink" title="2. Linux 目录结构"></a>2. Linux 目录结构</h2><ul>
+<li><code>/</code>：根目录，所有目录的起点。</li>
+<li><code>/home</code>：普通用户的主目录。</li>
+<li><code>/etc</code>：系统和软件配置文件。</li>
+<li><code>/var/log</code>：日志文件。</li>
+<li><code>/tmp</code>：临时文件。</li>
+<li><code>/usr/bin</code>：常用可执行程序。</li>
+<li><code>/opt</code>：第三方软件常见安装位置。</li>
+</ul>
+<p>路径分为绝对路径和相对路径。<code>/home/user/app</code> 是绝对路径，<code>./app</code> 是相对当前目录的路径。</p>
+<h2 id="3-查看与切换目录"><a href="#3-查看与切换目录" class="headerlink" title="3. 查看与切换目录"></a>3. 查看与切换目录</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pwd</span>                 <span class="comment"># 显示当前目录</span></span><br><span class="line"><span class="built_in">ls</span>                  <span class="comment"># 列出目录内容</span></span><br><span class="line"><span class="built_in">ls</span> -l               <span class="comment"># 显示详细信息</span></span><br><span class="line"><span class="built_in">ls</span> -la              <span class="comment"># 包含隐藏文件</span></span><br><span class="line"><span class="built_in">cd</span> /var/log         <span class="comment"># 进入指定目录</span></span><br><span class="line"><span class="built_in">cd</span> ..               <span class="comment"># 返回上一级</span></span><br><span class="line"><span class="built_in">cd</span> -                <span class="comment"># 返回上一次所在目录</span></span><br><span class="line"><span class="built_in">cd</span>                  <span class="comment"># 返回当前用户主目录</span></span><br></pre></td></tr></table></figure>
+
+<p>Linux 中以 <code>.</code> 开头的文件通常是隐藏文件。</p>
+<h2 id="4-创建、复制、移动和删除"><a href="#4-创建、复制、移动和删除" class="headerlink" title="4. 创建、复制、移动和删除"></a>4. 创建、复制、移动和删除</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> project                 <span class="comment"># 创建目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p project/logs/nginx   <span class="comment"># 递归创建多级目录</span></span><br><span class="line"><span class="built_in">touch</span> app.py                  <span class="comment"># 创建空文件或更新时间</span></span><br><span class="line"><span class="built_in">cp</span> app.py app_backup.py       <span class="comment"># 复制文件</span></span><br><span class="line"><span class="built_in">cp</span> -r project project_copy    <span class="comment"># 复制目录</span></span><br><span class="line"><span class="built_in">mv</span> old.txt new.txt            <span class="comment"># 重命名</span></span><br><span class="line"><span class="built_in">mv</span> app.py project/            <span class="comment"># 移动文件</span></span><br><span class="line"><span class="built_in">rm</span> file.txt                   <span class="comment"># 删除文件</span></span><br><span class="line"><span class="built_in">rmdir</span> empty_dir               <span class="comment"># 删除空目录</span></span><br></pre></td></tr></table></figure>
+
+<p><code>rm</code> 删除后通常不会进入回收站。使用 <code>rm -r</code> 前必须确认当前目录和目标路径，避免误删。</p>
+<h2 id="5-查看文件内容"><a href="#5-查看文件内容" class="headerlink" title="5. 查看文件内容"></a>5. 查看文件内容</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> config.txt             <span class="comment"># 输出整个文件</span></span><br><span class="line">less large.log             <span class="comment"># 分页查看大文件</span></span><br><span class="line"><span class="built_in">head</span> -n 20 app.log         <span class="comment"># 查看前 20 行</span></span><br><span class="line"><span class="built_in">tail</span> -n 20 app.log         <span class="comment"># 查看后 20 行</span></span><br><span class="line"><span class="built_in">tail</span> -f app.log            <span class="comment"># 持续查看新增日志</span></span><br><span class="line"><span class="built_in">wc</span> -l app.log              <span class="comment"># 统计行数</span></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>less</code> 中按 <code>/</code> 搜索，按 <code>n</code> 跳到下一个结果，按 <code>q</code> 退出。</p>
+<h2 id="6-搜索文件与文本"><a href="#6-搜索文件与文本" class="headerlink" title="6. 搜索文件与文本"></a>6. 搜索文件与文本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find . -name <span class="string">&quot;*.py&quot;</span>                    <span class="comment"># 查找 Python 文件</span></span><br><span class="line">find /var/log -<span class="built_in">type</span> f -mtime -1        <span class="comment"># 查找一天内修改的文件</span></span><br><span class="line">grep <span class="string">&quot;ERROR&quot;</span> app.log                   <span class="comment"># 查找包含 ERROR 的行</span></span><br><span class="line">grep -n <span class="string">&quot;ERROR&quot;</span> app.log                <span class="comment"># 同时显示行号</span></span><br><span class="line">grep -ri <span class="string">&quot;timeout&quot;</span> ./logs              <span class="comment"># 递归、不区分大小写</span></span><br></pre></td></tr></table></figure>
+
+<p>如果系统安装了 ripgrep，搜索代码通常更快：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rg <span class="string">&quot;def login&quot;</span> src/</span><br><span class="line">rg --files</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-重定向与管道"><a href="#7-重定向与管道" class="headerlink" title="7. 重定向与管道"></a>7. 重定向与管道</h2><p>重定向控制命令的输入和输出，管道把前一个命令的输出交给下一个命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;hello&quot;</span> &gt; note.txt       <span class="comment"># 覆盖写入</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;world&quot;</span> &gt;&gt; note.txt      <span class="comment"># 追加写入</span></span><br><span class="line"><span class="built_in">command</span> 2&gt; error.log           <span class="comment"># 保存错误输出</span></span><br><span class="line"><span class="built_in">cat</span> app.log | grep <span class="string">&quot;ERROR&quot;</span>    <span class="comment"># 管道过滤</span></span><br><span class="line">ps aux | grep python           <span class="comment"># 查找 Python 进程</span></span><br></pre></td></tr></table></figure>
+
+<p>许多命令可以直接接收文件，因此 <code>grep &quot;ERROR&quot; app.log</code> 比 <code>cat app.log | grep &quot;ERROR&quot;</code> 更简洁。</p>
+<h2 id="8-用户与文件权限"><a href="#8-用户与文件权限" class="headerlink" title="8. 用户与文件权限"></a>8. 用户与文件权限</h2><p>执行 <code>ls -l</code> 可能看到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-rwxr-xr-- 1 user group 1024 Sep 2 10:00 deploy.sh</span><br></pre></td></tr></table></figure>
+
+<p>权限分为三组：文件所有者、所属组、其他用户。每组包含：</p>
+<ul>
+<li><code>r</code>：读取。</li>
+<li><code>w</code>：写入。</li>
+<li><code>x</code>：执行。</li>
+</ul>
+<p>常见操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whoami</span>                 <span class="comment"># 当前用户</span></span><br><span class="line"><span class="built_in">id</span>                     <span class="comment"># 用户与用户组信息</span></span><br><span class="line"><span class="built_in">chmod</span> +x deploy.sh     <span class="comment"># 添加执行权限</span></span><br><span class="line"><span class="built_in">chmod</span> 644 config.txt   <span class="comment"># 所有者可读写，其他人只读</span></span><br><span class="line"><span class="built_in">chmod</span> 755 deploy.sh    <span class="comment"># 所有者可读写执行，其他人可读执行</span></span><br></pre></td></tr></table></figure>
+
+<p><code>sudo</code> 以管理员权限执行命令。不要看到权限错误就盲目加 <code>sudo</code>，应先确认操作是否确实需要管理员权限。</p>
+<h2 id="9-进程与任务管理"><a href="#9-进程与任务管理" class="headerlink" title="9. 进程与任务管理"></a>9. 进程与任务管理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ps aux                  <span class="comment"># 查看进程</span></span><br><span class="line">top                     <span class="comment"># 动态查看系统负载与进程</span></span><br><span class="line">pgrep -af python        <span class="comment"># 查找 Python 进程及命令</span></span><br><span class="line"><span class="built_in">kill</span> 1234               <span class="comment"># 请求 PID 1234 正常退出</span></span><br><span class="line"><span class="built_in">kill</span> -9 1234            <span class="comment"># 强制终止，谨慎使用</span></span><br><span class="line"><span class="built_in">command</span> &amp;               <span class="comment"># 放到后台运行</span></span><br><span class="line"><span class="built_in">jobs</span>                    <span class="comment"># 查看当前 Shell 的后台任务</span></span><br></pre></td></tr></table></figure>
+
+<p>如果系统使用 systemd，可以管理系统服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl status nginx</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart nginx</span><br><span class="line">journalctl -u nginx --since today</span><br></pre></td></tr></table></figure>
+
+<h2 id="10-磁盘与内存"><a href="#10-磁盘与内存" class="headerlink" title="10. 磁盘与内存"></a>10. 磁盘与内存</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h                <span class="comment"># 查看各文件系统剩余空间</span></span><br><span class="line"><span class="built_in">du</span> -sh ./project     <span class="comment"># 查看目录占用空间</span></span><br><span class="line">free -h              <span class="comment"># 查看内存使用</span></span><br><span class="line"><span class="built_in">uptime</span>               <span class="comment"># 查看运行时间与平均负载</span></span><br></pre></td></tr></table></figure>
+
+<p>遇到“磁盘空间不足”时，先用 <code>df -h</code> 判断哪个分区已满，再用 <code>du</code> 定位大目录。</p>
+<h2 id="11-网络排查"><a href="#11-网络排查" class="headerlink" title="11. 网络排查"></a>11. 网络排查</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ip addr                         <span class="comment"># 查看网络接口与 IP</span></span><br><span class="line">ping -c 4 example.com           <span class="comment"># 测试网络连通性</span></span><br><span class="line">curl -I https://example.com     <span class="comment"># 查看 HTTP 响应头</span></span><br><span class="line">curl -v https://example.com     <span class="comment"># 查看详细请求过程</span></span><br><span class="line">ss -lntp                        <span class="comment"># 查看监听中的 TCP 端口</span></span><br></pre></td></tr></table></figure>
+
+<p>测试接口常用 <code>curl</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST https://api.example.com/login \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;&quot;username&quot;:&quot;test&quot;,&quot;password&quot;:&quot;demo&quot;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>不要把真实密码、令牌等敏感信息直接写进脚本、命令历史或公开日志。</p>
+<h2 id="12-压缩与解压"><a href="#12-压缩与解压" class="headerlink" title="12. 压缩与解压"></a>12. 压缩与解压</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -czf logs.tar.gz logs/     <span class="comment"># 打包并使用 gzip 压缩</span></span><br><span class="line">tar -xzf logs.tar.gz           <span class="comment"># 解压</span></span><br><span class="line">zip -r project.zip project/    <span class="comment"># 创建 zip 包</span></span><br><span class="line">unzip project.zip              <span class="comment"># 解压 zip 包</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="13-软件安装"><a href="#13-软件安装" class="headerlink" title="13. 软件安装"></a>13. 软件安装</h2><p>Ubuntu&#x2F;Debian 常用 <code>apt</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install git</span><br></pre></td></tr></table></figure>
+
+<p>CentOS&#x2F;RHEL 系通常使用 <code>dnf</code> 或 <code>yum</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> dnf install git</span><br></pre></td></tr></table></figure>
+
+<p>安装前先确认 Linux 发行版：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br></pre></td></tr></table></figure>
+
+<h2 id="14-环境变量"><a href="#14-环境变量" class="headerlink" title="14. 环境变量"></a>14. 环境变量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$PATH</span>&quot;</span>                 <span class="comment"># 查看 PATH</span></span><br><span class="line"><span class="built_in">export</span> APP_ENV=<span class="string">&quot;test&quot;</span>       <span class="comment"># 当前 Shell 临时设置</span></span><br><span class="line"><span class="built_in">printenv</span> APP_ENV             <span class="comment"># 查看变量</span></span><br><span class="line"><span class="built_in">unset</span> APP_ENV                <span class="comment"># 删除变量</span></span><br></pre></td></tr></table></figure>
+
+<p>长期配置通常写入 <code>~/.bashrc</code> 或 <code>~/.zshrc</code>，修改后可重新打开终端，或执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h2 id="15-常用组合示例"><a href="#15-常用组合示例" class="headerlink" title="15. 常用组合示例"></a>15. 常用组合示例</h2><h3 id="从日志中统计错误"><a href="#从日志中统计错误" class="headerlink" title="从日志中统计错误"></a>从日志中统计错误</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">&quot;ERROR&quot;</span> app.log | <span class="built_in">wc</span> -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="找到占用端口的进程"><a href="#找到占用端口的进程" class="headerlink" title="找到占用端口的进程"></a>找到占用端口的进程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ss -lntp | grep <span class="string">&quot;:8000&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="运行-Python-程序并保存日志"><a href="#运行-Python-程序并保存日志" class="headerlink" title="运行 Python 程序并保存日志"></a>运行 Python 程序并保存日志</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python app.py &gt; app.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p><code>2&gt;&amp;1</code> 表示把错误输出也交给标准输出，因此两者都会写入 <code>app.log</code>。</p>
+<h2 id="16-新手常见问题"><a href="#16-新手常见问题" class="headerlink" title="16. 新手常见问题"></a>16. 新手常见问题</h2><ul>
+<li>命令区分大小写，<code>File.txt</code> 和 <code>file.txt</code> 可能是两个文件。</li>
+<li>路径包含空格时要加引号，例如 <code>cd &quot;My Project&quot;</code>。</li>
+<li>“Permission denied” 可能是缺少读写或执行权限。</li>
+<li>“Command not found” 可能是软件未安装，或程序目录不在 <code>PATH</code> 中。</li>
+<li>修改配置前先备份，并在重启服务前检查语法。</li>
+</ul>
+<h2 id="17-入门练习"><a href="#17-入门练习" class="headerlink" title="17. 入门练习"></a>17. 入门练习</h2><ol>
+<li>创建 <code>linux-practice</code> 目录，并在其中创建三个文本文件。</li>
+<li>将包含 <code>ERROR</code> 的日志行保存到新文件。</li>
+<li>找出当前系统最占磁盘空间的几个目录。</li>
+<li>启动一个 Python HTTP 服务，查看其进程与监听端口。</li>
+<li>编写 <code>backup.sh</code>，把指定目录打包为带日期的压缩文件。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Linux 入门的核心不是背诵命令，而是理解“当前在哪个目录、以哪个用户操作、目标文件是什么、命令会造成什么结果”。能熟练使用目录、文件、权限、进程、日志和网络命令后，就已经具备开发和初级测试岗位最常用的 Linux 操作能力。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io/2026/09/02/linux-basic-usage/%20plong's blog%20Linux 基础用法：开发与测试常用命令入门"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/02/sql-basic-usage/" title="SQL 基础用法：从查询到增删改的入门指南"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: SQL 基础用法：从查询到增删改的入门指南</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/02/python-basic-syntax/" title="Python 基础语法：零基础入门与实用速查">下一篇: Python 基础语法：零基础入门与实用速查&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>
