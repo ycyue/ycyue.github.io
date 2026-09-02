@@ -42,20 +42,52 @@
     var progress = create('div', 'reading-progress');
     progress.setAttribute('aria-hidden', 'true');
     var bar = create('span', 'reading-progress__bar');
+    var label = create('span', 'reading-progress__label', '0%');
     progress.appendChild(bar);
+    progress.appendChild(label);
     document.body.appendChild(progress);
 
+    var frame = null;
+    var idleTimer = null;
+
     function update() {
+      frame = null;
       var rect = article.getBoundingClientRect();
       var articleTop = window.scrollY + rect.top;
-      var max = Math.max(1, article.offsetHeight - window.innerHeight * 0.65);
-      var value = Math.min(1, Math.max(0, (window.scrollY - articleTop + 80) / max));
-      bar.style.width = (value * 100).toFixed(2) + '%';
+      var start = articleTop - 96;
+      var max = Math.max(1, article.offsetHeight - window.innerHeight + 160);
+      var value = Math.min(1, Math.max(0, (window.scrollY - start) / max));
+      var percentage = value * 100;
+      var percentageText = Math.round(percentage) + '%';
+
+      progress.style.setProperty('--reading-progress-value', percentage.toFixed(2) + '%');
+      label.textContent = percentageText;
     }
 
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+    function requestUpdate(showLabel) {
+      if (frame === null) {
+        frame = window.requestAnimationFrame(update);
+      }
+
+      if (!showLabel) {
+        return;
+      }
+
+      progress.classList.add('is-active');
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(function () {
+        progress.classList.remove('is-active');
+      }, 900);
+    }
+
+    window.addEventListener('scroll', function () { requestUpdate(true); }, { passive: true });
+    window.addEventListener('resize', function () { requestUpdate(false); });
+
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { requestUpdate(false); }).observe(article);
+    }
+
+    requestUpdate(false);
   }
 
   function addToc() {
