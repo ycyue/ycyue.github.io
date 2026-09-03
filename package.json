@@ -8,6 +8,7 @@
   "scripts": {
     "clean": "hexo clean",
     "build": "hexo clean && hexo generate",
+    "dev": "hexo server --ip 0.0.0.0",
     "preview": "hexo server"
   },
   "dependencies": {

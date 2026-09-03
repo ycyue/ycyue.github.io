@@ -1,0 +1,126 @@
+.algorithm-figure {
+  margin: 1.8em 0 2.2em;
+  padding: clamp(12px, 2.5vw, 22px);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-muted);
+}
+
+.algorithm-figure img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+html[data-theme='dark'] .algorithm-figure img[src$='.svg'] {
+  filter: invert(.86) hue-rotate(170deg) brightness(.95) contrast(.9);
+}
+
+.algorithm-figure figcaption {
+  margin-top: 0.9em;
+  color: var(--ink-soft);
+  font-size: 0.88em;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.algorithm-note,
+.pattern-card {
+  margin: 1.5em 0;
+  padding: 1em 1.15em;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  background: var(--accent-soft);
+}
+
+.algorithm-note > :last-child,
+.pattern-card > :last-child {
+  margin-bottom: 0 !important;
+}
+
+.series-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  margin: 1.5em 0 2.2em;
+  padding: 0.85em 1em;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-muted);
+}
+
+.series-nav a,
+.series-nav span {
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.series-nav__next {
+  text-align: right;
+}
+
+.series-nav__pending {
+  color: var(--ink-soft);
+}
+
+.course-status {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 0.82em;
+  white-space: nowrap;
+}
+
+.course-status--ready {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.post-page .post-abstract details {
+  margin: 1.2em 0 1.8em;
+  padding: 0.85em 1em;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-muted);
+}
+
+.post-page .post-abstract summary {
+  color: var(--accent);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.post-page .post-abstract details[open] summary {
+  margin-bottom: 0.9em;
+}
+
+@media (max-width: 640px) {
+  .algorithm-figure {
+    margin-right: -8px;
+    margin-left: -8px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .series-nav {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .series-nav__map {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    text-align: center;
+  }
+
+  .series-nav__prev,
+  .series-nav__next {
+    overflow-wrap: anywhere;
+  }
+}

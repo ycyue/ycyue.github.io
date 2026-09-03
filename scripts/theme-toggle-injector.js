@@ -3,6 +3,7 @@
 const headMarkup = `
 <link rel="stylesheet" href="/css/theme-toggle.css">
 <link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
 <script>
 (function () {
   var storageKey = 'plong-theme';

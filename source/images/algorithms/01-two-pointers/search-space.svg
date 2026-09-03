@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-labelledby="title desc">
+  <title id="title">双指针如何排除搜索空间</title>
+  <desc id="desc">在有序数组 1、3、4、7、9 中寻找和为 8 的数对。当 1 加 9 大于 8 时，包含 9 的整列候选都不可能；右指针左移后找到 1 加 7。</desc>
+  <style>
+    :root{color-scheme:light dark}.bg{fill:#f7f8fa}.cell{fill:#fff;stroke:#c5cdd2}.invalid{fill:#eef0f2}.drop{fill:#f8dddd;stroke:#c75b5b}.hit{fill:#dff2e6;stroke:#2f7d55;stroke-width:2}.head{fill:#315f73}.t{fill:#252a31;font:600 22px system-ui,-apple-system,"Segoe UI","Noto Sans SC",sans-serif}.s{fill:#616a75;font:17px system-ui,-apple-system,"Segoe UI","Noto Sans SC",sans-serif}.v{fill:#252a31;font:600 18px ui-monospace,SFMono-Regular,Consolas,monospace;text-anchor:middle}.h{fill:#fff;font:700 18px ui-monospace,SFMono-Regular,Consolas,monospace;text-anchor:middle}.x{fill:#a24646;font:700 17px system-ui,sans-serif;text-anchor:middle}.ok{fill:#246845;font:700 17px system-ui,sans-serif;text-anchor:middle}
+  </style>
+  <rect class="bg" width="900" height="560" rx="22"/>
+  <text class="t" x="40" y="45">例：nums = [1, 3, 4, 7, 9]，target = 8</text>
+  <text class="s" x="40" y="76">表格中的每个格子代表一对 (left, right)。只考虑 left &lt; right。</text>
+  <g transform="translate(95 112)">
+    <rect class="head" x="80" width="80" height="54" rx="8"/><rect class="head" x="160" width="80" height="54" rx="8"/><rect class="head" x="240" width="80" height="54" rx="8"/><rect class="head" x="320" width="80" height="54" rx="8"/><rect class="head" x="400" width="80" height="54" rx="8"/>
+    <text class="h" x="120" y="34">1</text><text class="h" x="200" y="34">3</text><text class="h" x="280" y="34">4</text><text class="h" x="360" y="34">7</text><text class="h" x="440" y="34">9</text>
+    <rect class="head" y="54" width="72" height="62" rx="8"/><rect class="head" y="116" width="72" height="62" rx="8"/><rect class="head" y="178" width="72" height="62" rx="8"/><rect class="head" y="240" width="72" height="62" rx="8"/><rect class="head" y="302" width="72" height="62" rx="8"/>
+    <text class="h" x="36" y="91">1</text><text class="h" x="36" y="153">3</text><text class="h" x="36" y="215">4</text><text class="h" x="36" y="277">7</text><text class="h" x="36" y="339">9</text>
+    <g>
+      <rect class="invalid" x="80" y="54" width="80" height="62"/><rect class="cell" x="160" y="54" width="80" height="62"/><rect class="cell" x="240" y="54" width="80" height="62"/><rect class="hit" x="320" y="54" width="80" height="62"/><rect class="drop" x="400" y="54" width="80" height="62"/>
+      <rect class="invalid" x="80" y="116" width="80" height="62"/><rect class="invalid" x="160" y="116" width="80" height="62"/><rect class="cell" x="240" y="116" width="80" height="62"/><rect class="cell" x="320" y="116" width="80" height="62"/><rect class="drop" x="400" y="116" width="80" height="62"/>
+      <rect class="invalid" x="80" y="178" width="80" height="62"/><rect class="invalid" x="160" y="178" width="80" height="62"/><rect class="invalid" x="240" y="178" width="80" height="62"/><rect class="cell" x="320" y="178" width="80" height="62"/><rect class="drop" x="400" y="178" width="80" height="62"/>
+      <rect class="invalid" x="80" y="240" width="80" height="62"/><rect class="invalid" x="160" y="240" width="80" height="62"/><rect class="invalid" x="240" y="240" width="80" height="62"/><rect class="invalid" x="320" y="240" width="80" height="62"/><rect class="drop" x="400" y="240" width="80" height="62"/>
+      <rect class="invalid" x="80" y="302" width="80" height="62"/><rect class="invalid" x="160" y="302" width="80" height="62"/><rect class="invalid" x="240" y="302" width="80" height="62"/><rect class="invalid" x="320" y="302" width="80" height="62"/><rect class="invalid" x="400" y="302" width="80" height="62"/>
+      <text class="v" x="200" y="92">4</text><text class="v" x="280" y="92">5</text><text class="v" x="360" y="92">8</text><text class="x" x="440" y="86">10</text><text class="x" x="440" y="106">丢弃列</text>
+      <text class="v" x="280" y="154">7</text><text class="v" x="360" y="154">10</text><text class="v" x="440" y="154">12</text><text class="v" x="360" y="216">11</text><text class="v" x="440" y="216">13</text><text class="v" x="440" y="278">16</text><text class="ok" x="360" y="86">命中</text>
+    </g>
+    <text class="s" x="515" y="78">① 1 + 9 = 10 &gt; 8</text><text class="s" x="515" y="108">固定 right = 9，换更大的 left</text><text class="s" x="515" y="136">和只会更大，所以整列都能排除。</text>
+    <text class="s" x="515" y="205">② right 左移到 7</text><text class="s" x="515" y="235">1 + 7 = 8，找到答案。</text>
+  </g>
+  <text class="s" x="95" y="515">灰色：left ≥ right，不是合法数对　红色：一次比较后整体排除　绿色：答案</text>
+</svg>
