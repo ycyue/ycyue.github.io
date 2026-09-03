@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>算法基础 01｜相向双指针：从暴力枚举到 O(n) · plong's blog</title><meta name="description" content="从两数之和的暴力枚举开始，用图解和严格推导理解相向双指针为什么不会漏解，并进一步写出三数之和。"><link rel="canonical" href="https://ycyue.github.io/2026/09/04/algorithm-01-two-pointers/"><meta property="og:type" content="article"><meta property="og:title" content="算法基础 01｜相向双指针：从暴力枚举到 O(n)"><meta property="og:description" content="从两数之和的暴力枚举开始，用图解和严格推导理解相向双指针为什么不会漏解，并进一步写出三数之和。"><meta property="og:url" content="https://ycyue.github.io/2026/09/04/algorithm-01-two-pointers/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="算法基础 01｜相向双指针：从暴力枚举到 O(n)"><meta name="twitter:description" content="从两数之和的暴力枚举开始，用图解和严格推导理解相向双指针为什么不会漏解，并进一步写出三数之和。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>算法基础 01｜相向双指针：从暴力枚举到 O(n)</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/双指针/" title="双指针">双指针</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span></span></p><div class="post-abstract"><nav class="series-nav" aria-label="算法系列导航">
+  <span class="series-nav__prev series-nav__pending">← 这是第一篇</span>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <span class="series-nav__next series-nav__pending">下一篇：容器与接雨水 →</span>
+</nav>
+
+<p>给你一个<strong>已经升序排列</strong>的数组和一个目标值，怎样找出和等于目标值的两个数？</p>
+<p>这道题真正要学的不是一段 <code>while</code> 模板，而是一个可迁移的判断：<strong>利用有序性，一次比较就排除一整批不可能的答案。</strong></p>
+<span id="more"></span>
+
+<h2 id="1-这节解决什么问题？"><a href="#1-这节解决什么问题？" class="headerlink" title="1. 这节解决什么问题？"></a>1. 这节解决什么问题？</h2><p>先用最小例子说明输入与输出：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [2, 7, 11, 15]，target = 9</span><br><span class="line">输出：[1, 2]</span><br><span class="line">解释：nums[0] + nums[1] = 2 + 7 = 9</span><br></pre></td></tr></table></figure>
+
+<p>这里输出的是 LeetCode 167 要求的 <strong>从 1 开始计数的下标</strong>，所以 Python 下标 <code>0, 1</code> 要返回成 <code>[1, 2]</code>。</p>
+<p>“指针”在这篇里并不是一个神秘的数据结构。你可以先把它理解成：<strong>保存数组下标的整数变量</strong>。<code>left = 0</code> 表示看最左边元素，<code>right = len(nums) - 1</code> 表示看最右边元素。</p>
+<h2 id="2-从暴力解法开始"><a href="#2-从暴力解法开始" class="headerlink" title="2. 从暴力解法开始"></a>2. 从暴力解法开始</h2><p>最直接的方法是枚举所有下标对 <code>(i, j)</code>：固定第一个数，再逐个尝试它右边的数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">two_sum_brute</span>(<span class="params">nums, target</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">1</span>, <span class="built_in">len</span>(nums)):</span><br><span class="line">            <span class="keyword">if</span> nums[i] + nums[j] == target:</span><br><span class="line">                <span class="keyword">return</span> [i + <span class="number">1</span>, j + <span class="number">1</span>]</span><br><span class="line">    <span class="keyword">return</span> []</span><br></pre></td></tr></table></figure>
+
+<h3 id="暴力为什么慢？"><a href="#暴力为什么慢？" class="headerlink" title="暴力为什么慢？"></a>暴力为什么慢？</h3><p>长度为 <code>n</code> 的数组共有：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(n - 1) + (n - 2) + ... + 1 = n(n - 1) / 2</span><br></pre></td></tr></table></figure>
+
+<p>个下标对。数量级与 <code>n²</code> 成正比，因此时间复杂度是 <strong>O(n²)</strong>。数组有序这个重要条件，在暴力解法中完全没有被利用。</p>
+<p>空间复杂度是 <strong>O(1)</strong>，因为除去返回结果，只使用了 <code>i</code>、<code>j</code> 等固定数量的变量；输入变长也不会创建同样变长的额外容器。</p>
+<h2 id="3-核心思想：从两端夹逼"><a href="#3-核心思想：从两端夹逼" class="headerlink" title="3. 核心思想：从两端夹逼"></a>3. 核心思想：从两端夹逼</h2><p>一句话记忆：</p>
+<div class="pattern-card"><strong>左右各放一个指针，根据当前和偏大还是偏小，排除一整片不可能区域。</strong></div>
+
+<p>做法如下：</p>
+<ol>
+<li><code>left</code> 指向最小的候选数，<code>right</code> 指向最大的候选数。</li>
+<li>计算 <code>current = nums[left] + nums[right]</code>。</li>
+<li>如果 <code>current == target</code>，找到答案。</li>
+<li>如果 <code>current &lt; target</code>，让 <code>left</code> 右移，尝试把和增大。</li>
+<li>如果 <code>current &gt; target</code>，让 <code>right</code> 左移，尝试把和减小。</li>
+</ol>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/01-two-pointers/pointer-movement.svg" alt="相向双指针在 2、7、11、15 中寻找和为 9 的数对，右指针逐步左移" loading="eager">
+  <figcaption>两个指针只向中间移动。已经排除的 15、11 不会再被检查。</figcaption>
+</figure>
+
+<h2 id="4-为什么这样移动不会漏掉答案？"><a href="#4-为什么这样移动不会漏掉答案？" class="headerlink" title="4. 为什么这样移动不会漏掉答案？"></a>4. 为什么这样移动不会漏掉答案？</h2><p>这是整篇最重要的部分。只说“和小就移动左边，和大就移动右边”不够，我们要证明被丢掉的候选确实不可能是答案。</p>
+<p>设当前指针是 <code>left</code> 和 <code>right</code>，数组升序。</p>
+<h3 id="情况一：当前和小于-target"><a href="#情况一：当前和小于-target" class="headerlink" title="情况一：当前和小于 target"></a>情况一：当前和小于 target</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nums[left] + nums[right] &lt; target</span><br></pre></td></tr></table></figure>
+
+<p><code>nums[right]</code> 已经是当前区间里最大的数。固定 <code>left</code> 后，把 <code>right</code> 换成任何更靠左的下标 <code>j</code>，都有：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nums[left] + nums[j] &lt;= nums[left] + nums[right] &lt; target</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，<strong>当前 <code>left</code> 和区间内任何数配对都太小</strong>。所以包含 <code>left</code> 的所有候选都可以排除，安全地执行 <code>left += 1</code>。</p>
+<p>注意：此时如果移动 <code>right</code>，右边的数只会更小，离目标更远；更重要的是，你没有证明可以丢掉当前 <code>right</code>。</p>
+<h3 id="情况二：当前和大于-target"><a href="#情况二：当前和大于-target" class="headerlink" title="情况二：当前和大于 target"></a>情况二：当前和大于 target</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nums[left] + nums[right] &gt; target</span><br></pre></td></tr></table></figure>
+
+<p><code>nums[left]</code> 已经是当前区间里最小的数。固定 <code>right</code> 后，把 <code>left</code> 换成任何更靠右的下标 <code>i</code>，都有：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nums[i] + nums[right] &gt;= nums[left] + nums[right] &gt; target</span><br></pre></td></tr></table></figure>
+
+<p>因此，<strong>当前 <code>right</code> 和区间内任何数配对都太大</strong>。包含 <code>right</code> 的候选全都不可能是答案，可以执行 <code>right -= 1</code>。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/01-two-pointers/search-space.svg" alt="双指针通过一次比较排除二维候选表中的整列搜索空间" loading="lazy">
+  <figcaption>双指针快的原因不是“少写了一层循环”，而是每一步都有依据地淘汰整行或整列候选。</figcaption>
+</figure>
+
+<h3 id="成立所依赖的前提"><a href="#成立所依赖的前提" class="headerlink" title="成立所依赖的前提"></a>成立所依赖的前提</h3><p>上面的不等式推导依赖数组升序。如果数组是 <code>[7, 1, 9, 2]</code>，移动指针后数值不一定按预期变大或变小，排除结论就不成立。</p>
+<p>无序数组的两数之和通常有两种选择：</p>
+<ul>
+<li>用哈希表记录见过的数，做到 O(n) 时间和 O(n) 空间；</li>
+<li>先排序再用双指针，做到 O(n log n) 时间，但如果要返回原下标，需要额外保存下标。</li>
+</ul>
+<h2 id="5-两数之和模板"><a href="#5-两数之和模板" class="headerlink" title="5. 两数之和模板"></a>5. 两数之和模板</h2><p>推导清楚以后，代码只是把三个分支翻译出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">two_sum_sorted</span>(<span class="params">nums, target</span>):</span><br><span class="line">    left = <span class="number">0</span></span><br><span class="line">    right = <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> left &lt; right:</span><br><span class="line">        current = nums[left] + nums[right]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> current == target:</span><br><span class="line">            <span class="keyword">return</span> [left + <span class="number">1</span>, right + <span class="number">1</span>]</span><br><span class="line">        <span class="keyword">if</span> current &lt; target:</span><br><span class="line">            left += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            right -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> []</span><br></pre></td></tr></table></figure>
+
+<p>这里使用 <code>left &lt; right</code>，因为题目要求两个不同位置的元素。当 <code>left == right</code> 时，两个指针指向同一个元素，不能把它使用两次。</p>
+<h2 id="6-手工模拟一次"><a href="#6-手工模拟一次" class="headerlink" title="6. 手工模拟一次"></a>6. 手工模拟一次</h2><p>输入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nums = [<span class="number">2</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">15</span>]</span><br><span class="line">target = <span class="number">9</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="right">step</th>
+<th align="right">left</th>
+<th align="right">right</th>
+<th>当前两个数</th>
+<th align="right">当前和</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td>2 和 15</td>
+<td align="right">17</td>
+<td>太大，<code>right -= 1</code></td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td>2 和 11</td>
+<td align="right">13</td>
+<td>太大，<code>right -= 1</code></td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td>2 和 7</td>
+<td align="right">9</td>
+<td>找到，返回 <code>[1, 2]</code></td>
+</tr>
+</tbody></table>
+<p>你可以把循环不变量理解成：</p>
+<blockquote>
+<p>每轮开始时，如果答案存在，那么答案一定还在闭区间 <code>[left, right]</code> 的候选对中。</p>
+</blockquote>
+<p>每次移动前我们都证明了被排除的一端不可能参与答案，所以这个说法始终成立。</p>
+<h2 id="7-从两数之和推广到三数之和"><a href="#7-从两数之和推广到三数之和" class="headerlink" title="7. 从两数之和推广到三数之和"></a>7. 从两数之和推广到三数之和</h2><p>LeetCode 15 要找所有满足 <code>a + b + c = 0</code> 的不重复三元组。可以把它拆成：</p>
+<ol>
+<li>先排序。</li>
+<li>枚举第一个数 <code>nums[i]</code>。</li>
+<li>在 <code>i</code> 右侧的有序区间，用相向双指针寻找和等于 <code>-nums[i]</code> 的两个数。</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">固定 nums[i]</span><br><span class="line">        ↓</span><br><span class="line">nums[i] + nums[left] + nums[right] 与 0 比较</span><br><span class="line">        ↓</span><br><span class="line">小于 0：left 右移；大于 0：right 左移</span><br></pre></td></tr></table></figure>
+
+<p>完整实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">three_sum</span>(<span class="params">nums</span>):</span><br><span class="line">    nums = <span class="built_in">sorted</span>(nums)</span><br><span class="line">    answer = []</span><br><span class="line">    n = <span class="built_in">len</span>(nums)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n - <span class="number">2</span>):</span><br><span class="line">        <span class="comment"># 与上一次固定的数相同，会产生重复三元组</span></span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">0</span> <span class="keyword">and</span> nums[i] == nums[i - <span class="number">1</span>]:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 当前最小的三个数都大于 0，后面只会更大</span></span><br><span class="line">        <span class="keyword">if</span> nums[i] + nums[i + <span class="number">1</span>] + nums[i + <span class="number">2</span>] &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 当前数与最大的两个数相加仍小于 0，本轮不可能成功</span></span><br><span class="line">        <span class="keyword">if</span> nums[i] + nums[n - <span class="number">2</span>] + nums[n - <span class="number">1</span>] &lt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        left = i + <span class="number">1</span></span><br><span class="line">        right = n - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> left &lt; right:</span><br><span class="line">            total = nums[i] + nums[left] + nums[right]</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> total &lt; <span class="number">0</span>:</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> total &gt; <span class="number">0</span>:</span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                answer.append([nums[i], nums[left], nums[right]])</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">                <span class="comment"># 跳过相同值，避免记录重复三元组</span></span><br><span class="line">                <span class="keyword">while</span> left &lt; right <span class="keyword">and</span> nums[left] == nums[left - <span class="number">1</span>]:</span><br><span class="line">                    left += <span class="number">1</span></span><br><span class="line">                <span class="keyword">while</span> left &lt; right <span class="keyword">and</span> nums[right] == nums[right + <span class="number">1</span>]:</span><br><span class="line">                    right -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么三数之和要去重？"><a href="#为什么三数之和要去重？" class="headerlink" title="为什么三数之和要去重？"></a>为什么三数之和要去重？</h3><p>输入 <code>[-2, 0, 0, 2, 2]</code> 中，下标组合不止一个，但数值三元组 <code>[-2, 0, 2]</code> 只能在答案里出现一次。</p>
+<p>去重分两层：</p>
+<ul>
+<li><code>i</code> 与前一个固定值相同时，跳过整个本轮；</li>
+<li>找到答案后，<code>left</code>、<code>right</code> 先移动一步，再越过与刚才相同的值。</li>
+</ul>
+<p>不能在尚未找到答案时随意跳过所有重复值；先明确“这一层在避免哪一种重复”，代码才不容易错。</p>
+<h2 id="8-复杂度分析"><a href="#8-复杂度分析" class="headerlink" title="8. 复杂度分析"></a>8. 复杂度分析</h2><h3 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h3><ul>
+<li><strong>时间复杂度 O(n)</strong>：<code>left</code> 只会向右移动，<code>right</code> 只会向左移动。两者各自最多走 <code>n - 1</code> 步，并不是在彼此内部重新遍历数组，所以总操作次数与 <code>n</code> 成正比。</li>
+<li><strong>空间复杂度 O(1)</strong>：只使用两个下标和当前和，不随输入长度增长。</li>
+</ul>
+<h3 id="三数之和"><a href="#三数之和" class="headerlink" title="三数之和"></a>三数之和</h3><ul>
+<li><strong>时间复杂度 O(n²)</strong>：排序需要 O(n log n)；外层枚举最多 O(n) 次，每次内部双指针最多 O(n)，合计 O(n²)，它主导了排序时间。</li>
+<li><strong>空间复杂度</strong>：如果不计算返回答案，取决于排序实现。这里 <code>sorted(nums)</code> 创建新列表，需要 O(n) 额外空间；如果原地 <code>nums.sort()</code>，Python 排序本身仍可能使用额外内存。</li>
+</ul>
+<h2 id="9-什么时候想到相向双指针？"><a href="#9-什么时候想到相向双指针？" class="headerlink" title="9. 什么时候想到相向双指针？"></a>9. 什么时候想到相向双指针？</h2><p>看到下面的组合信号时，优先检查双指针：</p>
+<div class="pattern-card"><strong>有序数组 + 选择两个位置 + 结果随左右端移动具有单调变化</strong><br>↓<br>尝试从两端向中间收缩，并证明每次能排除哪一批候选。</div>
+
+<p>常见表述包括：</p>
+<ul>
+<li>在有序数组中找和为目标值的两个数；</li>
+<li>统计和小于某个值的数对数量；</li>
+<li>固定一个数后，在剩余有序区间找两个数；</li>
+<li>从数组两端选择、比较或收缩范围。</li>
+</ul>
+<p>只有“两个变量”并不等于能用双指针。必须存在可证明的单调性；否则移动任意一端都可能漏掉答案。</p>
+<h2 id="10-常见坑"><a href="#10-常见坑" class="headerlink" title="10. 常见坑"></a>10. 常见坑</h2><h3 id="坑-1：无序数组直接夹逼"><a href="#坑-1：无序数组直接夹逼" class="headerlink" title="坑 1：无序数组直接夹逼"></a>坑 1：无序数组直接夹逼</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 错误：nums 没有保证有序</span></span><br><span class="line"><span class="keyword">if</span> nums[left] + nums[right] &lt; target:</span><br><span class="line">    left += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>修正：先确认题目给出有序条件，或者先排序并处理原下标问题。</p>
+<h3 id="坑-2：写成-left"><a href="#坑-2：写成-left" class="headerlink" title="坑 2：写成 left &lt;= right"></a>坑 2：写成 <code>left &lt;= right</code></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> left &lt;= right:  <span class="comment"># 可能把同一个位置使用两次</span></span><br></pre></td></tr></table></figure>
+
+<p>找两个不同元素时用 <code>left &lt; right</code>。二分查找是否使用 <code>&lt;=</code> 是另一个问题，取决于二分的区间定义，不能把模板混用。</p>
+<h3 id="坑-3：返回了-Python-下标"><a href="#坑-3：返回了-Python-下标" class="headerlink" title="坑 3：返回了 Python 下标"></a>坑 3：返回了 Python 下标</h3><p>LeetCode 167 要求从 1 开始：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> [left + <span class="number">1</span>, right + <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>而大多数 LeetCode 题使用从 0 开始的下标。先读输出定义，不要机械地 <code>+1</code>。</p>
+<h3 id="坑-4：三数之和在错误的位置去重"><a href="#坑-4：三数之和在错误的位置去重" class="headerlink" title="坑 4：三数之和在错误的位置去重"></a>坑 4：三数之和在错误的位置去重</h3><p>固定值去重使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> i &gt; <span class="number">0</span> <span class="keyword">and</span> nums[i] == nums[i - <span class="number">1</span>]:</span><br><span class="line">    <span class="keyword">continue</span></span><br></pre></td></tr></table></figure>
+
+<p>如果拿 <code>nums[i] == nums[i + 1]</code> 当条件，会提前跳过某个值第一次出现的位置，可能漏解。</p>
+<h3 id="坑-5：把-sort-的返回值赋回去"><a href="#坑-5：把-sort-的返回值赋回去" class="headerlink" title="坑 5：把 sort() 的返回值赋回去"></a>坑 5：把 <code>sort()</code> 的返回值赋回去</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nums = nums.sort()  <span class="comment"># 错误：nums 变成 None</span></span><br></pre></td></tr></table></figure>
+
+<p>Python 的 <code>list.sort()</code> 原地修改列表并返回 <code>None</code>。使用 <code>nums.sort()</code>，或者写 <code>nums = sorted(nums)</code> 得到新列表。</p>
+<h2 id="11-Python-补充"><a href="#11-Python-补充" class="headerlink" title="11. Python 补充"></a>11. Python 补充</h2><h3 id="range-n-2-为什么停在那里？"><a href="#range-n-2-为什么停在那里？" class="headerlink" title="range(n - 2) 为什么停在那里？"></a><code>range(n - 2)</code> 为什么停在那里？</h3><p>三数之和中，固定第一个数后，右边至少还要有两个数。因此 <code>i</code> 最大只能到 <code>n - 3</code>。<code>range(n - 2)</code> 产生 <code>0</code> 到 <code>n - 3</code>，恰好符合要求。</p>
+<h3 id="sorted-与-sort"><a href="#sorted-与-sort" class="headerlink" title="sorted() 与 .sort()"></a><code>sorted()</code> 与 <code>.sort()</code></h3><table>
+<thead>
+<tr>
+<th>写法</th>
+<th>是否修改原列表</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sorted(nums)</code></td>
+<td>否</td>
+<td>新的已排序列表</td>
+</tr>
+<tr>
+<td><code>nums.sort()</code></td>
+<td>是</td>
+<td><code>None</code></td>
+</tr>
+</tbody></table>
+<p>教程代码使用 <code>sorted(nums)</code>，避免调用函数后悄悄改变外部传入的列表。</p>
+<h2 id="12-典型练习题"><a href="#12-典型练习题" class="headerlink" title="12. 典型练习题"></a>12. 典型练习题</h2><p>先做入门题，能独立解释指针为什么移动，再做变形。</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/">167. 两数之和 II - 输入有序数组</a>（中等）<br>观察：数组已排序，当前和相对 <code>target</code> 的大小能决定排除哪一端。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/count-pairs-whose-sum-is-less-than-target/">2824. 统计和小于目标的下标对数目</a>（简单）<br>提示：当 <code>nums[left] + nums[right] &lt; target</code> 时，固定 <code>left</code>，中间有多少个 <code>right</code> 都成立？</li>
+</ul>
+<h3 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/3sum/">15. 三数之和</a>（中等）<br>观察：排序后固定一个数，把问题降成两数之和；重点是两层去重。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/3sum-closest/">16. 最接近的三数之和</a>（中等）<br>提示：每轮先用当前三数和更新“距离目标最近的答案”，再移动指针。</li>
+</ul>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/4sum/">18. 四数之和</a>（中等）<br>观察：再多固定一层就能降成两数之和，但要处理去重和剪枝。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/valid-triangle-number/">611. 有效三角形的个数</a>（中等）<br>提示：排序后固定最长边，条件变成“两条短边之和大于最长边”；一次成立时能批量统计多少对？</li>
+</ul>
+<details>
+<summary>检查答案：两数之和完整代码</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">two_sum</span>(<span class="params">numbers, target</span>):</span><br><span class="line">    left = <span class="number">0</span></span><br><span class="line">    right = <span class="built_in">len</span>(numbers) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> left &lt; right:</span><br><span class="line">        current = numbers[left] + numbers[right]</span><br><span class="line">        <span class="keyword">if</span> current &lt; target:</span><br><span class="line">            left += <span class="number">1</span></span><br><span class="line">        <span class="keyword">elif</span> current &gt; target:</span><br><span class="line">            right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> [left + <span class="number">1</span>, right + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> []</span><br></pre></td></tr></table></figure>
+
+<p>先确认你能不看代码回答：和太小时，为什么固定 <code>left</code> 的所有其他配对都不可能？</p>
+</details>
+
+<h2 id="13-本节你应该掌握"><a href="#13-本节你应该掌握" class="headerlink" title="13. 本节你应该掌握"></a>13. 本节你应该掌握</h2><ul>
+<li><input disabled="" type="checkbox"> 能说出相向双指针的前提：有序性和单调变化。</li>
+<li><input disabled="" type="checkbox"> 能解释和偏小时为什么移动 <code>left</code>，而不是只背结论。</li>
+<li><input disabled="" type="checkbox"> 能手动画出 <code>[2, 7, 11, 15]</code> 的三轮变化。</li>
+<li><input disabled="" type="checkbox"> 能独立写出 LeetCode 167 的模板并处理下标规则。</li>
+<li><input disabled="" type="checkbox"> 能把三数之和拆成“枚举一个数 + 双指针”。</li>
+<li><input disabled="" type="checkbox"> 能解释三数之和的两层去重。</li>
+<li><input disabled="" type="checkbox"> 至少完成 167 和 2824，再挑战 15。</li>
+</ul>
+<h2 id="下一节"><a href="#下一节" class="headerlink" title="下一节"></a>下一节</h2><p>下一节将继续使用相向双指针，但判断依据不再是“两数和”：我们会解释盛水容器为什么必须移动短板，以及接雨水中怎样只凭一侧确定当前位置的水量。</p>
+<nav class="series-nav" aria-label="算法系列导航">
+  <span class="series-nav__prev series-nav__pending">← 这是第一篇</span>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <span class="series-nav__next series-nav__pending">下一篇：容器与接雨水 →</span>
+</nav>
+
+<p>课程顺序参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1bP411c7oJ/">灵茶山艾府《基础算法精讲 01》</a>；题目范围参考<a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的汇总</a>。本文讲解、代码组织与图解均为独立编写。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/algorithm-01-two-pointers/%20plong's blog%20算法基础 01｜相向双指针：从暴力枚举到 O(n)"></a></span></div><div class="pagination"><p class="clearfix"><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/python-algorithm-learning-map/" title="Python 基础算法学习地图｜27 节图解教程">下一篇: Python 基础算法学习地图｜27 节图解教程&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

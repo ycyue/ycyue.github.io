@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 610" role="img" aria-labelledby="title desc">
+  <title id="title">Python 基础算法学习地图</title>
+  <desc id="desc">从数组与双指针开始，依次学习链表、二叉树、回溯、动态规划、树形动态规划和单调数据结构。</desc>
+  <style>
+    :root{color-scheme:light dark}.bg{fill:#f7f8fa}.box{fill:#fff;stroke:#315f73;stroke-width:2}.num{fill:#315f73}.line{stroke:#7d9099;stroke-width:3;fill:none;marker-end:url(#arrow)}.t{fill:#252a31;font:600 25px system-ui,-apple-system,"Segoe UI","Noto Sans SC",sans-serif}.s{fill:#616a75;font:17px system-ui,-apple-system,"Segoe UI","Noto Sans SC",sans-serif}.n{fill:#fff;font:700 18px system-ui,sans-serif;text-anchor:middle}
+  </style>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5 0 10z" fill="#7d9099"/></marker></defs>
+  <rect class="bg" width="900" height="610" rx="24"/>
+  <path class="line" d="M450 92V126M450 194V228M450 296V330M450 398V432M450 500V534"/>
+  <path class="line" d="M414 568H260Q220 568 220 528V500"/>
+  <g transform="translate(165 24)"><rect class="box" width="570" height="68" rx="16"/><circle class="num" cx="40" cy="34" r="22"/><text class="n" x="40" y="40">1</text><text class="t" x="78" y="31">数组与基础算法思想</text><text class="s" x="78" y="54">相向双指针 → 滑动窗口 → 二分查找</text></g>
+  <g transform="translate(165 126)"><rect class="box" width="570" height="68" rx="16"/><circle class="num" cx="40" cy="34" r="22"/><text class="n" x="40" y="40">2</text><text class="t" x="78" y="31">链表</text><text class="s" x="78" y="54">反转 → 快慢指针 → 删除与哨兵节点</text></g>
+  <g transform="translate(165 228)"><rect class="box" width="570" height="68" rx="16"/><circle class="num" cx="40" cy="34" r="22"/><text class="n" x="40" y="40">3</text><text class="t" x="78" y="31">二叉树</text><text class="s" x="78" y="54">递归 → 遍历 → BST → LCA → BFS</text></g>
+  <g transform="translate(165 330)"><rect class="box" width="570" height="68" rx="16"/><circle class="num" cx="40" cy="34" r="22"/><text class="n" x="40" y="40">4</text><text class="t" x="78" y="31">回溯</text><text class="s" x="78" y="54">子集型 → 组合型与剪枝 → 排列型</text></g>
+  <g transform="translate(165 432)"><rect class="box" width="570" height="68" rx="16"/><circle class="num" cx="40" cy="34" r="22"/><text class="n" x="40" y="40">5</text><text class="t" x="78" y="31">动态规划</text><text class="s" x="78" y="54">记忆化 → 背包 → LCS/LIS → 状态机 → 区间</text></g>
+  <g transform="translate(414 534)"><rect class="box" width="321" height="60" rx="15"/><circle class="num" cx="38" cy="30" r="21"/><text class="n" x="38" y="36">6</text><text class="t" x="74" y="29">树形 DP</text><text class="s" x="74" y="50">直径 / 独立集 / 支配集</text></g>
+  <g transform="translate(165 432)"><path class="line" d="M0 34H-58Q-94 34-94 70V102"/></g>
+  <g transform="translate(35 534)"><rect class="box" width="330" height="60" rx="15"/><circle class="num" cx="38" cy="30" r="21"/><text class="n" x="38" y="36">7</text><text class="t" x="74" y="29">单调数据结构</text><text class="s" x="74" y="50">单调栈 / 单调队列</text></g>
+</svg>

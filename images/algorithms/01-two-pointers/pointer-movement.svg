@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 530" role="img" aria-labelledby="title desc">
+  <title id="title">相向双指针逐步执行</title>
+  <desc id="desc">在有序数组 2、7、11、15 中寻找和为 9 的两个数。右指针连续左移，最后找到 2 和 7。</desc>
+  <style>
+    :root{color-scheme:light dark}.bg{fill:#f7f8fa}.box{fill:#fff;stroke:#c5cdd2;stroke-width:2}.hit{fill:#e2f2e8;stroke:#2f7d55}.pointer{fill:#315f73}.label{fill:#252a31;font:600 20px system-ui,-apple-system,"Segoe UI","Noto Sans SC",sans-serif}.value{fill:#252a31;font:700 25px ui-monospace,SFMono-Regular,Consolas,monospace;text-anchor:middle}.small{fill:#616a75;font:18px system-ui,-apple-system,"Segoe UI","Noto Sans SC",sans-serif}.ptext{fill:#fff;font:700 15px system-ui,sans-serif;text-anchor:middle}.arrow{stroke:#315f73;stroke-width:3;fill:none;marker-end:url(#tip)}
+  </style>
+  <defs><marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10z" fill="#315f73"/></marker></defs>
+  <rect class="bg" width="900" height="530" rx="22"/>
+  <text class="label" x="44" y="42">target = 9</text>
+  <g transform="translate(44 70)">
+    <text class="label" x="0" y="30">第 1 轮</text>
+    <g transform="translate(150 0)"><rect class="box" width="95" height="64" rx="10"/><rect class="box" x="105" width="95" height="64" rx="10"/><rect class="box" x="210" width="95" height="64" rx="10"/><rect class="box" x="315" width="95" height="64" rx="10"/><text class="value" x="47" y="41">2</text><text class="value" x="152" y="41">7</text><text class="value" x="257" y="41">11</text><text class="value" x="362" y="41">15</text><path class="arrow" d="M47 108V72"/><path class="arrow" d="M362 108V72"/><rect class="pointer" x="12" y="112" width="70" height="29" rx="14"/><rect class="pointer" x="324" y="112" width="76" height="29" rx="14"/><text class="ptext" x="47" y="132">left</text><text class="ptext" x="362" y="132">right</text></g>
+    <text class="small" x="600" y="29">2 + 15 = 17</text><text class="small" x="600" y="58">17 &gt; 9，右端太大</text><text class="small" x="600" y="87">right 左移</text>
+  </g>
+  <g transform="translate(44 225)">
+    <text class="label" x="0" y="30">第 2 轮</text>
+    <g transform="translate(150 0)"><rect class="box" width="95" height="64" rx="10"/><rect class="box" x="105" width="95" height="64" rx="10"/><rect class="box" x="210" width="95" height="64" rx="10"/><rect class="box" x="315" width="95" height="64" rx="10" opacity=".38"/><text class="value" x="47" y="41">2</text><text class="value" x="152" y="41">7</text><text class="value" x="257" y="41">11</text><text class="value" x="362" y="41" opacity=".38">15</text><path class="arrow" d="M47 108V72"/><path class="arrow" d="M257 108V72"/><rect class="pointer" x="12" y="112" width="70" height="29" rx="14"/><rect class="pointer" x="219" y="112" width="76" height="29" rx="14"/><text class="ptext" x="47" y="132">left</text><text class="ptext" x="257" y="132">right</text></g>
+    <text class="small" x="600" y="29">2 + 11 = 13</text><text class="small" x="600" y="58">13 &gt; 9，仍然太大</text><text class="small" x="600" y="87">right 再左移</text>
+  </g>
+  <g transform="translate(44 380)">
+    <text class="label" x="0" y="30">第 3 轮</text>
+    <g transform="translate(150 0)"><rect class="hit" width="95" height="64" rx="10"/><rect class="hit" x="105" width="95" height="64" rx="10"/><rect class="box" x="210" width="95" height="64" rx="10" opacity=".38"/><rect class="box" x="315" width="95" height="64" rx="10" opacity=".38"/><text class="value" x="47" y="41">2</text><text class="value" x="152" y="41">7</text><text class="value" x="257" y="41" opacity=".38">11</text><text class="value" x="362" y="41" opacity=".38">15</text><path class="arrow" d="M47 108V72"/><path class="arrow" d="M152 108V72"/><rect class="pointer" x="12" y="112" width="70" height="29" rx="14"/><rect class="pointer" x="114" y="112" width="76" height="29" rx="14"/><text class="ptext" x="47" y="132">left</text><text class="ptext" x="152" y="132">right</text></g>
+    <text class="small" x="600" y="29">2 + 7 = 9</text><text class="small" x="600" y="58">等于 target</text><text class="small" x="600" y="87">找到下标 0 和 1</text>
+  </g>
+</svg>
