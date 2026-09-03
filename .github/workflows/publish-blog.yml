@@ -41,6 +41,9 @@ jobs:
           git clone https://github.com/SumiMakito/hexo-theme-typography.git themes/typography
           git -C themes/typography checkout ddbe45aabe5ee3d431426cbd6c2f62ae448fc6d1
 
+      - name: Apply local theme fixes
+        run: node scripts/patch-typography-theme.js
+
       - name: Build static site
         run: npm run build
 
@@ -60,4 +63,3 @@ jobs:
             git commit -m "Publish blog [skip ci]"
             git push
           fi
-
