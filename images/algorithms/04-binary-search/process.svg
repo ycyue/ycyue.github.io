@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">二分查找：执行过程</title>
+  <desc id="desc">二分查找：执行过程的教学图解</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#527987"/></marker></defs>
+  <style>
+  .bg{fill:#f7fafc}.card{fill:#fff;stroke:#a9bbc6;stroke-width:2}.accent{fill:#286f88}
+  .soft{fill:#e8f4f7}.line{stroke:#527987;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  .title{font:700 26px system-ui,sans-serif;fill:#18313b}.head{font:700 18px system-ui,sans-serif;fill:#18313b}
+  .body{font:15px system-ui,sans-serif;fill:#38505a}.small{font:14px system-ui,sans-serif;fill:#526873}
+  .node{fill:#fff;stroke:#286f88;stroke-width:2}.edge{stroke:#6a8792;stroke-width:2}.good{fill:#dff4e7;stroke:#4b9870;stroke-width:2}
+  .warn{fill:#fff0e1;stroke:#bd7740;stroke-width:2}
+</style>
+  <rect class="bg" width="960" height="520" rx="20"/>
+  <text x="48" y="52" class="title">二分查找：执行过程</text>
+  <g>
+      <rect x="48" y="92" width="408" height="166" rx="16" class="card"/>
+      <circle cx="84" cy="128" r="20" class="accent"/>
+      <text x="84" y="134" text-anchor="middle" style="font:700 15px system-ui;fill:#fff">1</text>
+      <text x="118" y="126" class="head">定义区间</text>
+      <text x="72" y="184" class="body">候选答案位于 [left, right)</text>
+    </g>
+<g>
+      <rect x="504" y="92" width="408" height="166" rx="16" class="card"/>
+      <circle cx="540" cy="128" r="20" class="accent"/>
+      <text x="540" y="134" text-anchor="middle" style="font:700 15px system-ui;fill:#fff">2</text>
+      <text x="574" y="126" class="head">检查中点</text>
+      <text x="528" y="184" class="body">mid=(left+right)//2</text>
+    </g>
+<g>
+      <rect x="48" y="302" width="408" height="166" rx="16" class="card"/>
+      <circle cx="84" cy="338" r="20" class="accent"/>
+      <text x="84" y="344" text-anchor="middle" style="font:700 15px system-ui;fill:#fff">3</text>
+      <text x="118" y="336" class="head">蓝色中点</text>
+      <text x="72" y="394" class="body">nums[mid] &gt;= target，答案在左侧</text>
+<text x="72" y="417" class="body">含 mid</text>
+    </g>
+<g>
+      <rect x="504" y="302" width="408" height="166" rx="16" class="card"/>
+      <circle cx="540" cy="338" r="20" class="accent"/>
+      <text x="540" y="344" text-anchor="middle" style="font:700 15px system-ui;fill:#fff">4</text>
+      <text x="574" y="336" class="head">红色中点</text>
+      <text x="528" y="394" class="body">nums[mid] &lt; target，答案严格在 </text>
+<text x="528" y="417" class="body">mid 右侧</text>
+    </g>
+<path d="M456 175 H493" class="line"/><path d="M708 260 V291" class="line"/><path d="M504 385 H467" class="line"/>
+</svg>

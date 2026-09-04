@@ -1,0 +1,176 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>算法基础 17｜动态规划入门：从记忆化搜索到递推 · plong's blog</title><meta name="description" content="从打家劫舍出发，完整推导 DP 状态、转移、初始化、遍历顺序与空间优化。"><link rel="canonical" href="https://ycyue.github.io/2026/09/04/algorithm-17-dynamic-programming-intro/"><meta property="og:type" content="article"><meta property="og:title" content="算法基础 17｜动态规划入门：从记忆化搜索到递推"><meta property="og:description" content="从打家劫舍出发，完整推导 DP 状态、转移、初始化、遍历顺序与空间优化。"><meta property="og:url" content="https://ycyue.github.io/2026/09/04/algorithm-17-dynamic-programming-intro/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="算法基础 17｜动态规划入门：从记忆化搜索到递推"><meta name="twitter:description" content="从打家劫舍出发，完整推导 DP 状态、转移、初始化、遍历顺序与空间优化。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>算法基础 17｜动态规划入门：从记忆化搜索到递推</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/动态规划/" title="动态规划">动态规划</a><span>&nbsp;</span></span></p><div class="post-abstract"><nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-16-backtracking-permutations/">← 16 排列型回溯</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-18-knapsack/">18 背包 DP →</a>
+</nav>
+
+<p>动态规划不是先猜公式。最自然的起点是暴力搜索：面对第 i 间房，选它还是不选？当你发现相同的 <code>dfs(i)</code> 被反复计算，缓存与递推就顺理成章。</p>
+<p>这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。</p>
+<span id="more"></span>
+
+<h2 id="1-这节解决什么问题？"><a href="#1-这节解决什么问题？" class="headerlink" title="1. 这节解决什么问题？"></a>1. 这节解决什么问题？</h2><ul>
+<li><strong>输入</strong>：一排房屋金额 nums，相邻房屋不能同时偷。</li>
+<li><strong>输出</strong>：能偷到的最大金额。</li>
+<li><strong>直接想法</strong>：对每间房递归尝试“跳过”或“偷取”。</li>
+<li><strong>真正瓶颈</strong>：不同选择路径会反复求同一个后缀的最优值，调用数近似指数增长。</li>
+</ul>
+<h2 id="2-从暴力解法开始"><a href="#2-从暴力解法开始" class="headerlink" title="2. 从暴力解法开始"></a>2. 从暴力解法开始</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rob_brute</span>(<span class="params">nums</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">i</span>):</span><br><span class="line">        <span class="keyword">if</span> i &gt;= <span class="built_in">len</span>(nums):</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(dfs(i + <span class="number">1</span>), nums[i] + dfs(i + <span class="number">2</span>))</span><br><span class="line">    <span class="keyword">return</span> dfs(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>状态只有 n 个，暴力却形成两叉递归树。给 <code>dfs(i)</code> 缓存后，每个状态只计算一次；再按依赖顺序倒推即可去掉递归。</p>
+<p>暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。</p>
+<h2 id="3-核心思想"><a href="#3-核心思想" class="headerlink" title="3. 核心思想"></a>3. 核心思想</h2><div class="pattern-card"><strong>先定义状态，再写选择：dfs(i) 表示从第 i 间及以后能偷到的最大金额。</strong></div>
+
+<p>不偷第 i 间得到 <code>dfs(i+1)</code>；偷它就必须跳过相邻房，得到 <code>nums[i]+dfs(i+2)</code>。两种选择覆盖所有合法方案，取较大值。递推可改成 <code>dp[i]=max(dp[i-1],dp[i-2]+nums[i])</code>。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/17-dynamic-programming-intro/process.svg" alt="动态规划入门执行过程图" loading="lazy">
+  <figcaption>公式中的每一项都对应一个明确选择，表格只是把搜索结果按依赖顺序保存。</figcaption>
+</figure>
+
+<h2 id="4-为什么这个算法成立？"><a href="#4-为什么这个算法成立？" class="headerlink" title="4. 为什么这个算法成立？"></a>4. 为什么这个算法成立？</h2><h3 id="1-转移为什么完整"><a href="#1-转移为什么完整" class="headerlink" title="1. 转移为什么完整"></a>1. 转移为什么完整</h3><p>任一合法方案对房 i 只有两种情况：不偷，方案完全位于前 i-1 间；偷，则 i-1 不能偷，剩余来自前 i-2 间。这两类覆盖全部方案。</p>
+<h3 id="2-为什么子问题必须最优"><a href="#2-为什么子问题必须最优" class="headerlink" title="2. 为什么子问题必须最优"></a>2. 为什么子问题必须最优</h3><p>若偷 i 的最优方案中，前 i-2 间不是最优选择，就可替换成更优前缀且仍不相邻，从而得到更大总额，与原方案最优矛盾。</p>
+<h3 id="3-空间为何能压缩"><a href="#3-空间为何能压缩" class="headerlink" title="3. 空间为何能压缩"></a>3. 空间为何能压缩</h3><p>计算当前值只依赖前两个状态，不需要整张 dp 表。保存 <code>prev2</code>、<code>prev1</code> 并滚动更新即可。压缩前先写清完整状态，避免更新顺序覆盖依赖。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/17-dynamic-programming-intro/proof.svg" alt="动态规划入门正确性推导图" loading="lazy">
+  <figcaption>每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。</figcaption>
+</figure>
+
+<h2 id="5-Python-模板"><a href="#5-Python-模板" class="headerlink" title="5. Python 模板"></a>5. Python 模板</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rob</span>(<span class="params">nums</span>):</span><br><span class="line">    prev2 = <span class="number">0</span>  <span class="comment"># dp[i-2]</span></span><br><span class="line">    prev1 = <span class="number">0</span>  <span class="comment"># dp[i-1]</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> money <span class="keyword">in</span> nums:</span><br><span class="line">        current = <span class="built_in">max</span>(prev1, prev2 + money)</span><br><span class="line">        prev2 = prev1</span><br><span class="line">        prev1 = current</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> prev1</span><br></pre></td></tr></table></figure>
+
+<p>这段写法自然处理空数组和单元素。先算 current，再整体滚动；若先覆盖 prev1，会丢掉旧状态。</p>
+<h2 id="6-手工模拟一次"><a href="#6-手工模拟一次" class="headerlink" title="6. 手工模拟一次"></a>6. 手工模拟一次</h2><p>输入：<code>nums=[2,7,9,3,1]</code></p>
+<table>
+<thead>
+<tr>
+<th>房屋</th>
+<th>金额</th>
+<th>不偷</th>
+<th>偷</th>
+<th>dp</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>7</td>
+<td>2</td>
+<td>7</td>
+<td>7</td>
+</tr>
+<tr>
+<td>2</td>
+<td>9</td>
+<td>7</td>
+<td>11</td>
+<td>11</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>11</td>
+<td>10</td>
+<td>11</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>11</td>
+<td>12</td>
+<td>12</td>
+</tr>
+</tbody></table>
+<p>最优值 12 对应偷 2、9、1。表中每行都比较最后一步的两种选择。</p>
+<h2 id="7-复杂度分析"><a href="#7-复杂度分析" class="headerlink" title="7. 复杂度分析"></a>7. 复杂度分析</h2><ul>
+<li><strong>时间复杂度：O(n)</strong>。n 个状态各计算一次，每次常数操作。</li>
+<li><strong>空间复杂度：O(1)</strong>。滚动变量只保存最近两个状态；完整 dp 表则为 O(n)。</li>
+</ul>
+<h2 id="8-什么时候想到这个算法？"><a href="#8-什么时候想到这个算法？" class="headerlink" title="8. 什么时候想到这个算法？"></a>8. 什么时候想到这个算法？</h2><div class="pattern-card"><strong>求最优/计数 + 选择后产生重复子问题 + 状态数有限 → 记忆化搜索 / DP</strong></div>
+
+<ul>
+<li>最大、最小、方案数或是否可行。</li>
+<li>问题可由更小前缀&#x2F;后缀表示。</li>
+<li>暴力递归反复出现相同参数。</li>
+</ul>
+<p>识别信号只是入口，最后仍要检查算法依赖的单调性、状态含义或数据结构不变量是否真的存在。</p>
+<h2 id="9-常见坑"><a href="#9-常见坑" class="headerlink" title="9. 常见坑"></a>9. 常见坑</h2><h3 id="坑-1：没定义-dp-含义就写公式"><a href="#坑-1：没定义-dp-含义就写公式" class="headerlink" title="坑 1：没定义 dp 含义就写公式"></a>坑 1：没定义 dp 含义就写公式</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i] = <span class="built_in">max</span>(dp[i-<span class="number">1</span>], dp[i-<span class="number">2</span>] + nums[i])</span><br></pre></td></tr></table></figure>
+
+<p>必须说明 dp[i] 覆盖哪段输入、返回什么。</p>
+<h3 id="坑-2：空数组初始化越界"><a href="#坑-2：空数组初始化越界" class="headerlink" title="坑 2：空数组初始化越界"></a>坑 2：空数组初始化越界</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[<span class="number">0</span>] = nums[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<p>通用代码要先处理空数组，或使用带空前缀的定义。</p>
+<h3 id="坑-3：滚动变量覆盖过早"><a href="#坑-3：滚动变量覆盖过早" class="headerlink" title="坑 3：滚动变量覆盖过早"></a>坑 3：滚动变量覆盖过早</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">prev1 = <span class="built_in">max</span>(prev1, prev2 + money)</span><br><span class="line">prev2 = prev1</span><br></pre></td></tr></table></figure>
+
+<p>第二行拿到的是新 prev1；先保存 current。</p>
+<h2 id="10-Python-补充"><a href="#10-Python-补充" class="headerlink" title="10. Python 补充"></a>10. Python 补充</h2><h3 id="functools-cache-做记忆化"><a href="#functools-cache-做记忆化" class="headerlink" title="functools.cache 做记忆化"></a><code>functools.cache</code> 做记忆化</h3><p>在递归函数上加 <code>@cache</code> 会按参数保存返回值，适合先验证状态与转移。之后再翻译成递推。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> cache</span><br><span class="line"></span><br><span class="line"><span class="meta">@cache</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">i</span>):</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-典型练习题"><a href="#11-典型练习题" class="headerlink" title="11. 典型练习题"></a>11. 典型练习题</h2><p>先根据提示独立画状态，再看代码。不要把练习变成复制模板。</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/climbing-stairs/">70. 爬楼梯</a>（简单）<br>最后一步来自 i-1 或 i-2。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/min-cost-climbing-stairs/">746. 使用最小花费爬楼梯</a>（简单）<br>明确 dp 表示到达台阶还是离开台阶。</li>
+</ul>
+<h3 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/house-robber/">198. 打家劫舍</a>（中等）<br>偷与不偷。</li>
+</ul>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/house-robber-ii/">213. 打家劫舍 II</a>（中等）<br>环拆成不含首或不含尾的两条链。</li>
+</ul>
+<details>
+<summary>检查答案：本节核心实现</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">rob</span>(<span class="params">nums</span>):</span><br><span class="line">    prev2 = <span class="number">0</span>  <span class="comment"># dp[i-2]</span></span><br><span class="line">    prev1 = <span class="number">0</span>  <span class="comment"># dp[i-1]</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> money <span class="keyword">in</span> nums:</span><br><span class="line">        current = <span class="built_in">max</span>(prev1, prev2 + money)</span><br><span class="line">        prev2 = prev1</span><br><span class="line">        prev1 = current</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> prev1</span><br></pre></td></tr></table></figure>
+
+<p>请先确认：你能不用代码解释“为什么这一步不会漏掉正确答案”吗？</p>
+</details>
+
+<h2 id="12-本节你应该掌握"><a href="#12-本节你应该掌握" class="headerlink" title="12. 本节你应该掌握"></a>12. 本节你应该掌握</h2><ul>
+<li><input disabled="" type="checkbox"> 能从暴力选择写出递归。</li>
+<li><input disabled="" type="checkbox"> 能识别重复状态并加缓存。</li>
+<li><input disabled="" type="checkbox"> 能完成 DP 五步：定义、转移、初始化、顺序、答案。</li>
+<li><input disabled="" type="checkbox"> 能安全做空间压缩。</li>
+<li><input disabled="" type="checkbox"> 完成 198 和 746。</li>
+</ul>
+<h2 id="下一节"><a href="#下一节" class="headerlink" title="下一节"></a>下一节</h2><p>下一节把“选或不选”放进容量限制中，系统区分 0-1 背包、完全背包以及至多、恰好、至少三种状态语义。</p>
+<nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-16-backtracking-permutations/">← 16 排列型回溯</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-18-knapsack/">18 背包 DP →</a>
+</nav>
+
+<p>课程顺序参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Xj411K7oF/">灵茶山艾府《基础算法精讲 17》</a>；题目范围参考<a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的汇总</a>。本文讲解、代码组织与图解均为独立编写。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/algorithm-17-dynamic-programming-intro/%20plong's blog%20算法基础 17｜动态规划入门：从记忆化搜索到递推"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-18-knapsack/" title="算法基础 18｜0-1 背包与完全背包：遍历方向为什么相反"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 18｜0-1 背包与完全背包：遍历方向为什么相反</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-16-backtracking-permutations/" title="算法基础 16｜排列型回溯：每个位置放谁">下一篇: 算法基础 16｜排列型回溯：每个位置放谁&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

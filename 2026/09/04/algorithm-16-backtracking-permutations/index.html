@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>算法基础 16｜排列型回溯：每个位置放谁 · plong's blog</title><meta name="description" content="用搜索树图解排列型回溯、used 数组和 N 皇后中的列与对角线约束。"><link rel="canonical" href="https://ycyue.github.io/2026/09/04/algorithm-16-backtracking-permutations/"><meta property="og:type" content="article"><meta property="og:title" content="算法基础 16｜排列型回溯：每个位置放谁"><meta property="og:description" content="用搜索树图解排列型回溯、used 数组和 N 皇后中的列与对角线约束。"><meta property="og:url" content="https://ycyue.github.io/2026/09/04/algorithm-16-backtracking-permutations/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="算法基础 16｜排列型回溯：每个位置放谁"><meta name="twitter:description" content="用搜索树图解排列型回溯、used 数组和 N 皇后中的列与对角线约束。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>算法基础 16｜排列型回溯：每个位置放谁</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/回溯/" title="回溯">回溯</a><span>&nbsp;</span></span></p><div class="post-abstract"><nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-15-backtracking-combinations/">← 15 组合型回溯</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-17-dynamic-programming-intro/">17 动态规划入门 →</a>
+</nav>
+
+<p>组合中 <code>[1,2]</code> 与 <code>[2,1]</code> 相同，排列中却是两个答案。因此状态不再是“从哪里继续选”，而是“哪些元素已被当前路径使用”。</p>
+<p>这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。</p>
+<span id="more"></span>
+
+<h2 id="1-这节解决什么问题？"><a href="#1-这节解决什么问题？" class="headerlink" title="1. 这节解决什么问题？"></a>1. 这节解决什么问题？</h2><ul>
+<li><strong>输入</strong>：互不相同的数组 nums。</li>
+<li><strong>输出</strong>：所有排列。</li>
+<li><strong>直接想法</strong>：枚举长度 n 的 n 进制序列，再过滤重复使用元素的序列。</li>
+<li><strong>真正瓶颈</strong>：会检查 nⁿ 个序列，而合法排列只有 n! 个；大量路径在很早就已重复使用元素。</li>
+</ul>
+<h2 id="2-从暴力解法开始"><a href="#2-从暴力解法开始" class="headerlink" title="2. 从暴力解法开始"></a>2. 从暴力解法开始</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">permute_filter</span>(<span class="params">nums</span>):</span><br><span class="line">    answer = []</span><br><span class="line">    <span class="keyword">for</span> candidate <span class="keyword">in</span> product(nums, repeat=<span class="built_in">len</span>(nums)):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(<span class="built_in">set</span>(candidate)) == <span class="built_in">len</span>(nums):</span><br><span class="line">            answer.append(<span class="built_in">list</span>(candidate))</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>这种写法产生 nⁿ 个候选后再筛选。回溯在选择时就禁止已使用元素，只进入可能成为排列的分支。</p>
+<p>暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。</p>
+<h2 id="3-核心思想"><a href="#3-核心思想" class="headerlink" title="3. 核心思想"></a>3. 核心思想</h2><div class="pattern-card"><strong>第 depth 层决定排列的第 depth 个位置；尝试每个尚未使用的元素，递归后恢复 used。</strong></div>
+
+<p><code>used[i]</code> 表示 nums[i] 是否已在当前 path 中。它和 path 一起构成完整状态：path 决定已放内容，used 决定剩余候选。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/16-backtracking-permutations/process.svg" alt="排列型回溯执行过程图" loading="lazy">
+  <figcaption>排列搜索树的同一层是在竞争同一个位置，而不是从某个起点继续向后。</figcaption>
+</figure>
+
+<h2 id="4-为什么这个算法成立？"><a href="#4-为什么这个算法成立？" class="headerlink" title="4. 为什么这个算法成立？"></a>4. 为什么这个算法成立？</h2><h3 id="1-为什么覆盖所有排列"><a href="#1-为什么覆盖所有排列" class="headerlink" title="1. 为什么覆盖所有排列"></a>1. 为什么覆盖所有排列</h3><p>任意排列的第 0、1、…个位置都给出一条唯一选择路径。每层会尝试所有尚未使用元素，所以这条路径一定存在。</p>
+<h3 id="2-为什么没有非法答案"><a href="#2-为什么没有非法答案" class="headerlink" title="2. 为什么没有非法答案"></a>2. 为什么没有非法答案</h3><p>只有 path 长度为 n 才记录，而 used 保证 n 次选择对应 n 个不同下标，因此每个原元素恰好出现一次。</p>
+<h3 id="3-N-皇后如何类比"><a href="#3-N-皇后如何类比" class="headerlink" title="3. N 皇后如何类比"></a>3. N 皇后如何类比</h3><p>第 row 层决定这一行把皇后放在哪一列。列集合、防斜线集合与反斜线集合相当于更复杂的 used，负责排除会冲突的候选。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/16-backtracking-permutations/proof.svg" alt="排列型回溯正确性推导图" loading="lazy">
+  <figcaption>每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。</figcaption>
+</figure>
+
+<h2 id="5-Python-模板"><a href="#5-Python-模板" class="headerlink" title="5. Python 模板"></a>5. Python 模板</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">permute</span>(<span class="params">nums</span>):</span><br><span class="line">    answer = []</span><br><span class="line">    path = []</span><br><span class="line">    used = [<span class="literal">False</span>] * <span class="built_in">len</span>(nums)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>():</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(path) == <span class="built_in">len</span>(nums):</span><br><span class="line">            answer.append(path.copy())</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i, value <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">            <span class="keyword">if</span> used[i]:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            used[i] = <span class="literal">True</span></span><br><span class="line">            path.append(value)</span><br><span class="line">            dfs()</span><br><span class="line">            path.pop()</span><br><span class="line">            used[i] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    dfs()</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>有重复值时不能只用值集合，因为相同值来自不同下标；通常先排序，再用“同层跳过重复值”的规则去重。</p>
+<h2 id="6-手工模拟一次"><a href="#6-手工模拟一次" class="headerlink" title="6. 手工模拟一次"></a>6. 手工模拟一次</h2><p>输入：<code>nums=[1,2,3]</code></p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>path</th>
+<th>used</th>
+<th>下一候选</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>[]</td>
+<td>FFF</td>
+<td>1、2、3</td>
+</tr>
+<tr>
+<td>1</td>
+<td>[1]</td>
+<td>TFF</td>
+<td>2、3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>[1,2]</td>
+<td>TTF</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>[1,2,3]</td>
+<td>TTT</td>
+<td>记录</td>
+</tr>
+<tr>
+<td>回溯</td>
+<td>[1]</td>
+<td>TFF</td>
+<td>继续尝试 3</td>
+</tr>
+</tbody></table>
+<p>回溯同时恢复 path 和 used，才能正确进入 <code>[1,3,2]</code> 分支。</p>
+<h2 id="7-复杂度分析"><a href="#7-复杂度分析" class="headerlink" title="7. 复杂度分析"></a>7. 复杂度分析</h2><ul>
+<li><strong>时间复杂度：O(n·n!)</strong>。共有 n! 个排列，每个答案复制 n 个元素。</li>
+<li><strong>空间复杂度：O(n)</strong>。path、used 和递归深度都为 n。</li>
+</ul>
+<h2 id="8-什么时候想到这个算法？"><a href="#8-什么时候想到这个算法？" class="headerlink" title="8. 什么时候想到这个算法？"></a>8. 什么时候想到这个算法？</h2><div class="pattern-card"><strong>安排顺序/位置 + 每个候选使用一次 → used 状态的排列回溯</strong></div>
+
+<ul>
+<li>所有排列、座位安排、顺序方案。</li>
+<li>第几层对应第几个位置。</li>
+<li>候选存在列、对角线或其他冲突约束。</li>
+</ul>
+<p>识别信号只是入口，最后仍要检查算法依赖的单调性、状态含义或数据结构不变量是否真的存在。</p>
+<h2 id="9-常见坑"><a href="#9-常见坑" class="headerlink" title="9. 常见坑"></a>9. 常见坑</h2><h3 id="坑-1：只恢复-path"><a href="#坑-1：只恢复-path" class="headerlink" title="坑 1：只恢复 path"></a>坑 1：只恢复 path</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">path.pop()</span><br></pre></td></tr></table></figure>
+
+<p>还必须把对应 <code>used[i]</code> 恢复为 False。</p>
+<h3 id="坑-2：用-start-参数"><a href="#坑-2：用-start-参数" class="headerlink" title="坑 2：用 start 参数"></a>坑 2：用 start 参数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dfs(i + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这会强制递增顺序，生成的是组合而非排列。</p>
+<h3 id="坑-3：重复值直接套模板"><a href="#坑-3：重复值直接套模板" class="headerlink" title="坑 3：重复值直接套模板"></a>坑 3：重复值直接套模板</h3><p>输入有重复值时需要排序和同层去重。</p>
+<h2 id="10-Python-补充"><a href="#10-Python-补充" class="headerlink" title="10. Python 补充"></a>10. Python 补充</h2><h3 id="False-n"><a href="#False-n" class="headerlink" title="[False] * n"></a><code>[False] * n</code></h3><p>布尔值不可变，因此这样创建 used 列表安全。若元素是可变列表，<code>[[]] * n</code> 会让所有位置引用同一个对象，应避免。</p>
+<h2 id="11-典型练习题"><a href="#11-典型练习题" class="headerlink" title="11. 典型练习题"></a>11. 典型练习题</h2><p>先根据提示独立画状态，再看代码。不要把练习变成复制模板。</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/permutations/">46. 全排列</a>（中等）<br>used 数组。</li>
+</ul>
+<h3 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/permutations-ii/">47. 全排列 II</a>（中等）<br>排序后同层跳过相同值。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/n-queens/">51. N 皇后</a>（困难）<br>每层放一行，维护列和两条对角线。</li>
+</ul>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/n-queens-ii/">52. N 皇后 II</a>（困难）<br>不保存棋盘，只统计叶子数。</li>
+</ul>
+<details>
+<summary>检查答案：本节核心实现</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">permute</span>(<span class="params">nums</span>):</span><br><span class="line">    answer = []</span><br><span class="line">    path = []</span><br><span class="line">    used = [<span class="literal">False</span>] * <span class="built_in">len</span>(nums)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>():</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(path) == <span class="built_in">len</span>(nums):</span><br><span class="line">            answer.append(path.copy())</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i, value <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">            <span class="keyword">if</span> used[i]:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            used[i] = <span class="literal">True</span></span><br><span class="line">            path.append(value)</span><br><span class="line">            dfs()</span><br><span class="line">            path.pop()</span><br><span class="line">            used[i] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    dfs()</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>请先确认：你能不用代码解释“为什么这一步不会漏掉正确答案”吗？</p>
+</details>
+
+<h2 id="12-本节你应该掌握"><a href="#12-本节你应该掌握" class="headerlink" title="12. 本节你应该掌握"></a>12. 本节你应该掌握</h2><ul>
+<li><input disabled="" type="checkbox"> 能区分组合的 start 与排列的 used。</li>
+<li><input disabled="" type="checkbox"> 能完整恢复两个状态。</li>
+<li><input disabled="" type="checkbox"> 能证明每个排列唯一。</li>
+<li><input disabled="" type="checkbox"> 能把 N 皇后映射为逐行决策。</li>
+<li><input disabled="" type="checkbox"> 完成 46 和 51。</li>
+</ul>
+<h2 id="下一节"><a href="#下一节" class="headerlink" title="下一节"></a>下一节</h2><p>下一阶段进入动态规划：先从暴力递归的重复子问题出发，把搜索结果缓存，再翻译成递推表。</p>
+<nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-15-backtracking-combinations/">← 15 组合型回溯</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-17-dynamic-programming-intro/">17 动态规划入门 →</a>
+</nav>
+
+<p>课程顺序参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1mY411D7f6/">灵茶山艾府《基础算法精讲 16》</a>；题目范围参考<a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的汇总</a>。本文讲解、代码组织与图解均为独立编写。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/algorithm-16-backtracking-permutations/%20plong's blog%20算法基础 16｜排列型回溯：每个位置放谁"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-17-dynamic-programming-intro/" title="算法基础 17｜动态规划入门：从记忆化搜索到递推"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 17｜动态规划入门：从记忆化搜索到递推</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-15-backtracking-combinations/" title="算法基础 15｜组合型回溯：从哪里选与剪枝">下一篇: 算法基础 15｜组合型回溯：从哪里选与剪枝&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

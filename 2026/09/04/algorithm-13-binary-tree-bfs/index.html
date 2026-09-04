@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>算法基础 13｜二叉树 BFS：队列如何守住层的边界 · plong's blog</title><meta name="description" content="用队列变化图解二叉树层序遍历，解释为什么先记录队列长度才能正确分层。"><link rel="canonical" href="https://ycyue.github.io/2026/09/04/algorithm-13-binary-tree-bfs/"><meta property="og:type" content="article"><meta property="og:title" content="算法基础 13｜二叉树 BFS：队列如何守住层的边界"><meta property="og:description" content="用队列变化图解二叉树层序遍历，解释为什么先记录队列长度才能正确分层。"><meta property="og:url" content="https://ycyue.github.io/2026/09/04/algorithm-13-binary-tree-bfs/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="算法基础 13｜二叉树 BFS：队列如何守住层的边界"><meta name="twitter:description" content="用队列变化图解二叉树层序遍历，解释为什么先记录队列长度才能正确分层。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>算法基础 13｜二叉树 BFS：队列如何守住层的边界</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/BFS/" title="BFS">BFS</a><span>&nbsp;</span></span></p><div class="post-abstract"><nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-12-lowest-common-ancestor/">← 12 最近公共祖先</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-14-backtracking-subsets/">14 子集型回溯 →</a>
+</nav>
+
+<p>BFS（广度优先搜索）像水波一样从根向外扩散。队列保证先进入的节点先处理，因此深度小的节点一定先于深度大的节点出队。</p>
+<p>这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。</p>
+<span id="more"></span>
+
+<h2 id="1-这节解决什么问题？"><a href="#1-这节解决什么问题？" class="headerlink" title="1. 这节解决什么问题？"></a>1. 这节解决什么问题？</h2><ul>
+<li><strong>输入</strong>：一棵二叉树。</li>
+<li><strong>输出</strong>：按层返回节点值，例如 <code>[[3],[9,20],[15,7]]</code>。</li>
+<li><strong>直接想法</strong>：给每个节点递归传深度，把值追加到对应下标列表。</li>
+<li><strong>真正瓶颈</strong>：递归方案可行，但本节要掌握队列以及最短步数问题通用的 BFS 分层方式。</li>
+</ul>
+<h2 id="2-从暴力解法开始"><a href="#2-从暴力解法开始" class="headerlink" title="2. 从暴力解法开始"></a>2. 从暴力解法开始</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">level_order_dfs</span>(<span class="params">root</span>):</span><br><span class="line">    answer = []</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">node, depth</span>):</span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">if</span> depth == <span class="built_in">len</span>(answer):</span><br><span class="line">            answer.append([])</span><br><span class="line">        answer[depth].append(node.val)</span><br><span class="line">        dfs(node.left, depth + <span class="number">1</span>)</span><br><span class="line">        dfs(node.right, depth + <span class="number">1</span>)</span><br><span class="line">    dfs(root, <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>DFS 同样是 O(n)，说明“暴力”并不总更慢。选择 BFS 的原因是它天然按距离&#x2F;层次处理，扩展到无权图最短路时尤其重要。</p>
+<p>暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。</p>
+<h2 id="3-核心思想"><a href="#3-核心思想" class="headerlink" title="3. 核心思想"></a>3. 核心思想</h2><div class="pattern-card"><strong>每层开始先冻结 `level_size = len(queue)`；本轮只弹出这批旧节点，新加入的孩子留给下一层。</strong></div>
+
+<p>Python 的 <code>deque</code> 支持 O(1) 的左端弹出。若在 <code>for</code> 循环条件中动态读取队列长度，新孩子会混进当前层；先保存长度就是在队列中画出层边界。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/13-binary-tree-bfs/process.svg" alt="二叉树 BFS执行过程图" loading="lazy">
+  <figcaption>先读取本层节点数，再扩展孩子，是层序遍历最关键的一行。</figcaption>
+</figure>
+
+<h2 id="4-为什么这个算法成立？"><a href="#4-为什么这个算法成立？" class="headerlink" title="4. 为什么这个算法成立？"></a>4. 为什么这个算法成立？</h2><h3 id="1-为什么队列按深度有序"><a href="#1-为什么队列按深度有序" class="headerlink" title="1. 为什么队列按深度有序"></a>1. 为什么队列按深度有序</h3><p>根深度为 0。假设某轮处理的节点深度都为 d，它们加入的孩子深度都是 d+1，并排在队尾；处理完本轮后，队列只剩这些 d+1 层节点。归纳即可。</p>
+<h3 id="2-为什么要冻结长度"><a href="#2-为什么要冻结长度" class="headerlink" title="2. 为什么要冻结长度"></a>2. 为什么要冻结长度</h3><p>处理本层节点时队列会持续增长。保存旧长度后，循环次数只对应本层；否则可能继续处理刚加入的孩子，所有层被混在一起。</p>
+<h3 id="3-为什么-BFS-能求无权最短路"><a href="#3-为什么-BFS-能求无权最短路" class="headerlink" title="3. 为什么 BFS 能求无权最短路"></a>3. 为什么 BFS 能求无权最短路</h3><p>BFS 按步数从小到大访问状态。一个状态第一次被发现时，不可能还存在步数更少但尚未处理的路径，因此第一次距离就是最短距离。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/13-binary-tree-bfs/proof.svg" alt="二叉树 BFS正确性推导图" loading="lazy">
+  <figcaption>每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。</figcaption>
+</figure>
+
+<h2 id="5-Python-模板"><a href="#5-Python-模板" class="headerlink" title="5. Python 模板"></a>5. Python 模板</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">level_order</span>(<span class="params">root</span>):</span><br><span class="line">    <span class="keyword">if</span> root <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line"></span><br><span class="line">    queue = deque([root])</span><br><span class="line">    answer = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> queue:</span><br><span class="line">        level = []</span><br><span class="line">        level_size = <span class="built_in">len</span>(queue)</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(level_size):</span><br><span class="line">            node = queue.popleft()</span><br><span class="line">            level.append(node.val)</span><br><span class="line">            <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                queue.append(node.left)</span><br><span class="line">            <span class="keyword">if</span> node.right <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                queue.append(node.right)</span><br><span class="line">        answer.append(level)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>若只需逐个访问而不关心层，可省略 <code>level_size</code>。只要题目按层统计最大值、右视图或层平均值，就必须保留边界。</p>
+<h2 id="6-手工模拟一次"><a href="#6-手工模拟一次" class="headerlink" title="6. 手工模拟一次"></a>6. 手工模拟一次</h2><p>输入：<code>root = [3,9,20,null,null,15,7]</code></p>
+<table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>开始队列</th>
+<th>弹出</th>
+<th>加入</th>
+<th>输出层</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>[3]</td>
+<td>3</td>
+<td>9,20</td>
+<td>[3]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>[9,20]</td>
+<td>9,20</td>
+<td>15,7</td>
+<td>[9,20]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>[15,7]</td>
+<td>15,7</td>
+<td>—</td>
+<td>[15,7]</td>
+</tr>
+</tbody></table>
+<p>答案为 <code>[[3],[9,20],[15,7]]</code>。</p>
+<h2 id="7-复杂度分析"><a href="#7-复杂度分析" class="headerlink" title="7. 复杂度分析"></a>7. 复杂度分析</h2><ul>
+<li><strong>时间复杂度：O(n)</strong>。每个节点入队一次、出队一次。</li>
+<li><strong>空间复杂度：O(w)</strong>。队列最大长度等于树的最大层宽 w，最坏 O(n)。</li>
+</ul>
+<h2 id="8-什么时候想到这个算法？"><a href="#8-什么时候想到这个算法？" class="headerlink" title="8. 什么时候想到这个算法？"></a>8. 什么时候想到这个算法？</h2><div class="pattern-card"><strong>按层/按最少步数扩散 + 每条边代价相同 → BFS + 队列</strong></div>
+
+<ul>
+<li>层序、每层最大值、右视图。</li>
+<li>无权图中的最短步数。</li>
+<li>从多个起点同时扩散。</li>
+</ul>
+<p>识别信号只是入口，最后仍要检查算法依赖的单调性、状态含义或数据结构不变量是否真的存在。</p>
+<h2 id="9-常见坑"><a href="#9-常见坑" class="headerlink" title="9. 常见坑"></a>9. 常见坑</h2><h3 id="坑-1：用-list-pop-0"><a href="#坑-1：用-list-pop-0" class="headerlink" title="坑 1：用 list.pop(0)"></a>坑 1：用 list.pop(0)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node = queue.pop(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>列表头部删除需要搬移元素，使用 <code>deque.popleft()</code>。</p>
+<h3 id="坑-2：循环中动态使用-len-queue"><a href="#坑-2：循环中动态使用-len-queue" class="headerlink" title="坑 2：循环中动态使用 len(queue)"></a>坑 2：循环中动态使用 len(queue)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> queue:</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(queue)):</span><br></pre></td></tr></table></figure>
+
+<p>这里只在进入 for 时求值一次尚可，但应显式保存 <code>level_size</code>，避免改写时混淆层边界。</p>
+<h3 id="坑-3：空树仍把-None-入队"><a href="#坑-3：空树仍把-None-入队" class="headerlink" title="坑 3：空树仍把 None 入队"></a>坑 3：空树仍把 None 入队</h3><p>先判断 root 是否为 None。</p>
+<h2 id="10-Python-补充"><a href="#10-Python-补充" class="headerlink" title="10. Python 补充"></a>10. Python 补充</h2><h3 id="collections-deque"><a href="#collections-deque" class="headerlink" title="collections.deque"></a><code>collections.deque</code></h3><p><code>deque</code> 是双端队列，<code>append()</code> 从右加入，<code>popleft()</code> 从左取出，两者都是 O(1)，适合 BFS。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line">queue = deque([<span class="number">1</span>])</span><br><span class="line">queue.append(<span class="number">2</span>)</span><br><span class="line">first = queue.popleft()</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-典型练习题"><a href="#11-典型练习题" class="headerlink" title="11. 典型练习题"></a>11. 典型练习题</h2><p>先根据提示独立画状态，再看代码。不要把练习变成复制模板。</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-level-order-traversal/">102. 二叉树的层序遍历</a>（中等）<br>冻结每层长度。</li>
+</ul>
+<h3 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/">103. 二叉树的锯齿形层序遍历</a>（中等）<br>按层号决定是否反转输出。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-bottom-left-tree-value/">513. 找树左下角的值</a>（中等）<br>每层第一个节点更新答案。</li>
+</ul>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/rotting-oranges/">994. 腐烂的橘子</a>（中等）<br>多源 BFS，每轮代表一分钟。</li>
+</ul>
+<details>
+<summary>检查答案：本节核心实现</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">level_order</span>(<span class="params">root</span>):</span><br><span class="line">    <span class="keyword">if</span> root <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line"></span><br><span class="line">    queue = deque([root])</span><br><span class="line">    answer = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> queue:</span><br><span class="line">        level = []</span><br><span class="line">        level_size = <span class="built_in">len</span>(queue)</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(level_size):</span><br><span class="line">            node = queue.popleft()</span><br><span class="line">            level.append(node.val)</span><br><span class="line">            <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                queue.append(node.left)</span><br><span class="line">            <span class="keyword">if</span> node.right <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                queue.append(node.right)</span><br><span class="line">        answer.append(level)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>请先确认：你能不用代码解释“为什么这一步不会漏掉正确答案”吗？</p>
+</details>
+
+<h2 id="12-本节你应该掌握"><a href="#12-本节你应该掌握" class="headerlink" title="12. 本节你应该掌握"></a>12. 本节你应该掌握</h2><ul>
+<li><input disabled="" type="checkbox"> 能解释队列先进先出。</li>
+<li><input disabled="" type="checkbox"> 能证明每轮队列只含同一层。</li>
+<li><input disabled="" type="checkbox"> 能写 level_size 分层模板。</li>
+<li><input disabled="" type="checkbox"> 能区分 O(h) DFS 栈与 O(w) BFS 队列。</li>
+<li><input disabled="" type="checkbox"> 完成 102 和 994。</li>
+</ul>
+<h2 id="下一节"><a href="#下一节" class="headerlink" title="下一节"></a>下一节</h2><p>下一阶段进入回溯：它仍是 DFS，但会在同一路径上做选择、递归，再撤销选择。</p>
+<nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-12-lowest-common-ancestor/">← 12 最近公共祖先</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-14-backtracking-subsets/">14 子集型回溯 →</a>
+</nav>
+
+<p>课程顺序参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1hG4y1277i/">灵茶山艾府《基础算法精讲 13》</a>；题目范围参考<a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的汇总</a>。本文讲解、代码组织与图解均为独立编写。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/algorithm-13-binary-tree-bfs/%20plong's blog%20算法基础 13｜二叉树 BFS：队列如何守住层的边界"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-14-backtracking-subsets/" title="算法基础 14｜子集型回溯：每个元素选还是不选"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 14｜子集型回溯：每个元素选还是不选</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-12-lowest-common-ancestor/" title="算法基础 12｜最近公共祖先：让子树向上汇报找到谁">下一篇: 算法基础 12｜最近公共祖先：让子树向上汇报找到谁&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

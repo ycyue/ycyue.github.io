@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>plong's blog</title><meta name="description" content="plong 的个人博客"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a class="current" href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-18-knapsack/">算法基础 18｜0-1 背包与完全背包：遍历方向为什么相反</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/动态规划/" title="动态规划">动态规划</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 17 动态规划入门
+  算法学习地图
+  19 最长公共子序列 →
+
+
+背包题的表面可能是分割数组、凑零钱或目标和，核心都在问：处理到某件物品、容量为 c 时，选或不选如何影响答案？
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
+
+
+1. 这节解决什么问题？
+输入...</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-17-dynamic-programming-intro/">算法基础 17｜动态规划入门：从记忆化搜索到递推</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/动态规划/" title="动态规划">动态规划</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 16 排列型回溯
+  算法学习地图
+  18 背包 DP →
+
+
+动态规划不是先猜公式。最自然的起点是暴力搜索：面对第 i 间房，选它还是不选？当你发现相同的 dfs(i) 被反复计算，缓存与递推就顺理成章。
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
+
+
+1....</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-16-backtracking-permutations/">算法基础 16｜排列型回溯：每个位置放谁</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/回溯/" title="回溯">回溯</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 15 组合型回溯
+  算法学习地图
+  17 动态规划入门 →
+
+
+组合中 [1,2] 与 [2,1] 相同，排列中却是两个答案。因此状态不再是“从哪里继续选”，而是“哪些元素已被当前路径使用”。
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
+
+
+1. 这节解决什...</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-15-backtracking-combinations/">算法基础 15｜组合型回溯：从哪里选与剪枝</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/回溯/" title="回溯">回溯</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 14 子集型回溯
+  算法学习地图
+  16 排列型回溯 →
+
+
+从 1 到 n 中选 k 个数，顺序不重要。若每层都从 1 重新选，会得到 [1,2] 与 [2,1] 这类重复排列。组合回溯用 start 保证只向后选。
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之...</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-14-backtracking-subsets/">算法基础 14｜子集型回溯：每个元素选还是不选</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/回溯/" title="回溯">回溯</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 13 二叉树 BFS
+  算法学习地图
+  15 组合型回溯 →
+
+
+数组 [1,2,3] 有 8 个子集。回溯不是神秘模板：它只是沿搜索树走一条决策路径，到叶子记录答案，再退回上一个分叉点尝试另一条路。
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
+
+
+1. 这...</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-13-binary-tree-bfs/">算法基础 13｜二叉树 BFS：队列如何守住层的边界</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/BFS/" title="BFS">BFS</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 12 最近公共祖先
+  算法学习地图
+  14 子集型回溯 →
+
+
+BFS（广度优先搜索）像水波一样从根向外扩散。队列保证先进入的节点先处理，因此深度小的节点一定先于深度大的节点出队。
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
+
+
+1. 这节解决什么问题？
+输...</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-12-lowest-common-ancestor/">算法基础 12｜最近公共祖先：让子树向上汇报找到谁</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/二叉树/" title="二叉树">二叉树</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 11 遍历与二叉搜索树
+  算法学习地图
+  13 二叉树 BFS →
+
+
+最近公共祖先是同时包含 p、q 的最深节点。与其从根向下猜方向，不如让左右子树向上汇报：“我这里找到了 p、q，还是已经找到了它们的公共祖先？”
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后...</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-11-bst-traversal/">算法基础 11｜前中后序与二叉搜索树：处理时机决定信息方向</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/二叉树/" title="二叉树">二叉树</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 10 二叉树递归进阶
+  算法学习地图
+  12 最近公共祖先 →
+
+
+前序、中序、后序的区别不是背三个字母顺序，而是“当前节点在什么时候处理”。BST 还提供一个额外性质：左子树所有值小于根，右子树所有值大于根。
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
+
+...</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-10-binary-tree-recursion-advanced/">算法基础 10｜二叉树递归进阶：让返回值携带足够信息</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/二叉树/" title="二叉树">二叉树</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 09 二叉树递归基础
+  算法学习地图
+  11 遍历与二叉搜索树 →
+
+
+判断平衡树时，父节点既需要孩子高度，又需要知道孩子内部是否已经不平衡。若每个节点都重新计算高度，会反复遍历同一子树。更好的办法是让一次递归同时汇报足够信息。
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只...</p></div><div class="post-container"><p class="post-title"><a href="/2026/09/04/algorithm-09-binary-tree-recursion/">算法基础 09｜二叉树递归基础：把大树交给两棵子树</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/二叉树/" title="二叉树">二叉树</a><span>&nbsp;</span></span></p><p class="post-abstract">
+  ← 08 链表删除与前后指针
+  算法学习地图
+  10 二叉树递归进阶 →
+
+
+递归不是“函数自己调用自己”这么简单。树上递归最稳定的思考顺序是：当前函数代表哪棵子树？空树返回什么？左右子树各返回什么？当前节点怎样合并？
+这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。...</p></div><div class="pagination no-margin-bottom"><p class="clearfix"><p> 第 2 页 / 共 4 页 &nbsp;</p><p><span class="pre pagbuttons"><i class="fa fa-angle-double-left"></i>&nbsp;<a role="navigation" href="/" aria-label="上一页">上一页</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/page/3/" aria-label="下一页">下一页</a>&nbsp;<i class="fa fa-angle-double-right"></i></span></p></p></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

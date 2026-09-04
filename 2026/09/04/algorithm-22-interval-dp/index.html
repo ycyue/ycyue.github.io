@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>算法基础 22｜区间 DP：从短区间推到长区间 · plong's blog</title><meta name="description" content="用最长回文子序列图解区间状态、两端决策和按长度递增的遍历顺序。"><link rel="canonical" href="https://ycyue.github.io/2026/09/04/algorithm-22-interval-dp/"><meta property="og:type" content="article"><meta property="og:title" content="算法基础 22｜区间 DP：从短区间推到长区间"><meta property="og:description" content="用最长回文子序列图解区间状态、两端决策和按长度递增的遍历顺序。"><meta property="og:url" content="https://ycyue.github.io/2026/09/04/algorithm-22-interval-dp/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="算法基础 22｜区间 DP：从短区间推到长区间"><meta name="twitter:description" content="用最长回文子序列图解区间状态、两端决策和按长度递增的遍历顺序。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>算法基础 22｜区间 DP：从短区间推到长区间</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/动态规划/" title="动态规划">动态规划</a><span>&nbsp;</span></span></p><div class="post-abstract"><nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-21-state-machine-dp/">← 21 状态机 DP</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-23-tree-dp-diameter/">23 树形 DP：直径 →</a>
+</nav>
+
+<p>当一次决策会删掉左端、右端或把区间分成两段时，前缀 dp 很难表达。区间 DP 直接定义 <code>dp[left][right]</code>，让更长区间依赖更短区间。</p>
+<p>这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。</p>
+<span id="more"></span>
+
+<h2 id="1-这节解决什么问题？"><a href="#1-这节解决什么问题？" class="headerlink" title="1. 这节解决什么问题？"></a>1. 这节解决什么问题？</h2><ul>
+<li><strong>输入</strong>：字符串 s。</li>
+<li><strong>输出</strong>：最长回文子序列长度。</li>
+<li><strong>直接想法</strong>：枚举所有子序列并检查是否回文。</li>
+<li><strong>真正瓶颈</strong>：共有 2ⁿ 个子序列；而同一左右边界会被不同删除顺序反复到达。</li>
+</ul>
+<h2 id="2-从暴力解法开始"><a href="#2-从暴力解法开始" class="headerlink" title="2. 从暴力解法开始"></a>2. 从暴力解法开始</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">lps_brute</span>(<span class="params">s</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">left, right</span>):</span><br><span class="line">        <span class="keyword">if</span> left &gt; right:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> left == right:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> s[left] == s[right]:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span> + dfs(left + <span class="number">1</span>, right - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(dfs(left + <span class="number">1</span>, right), dfs(left, right - <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> dfs(<span class="number">0</span>, <span class="built_in">len</span>(s) - <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>递归状态只有 O(n²) 个。区间表按长度递增填充，确保 <code>[left+1,right-1]</code>、<code>[left+1,right]</code>、<code>[left,right-1]</code> 都已计算。</p>
+<p>暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。</p>
+<h2 id="3-核心思想"><a href="#3-核心思想" class="headerlink" title="3. 核心思想"></a>3. 核心思想</h2><div class="pattern-card"><strong>dp[left][right] 表示闭区间 s[left:right+1] 的答案；短区间是长区间的地基。</strong></div>
+
+<p>两端相等时可同时进入回文序列，中间取最优；两端不同则至少舍弃一端，取两个缩短区间的较大值。单字符区间初始化为 1。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/22-interval-dp/process.svg" alt="区间 DP执行过程图" loading="lazy">
+  <figcaption>按长度填表比按普通行列更直观：所有箭头都从短区间指向长区间。</figcaption>
+</figure>
+
+<h2 id="4-为什么这个算法成立？"><a href="#4-为什么这个算法成立？" class="headerlink" title="4. 为什么这个算法成立？"></a>4. 为什么这个算法成立？</h2><h3 id="1-两端相等为什么加二"><a href="#1-两端相等为什么加二" class="headerlink" title="1. 两端相等为什么加二"></a>1. 两端相等为什么加二</h3><p>若 <code>s[l]==s[r]</code>，可以把它们放到区间 <code>(l,r)</code> 的最长回文子序列两端，形成更长回文。存在一个最优解能同时使用这两个边界字符。</p>
+<h3 id="2-两端不同为什么舍弃一端"><a href="#2-两端不同为什么舍弃一端" class="headerlink" title="2. 两端不同为什么舍弃一端"></a>2. 两端不同为什么舍弃一端</h3><p>回文序列的首尾字符必须相等，因此不同的 s[l]、s[r] 不可能同时作为所选序列两端。任一最优解至少不使用其中一个，被两个子区间之一覆盖。</p>
+<h3 id="3-为什么必须先算短区间"><a href="#3-为什么必须先算短区间" class="headerlink" title="3. 为什么必须先算短区间"></a>3. 为什么必须先算短区间</h3><p>当前状态依赖长度减少 1 或 2 的状态。如果按错误方向遍历，读到的仍是初始 0，会让结果偏小。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/22-interval-dp/proof.svg" alt="区间 DP正确性推导图" loading="lazy">
+  <figcaption>每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。</figcaption>
+</figure>
+
+<h2 id="5-Python-模板"><a href="#5-Python-模板" class="headerlink" title="5. Python 模板"></a>5. Python 模板</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">longest_palindrome_subseq</span>(<span class="params">s</span>):</span><br><span class="line">    n = <span class="built_in">len</span>(s)</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    dp = [[<span class="number">0</span>] * n <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n)]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        dp[i][i] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> length <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, n + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> left <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, n - length + <span class="number">1</span>):</span><br><span class="line">            right = left + length - <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> s[left] == s[right]:</span><br><span class="line">                dp[left][right] = <span class="number">2</span> + (dp[left + <span class="number">1</span>][right - <span class="number">1</span>] <span class="keyword">if</span> length &gt; <span class="number">2</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[left][right] = <span class="built_in">max</span>(dp[left + <span class="number">1</span>][right], dp[left][right - <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">0</span>][n - <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>长度为 2 且两端相等时内部是空区间，所以额外取 0。也可把表扩展或改变遍历方式统一边界。</p>
+<h2 id="6-手工模拟一次"><a href="#6-手工模拟一次" class="headerlink" title="6. 手工模拟一次"></a>6. 手工模拟一次</h2><p>输入：<code>s=&quot;bbbab&quot;</code></p>
+<table>
+<thead>
+<tr>
+<th>区间</th>
+<th>两端</th>
+<th>来源</th>
+<th>dp</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[0,0]</td>
+<td>b</td>
+<td>单字符</td>
+<td>1</td>
+</tr>
+<tr>
+<td>[0,1]</td>
+<td>b&#x3D;b</td>
+<td>空内部+2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>[1,3]</td>
+<td>b≠a</td>
+<td>max([2,3],[1,2])</td>
+<td>2</td>
+</tr>
+<tr>
+<td>[0,4]</td>
+<td>b&#x3D;b</td>
+<td>dp[1][3]+2</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>答案 4，对应子序列 “bbbb”。</p>
+<h2 id="7-复杂度分析"><a href="#7-复杂度分析" class="headerlink" title="7. 复杂度分析"></a>7. 复杂度分析</h2><ul>
+<li><strong>时间复杂度：O(n²)</strong>。共有约 n²&#x2F;2 个有效区间，每个常数转移。</li>
+<li><strong>空间复杂度：O(n²)</strong>。保存所有左右边界组合。</li>
+</ul>
+<h2 id="8-什么时候想到这个算法？"><a href="#8-什么时候想到这个算法？" class="headerlink" title="8. 什么时候想到这个算法？"></a>8. 什么时候想到这个算法？</h2><div class="pattern-card"><strong>答案定义在连续区间 + 决策缩两端或枚举分割点 → 区间 DP</strong></div>
+
+<ul>
+<li>回文、合并石子、切割区间。</li>
+<li>操作对象始终是一段 <code>[l,r]</code>。</li>
+<li>大区间由更短区间或两段子区间得到。</li>
+</ul>
+<p>识别信号只是入口，最后仍要检查算法依赖的单调性、状态含义或数据结构不变量是否真的存在。</p>
+<h2 id="9-常见坑"><a href="#9-常见坑" class="headerlink" title="9. 常见坑"></a>9. 常见坑</h2><h3 id="坑-1：按-left-从小到大、right-从小到大"><a href="#坑-1：按-left-从小到大、right-从小到大" class="headerlink" title="坑 1：按 left 从小到大、right 从小到大"></a>坑 1：按 left 从小到大、right 从小到大</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> left <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    <span class="keyword">for</span> right <span class="keyword">in</span> <span class="built_in">range</span>(left, n):</span><br></pre></td></tr></table></figure>
+
+<p>可能在依赖尚未计算时读取。按长度递增最清楚。</p>
+<h3 id="坑-2：空字符串返回-dp-0"><a href="#坑-2：空字符串返回-dp-0" class="headerlink" title="坑 2：空字符串返回 dp[0]"></a>坑 2：空字符串返回 dp[0]</h3><p>先处理 n&#x3D;&#x3D;0。</p>
+<h3 id="坑-3：长度2访问反向区间"><a href="#坑-3：长度2访问反向区间" class="headerlink" title="坑 3：长度2访问反向区间"></a>坑 3：长度2访问反向区间</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[left + <span class="number">1</span>][right - <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>为长度 2 单独把内部贡献设为 0。</p>
+<h2 id="10-Python-补充"><a href="#10-Python-补充" class="headerlink" title="10. Python 补充"></a>10. Python 补充</h2><h3 id="切片与区间-DP-下标"><a href="#切片与区间-DP-下标" class="headerlink" title="切片与区间 DP 下标"></a>切片与区间 DP 下标</h3><p>Python 切片右端不包含，而本文 dp 使用闭区间。写 <code>s[left:right+1]</code> 才对应 dp 的范围；不要让两套边界混在一起。</p>
+<h2 id="11-典型练习题"><a href="#11-典型练习题" class="headerlink" title="11. 典型练习题"></a>11. 典型练习题</h2><p>先根据提示独立画状态，再看代码。不要把练习变成复制模板。</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-palindromic-subsequence/">516. 最长回文子序列</a>（中等）<br>两端相等&#x2F;不等。</li>
+</ul>
+<h3 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-score-triangulation-of-polygon/">1039. 多边形三角剖分的最低得分</a>（中等）<br>枚举区间内分割点。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-cost-to-cut-a-stick/">1547. 切棍子的最小成本</a>（困难）<br>排序切点，区间代价加左右子问题。</li>
+</ul>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/burst-balloons/">312. 戳气球</a>（困难）<br>反向思考区间内最后戳哪个。</li>
+</ul>
+<details>
+<summary>检查答案：本节核心实现</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">longest_palindrome_subseq</span>(<span class="params">s</span>):</span><br><span class="line">    n = <span class="built_in">len</span>(s)</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    dp = [[<span class="number">0</span>] * n <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n)]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        dp[i][i] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> length <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, n + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> left <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, n - length + <span class="number">1</span>):</span><br><span class="line">            right = left + length - <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> s[left] == s[right]:</span><br><span class="line">                dp[left][right] = <span class="number">2</span> + (dp[left + <span class="number">1</span>][right - <span class="number">1</span>] <span class="keyword">if</span> length &gt; <span class="number">2</span> <span class="keyword">else</span> <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[left][right] = <span class="built_in">max</span>(dp[left + <span class="number">1</span>][right], dp[left][right - <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">0</span>][n - <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>请先确认：你能不用代码解释“为什么这一步不会漏掉正确答案”吗？</p>
+</details>
+
+<h2 id="12-本节你应该掌握"><a href="#12-本节你应该掌握" class="headerlink" title="12. 本节你应该掌握"></a>12. 本节你应该掌握</h2><ul>
+<li><input disabled="" type="checkbox"> 能定义闭区间状态。</li>
+<li><input disabled="" type="checkbox"> 能推导两端分支。</li>
+<li><input disabled="" type="checkbox"> 能按长度确定遍历顺序。</li>
+<li><input disabled="" type="checkbox"> 能处理单字符、空区间。</li>
+<li><input disabled="" type="checkbox"> 完成 516 和 1039。</li>
+</ul>
+<h2 id="下一节"><a href="#下一节" class="headerlink" title="下一节"></a>下一节</h2><p>下一阶段把 DP 搬到树上：子树返回向下延伸的链，当前节点把两条链拼成直径。</p>
+<nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-21-state-machine-dp/">← 21 状态机 DP</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-23-tree-dp-diameter/">23 树形 DP：直径 →</a>
+</nav>
+
+<p>课程顺序参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Gs4y1E7EU/">灵茶山艾府《基础算法精讲 22》</a>；题目范围参考<a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的汇总</a>。本文讲解、代码组织与图解均为独立编写。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/algorithm-22-interval-dp/%20plong's blog%20算法基础 22｜区间 DP：从短区间推到长区间"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-23-tree-dp-diameter/" title="算法基础 23｜树形 DP（一）：返回单链，更新两链之和"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 23｜树形 DP（一）：返回单链，更新两链之和</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-21-state-machine-dp/" title="算法基础 21｜状态机 DP：把股票交易画成状态转移">下一篇: 算法基础 21｜状态机 DP：把股票交易画成状态转移&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

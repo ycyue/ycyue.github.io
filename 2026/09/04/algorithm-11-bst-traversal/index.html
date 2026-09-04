@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>算法基础 11｜前中后序与二叉搜索树：处理时机决定信息方向 · plong's blog</title><meta name="description" content="图解前序、中序、后序处理时机，并用取值范围证明二叉搜索树是否合法。"><link rel="canonical" href="https://ycyue.github.io/2026/09/04/algorithm-11-bst-traversal/"><meta property="og:type" content="article"><meta property="og:title" content="算法基础 11｜前中后序与二叉搜索树：处理时机决定信息方向"><meta property="og:description" content="图解前序、中序、后序处理时机，并用取值范围证明二叉搜索树是否合法。"><meta property="og:url" content="https://ycyue.github.io/2026/09/04/algorithm-11-bst-traversal/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="算法基础 11｜前中后序与二叉搜索树：处理时机决定信息方向"><meta name="twitter:description" content="图解前序、中序、后序处理时机，并用取值范围证明二叉搜索树是否合法。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>算法基础 11｜前中后序与二叉搜索树：处理时机决定信息方向</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/二叉树/" title="二叉树">二叉树</a><span>&nbsp;</span></span></p><div class="post-abstract"><nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-10-binary-tree-recursion-advanced/">← 10 二叉树递归进阶</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-12-lowest-common-ancestor/">12 最近公共祖先 →</a>
+</nav>
+
+<p>前序、中序、后序的区别不是背三个字母顺序，而是“当前节点在什么时候处理”。BST 还提供一个额外性质：左子树所有值小于根，右子树所有值大于根。</p>
+<p>这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。</p>
+<span id="more"></span>
+
+<h2 id="1-这节解决什么问题？"><a href="#1-这节解决什么问题？" class="headerlink" title="1. 这节解决什么问题？"></a>1. 这节解决什么问题？</h2><ul>
+<li><strong>输入</strong>：一棵二叉树。</li>
+<li><strong>输出</strong>：判断它是否为严格二叉搜索树。</li>
+<li><strong>直接想法</strong>：对每个节点分别求左子树最大值和右子树最小值。</li>
+<li><strong>真正瓶颈</strong>：重复扫描子树，且只比较直接孩子会漏掉更深层违反范围的节点。</li>
+</ul>
+<h2 id="2-从暴力解法开始"><a href="#2-从暴力解法开始" class="headerlink" title="2. 从暴力解法开始"></a>2. 从暴力解法开始</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">inorder_values</span>(<span class="params">node, values</span>):</span><br><span class="line">    <span class="keyword">if</span> node <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    inorder_values(node.left, values)</span><br><span class="line">    values.append(node.val)</span><br><span class="line">    inorder_values(node.right, values)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">is_valid_bst_list</span>(<span class="params">root</span>):</span><br><span class="line">    values = []</span><br><span class="line">    inorder_values(root, values)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">all</span>(values[i] &lt; values[i + <span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(values) - <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<p>中序列表法时间 O(n)、空间 O(n)，已经正确。范围递归不用保存全部值，只把祖先施加的上下界传给当前节点。</p>
+<p>暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。</p>
+<h2 id="3-核心思想"><a href="#3-核心思想" class="headerlink" title="3. 核心思想"></a>3. 核心思想</h2><div class="pattern-card"><strong>前序向下传约束，中序按有序顺序访问，后序向上汇总信息；BST 验证可给每个节点传合法开区间。</strong></div>
+
+<p>根节点范围是 <code>(-∞,+∞)</code>。进入左子树，上界收紧为根值；进入右子树，下界提高为根值。当前值只要不严格落在 <code>(low, high)</code> 内，就立即失败。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/11-bst-traversal/process.svg" alt="遍历与二叉搜索树执行过程图" loading="lazy">
+  <figcaption>节点 6 虽小于父节点 7，却仍必须大于祖先 5；范围参数保留了这条信息。</figcaption>
+</figure>
+
+<h2 id="4-为什么这个算法成立？"><a href="#4-为什么这个算法成立？" class="headerlink" title="4. 为什么这个算法成立？"></a>4. 为什么这个算法成立？</h2><h3 id="1-为什么只比较孩子不够"><a href="#1-为什么只比较孩子不够" class="headerlink" title="1. 为什么只比较孩子不够"></a>1. 为什么只比较孩子不够</h3><p>树 <code>5 / \ 1 6</code> 中，6 的左孩子若为 4，它小于直接父节点 6，但落在根 5 的右子树中，必须大于 5。祖先范围不可丢失。</p>
+<h3 id="2-为什么使用开区间"><a href="#2-为什么使用开区间" class="headerlink" title="2. 为什么使用开区间"></a>2. 为什么使用开区间</h3><p>题目定义严格 BST，不允许重复值。因此当前值必须满足 <code>low &lt; node.val &lt; high</code>，等于任一边界都失败。</p>
+<h3 id="3-中序法为什么成立"><a href="#3-中序法为什么成立" class="headerlink" title="3. 中序法为什么成立"></a>3. 中序法为什么成立</h3><p>BST 的左子树值全部更小，右子树值全部更大；递归应用后，中序序列严格递增。反过来，若整棵树中序严格递增，也能保证每个节点满足左右关系。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/11-bst-traversal/proof.svg" alt="遍历与二叉搜索树正确性推导图" loading="lazy">
+  <figcaption>每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。</figcaption>
+</figure>
+
+<h2 id="5-Python-模板"><a href="#5-Python-模板" class="headerlink" title="5. Python 模板"></a>5. Python 模板</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_valid_bst</span>(<span class="params">root</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">node, low, high</span>):</span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (low &lt; node.val &lt; high):</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> (dfs(node.left, low, node.val)</span><br><span class="line">                <span class="keyword">and</span> dfs(node.right, node.val, high))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dfs(root, <span class="built_in">float</span>(<span class="string">&#x27;-inf&#x27;</span>), <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>这里在前序位置检查当前值并向下传范围。若使用中序遍历，则保存上一个访问值并检查严格递增。</p>
+<h2 id="6-手工模拟一次"><a href="#6-手工模拟一次" class="headerlink" title="6. 手工模拟一次"></a>6. 手工模拟一次</h2><p>输入：<code>根 5，左 3，右 7；7 的左孩子是 6</code></p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>合法范围</th>
+<th>值</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5</td>
+<td>(-∞,+∞)</td>
+<td>5</td>
+<td>通过</td>
+</tr>
+<tr>
+<td>3</td>
+<td>(-∞,5)</td>
+<td>3</td>
+<td>通过</td>
+</tr>
+<tr>
+<td>7</td>
+<td>(5,+∞)</td>
+<td>7</td>
+<td>通过</td>
+</tr>
+<tr>
+<td>6</td>
+<td>(5,7)</td>
+<td>6</td>
+<td>通过</td>
+</tr>
+</tbody></table>
+<p>6 的范围同时包含祖先 5 与父节点 7 的约束。</p>
+<h2 id="7-复杂度分析"><a href="#7-复杂度分析" class="headerlink" title="7. 复杂度分析"></a>7. 复杂度分析</h2><ul>
+<li><strong>时间复杂度：O(n)</strong>。每个节点验证一次，失败时可提前结束。</li>
+<li><strong>空间复杂度：O(h)</strong>。递归栈随树高增长；范围只是每层两个数。</li>
+</ul>
+<h2 id="8-什么时候想到这个算法？"><a href="#8-什么时候想到这个算法？" class="headerlink" title="8. 什么时候想到这个算法？"></a>8. 什么时候想到这个算法？</h2><div class="pattern-card"><strong>BST + 顺序查询 → 中序；祖先约束 → 前序传范围；子树统计 → 后序返回</strong></div>
+
+<ul>
+<li>题目出现二叉搜索树。</li>
+<li>要求第 k 小、验证有序或按序输出。</li>
+<li>当前节点的合法性取决于祖先范围。</li>
+</ul>
+<p>识别信号只是入口，最后仍要检查算法依赖的单调性、状态含义或数据结构不变量是否真的存在。</p>
+<h2 id="9-常见坑"><a href="#9-常见坑" class="headerlink" title="9. 常见坑"></a>9. 常见坑</h2><h3 id="坑-1：只比较直接孩子"><a href="#坑-1：只比较直接孩子" class="headerlink" title="坑 1：只比较直接孩子"></a>坑 1：只比较直接孩子</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> node.left.val &lt; node.val &lt; node.right.val</span><br></pre></td></tr></table></figure>
+
+<p>更深节点可能违反祖先限制。</p>
+<h3 id="坑-2：允许等号"><a href="#坑-2：允许等号" class="headerlink" title="坑 2：允许等号"></a>坑 2：允许等号</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> low &lt;= node.val &lt;= high:</span><br></pre></td></tr></table></figure>
+
+<p>严格 BST 不允许重复，必须用开区间。</p>
+<h3 id="坑-3：空孩子访问-val"><a href="#坑-3：空孩子访问-val" class="headerlink" title="坑 3：空孩子访问 val"></a>坑 3：空孩子访问 val</h3><p>递归基本情况先处理 None。</p>
+<h2 id="10-Python-补充"><a href="#10-Python-补充" class="headerlink" title="10. Python 补充"></a>10. Python 补充</h2><h3 id="正负无穷"><a href="#正负无穷" class="headerlink" title="正负无穷"></a>正负无穷</h3><p><code>float(&quot;-inf&quot;)</code> 和 <code>float(&quot;inf&quot;)</code> 比任何有限整数都小或大，适合表示根节点初始无限范围。</p>
+<h2 id="11-典型练习题"><a href="#11-典型练习题" class="headerlink" title="11. 典型练习题"></a>11. 典型练习题</h2><p>先根据提示独立画状态，再看代码。不要把练习变成复制模板。</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-preorder-traversal/">144. 二叉树的前序遍历</a>（简单）<br>在递归孩子前记录节点。</li>
+</ul>
+<h3 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/validate-binary-search-tree/">98. 验证二叉搜索树</a>（中等）<br>向下传开区间。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/kth-smallest-element-in-a-bst/">230. 二叉搜索树中第 K 小的元素</a>（中等）<br>中序第 k 个。</li>
+</ul>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/range-sum-of-bst/">938. 二叉搜索树的范围和</a>（简单）<br>利用范围剪掉整棵不可能子树。</li>
+</ul>
+<details>
+<summary>检查答案：本节核心实现</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">is_valid_bst</span>(<span class="params">root</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">node, low, high</span>):</span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (low &lt; node.val &lt; high):</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> (dfs(node.left, low, node.val)</span><br><span class="line">                <span class="keyword">and</span> dfs(node.right, node.val, high))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dfs(root, <span class="built_in">float</span>(<span class="string">&#x27;-inf&#x27;</span>), <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>请先确认：你能不用代码解释“为什么这一步不会漏掉正确答案”吗？</p>
+</details>
+
+<h2 id="12-本节你应该掌握"><a href="#12-本节你应该掌握" class="headerlink" title="12. 本节你应该掌握"></a>12. 本节你应该掌握</h2><ul>
+<li><input disabled="" type="checkbox"> 能解释三种遍历是处理时机。</li>
+<li><input disabled="" type="checkbox"> 能说明只比较孩子为何错误。</li>
+<li><input disabled="" type="checkbox"> 能写范围递归。</li>
+<li><input disabled="" type="checkbox"> 能用中序有序性解决第 k 小。</li>
+<li><input disabled="" type="checkbox"> 完成 98 和 230。</li>
+</ul>
+<h2 id="下一节"><a href="#下一节" class="headerlink" title="下一节"></a>下一节</h2><p>下一节继续用后序返回值做分类讨论：左右子树分别是否找到目标，决定当前节点是否为最近公共祖先。</p>
+<nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-10-binary-tree-recursion-advanced/">← 10 二叉树递归进阶</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-12-lowest-common-ancestor/">12 最近公共祖先 →</a>
+</nav>
+
+<p>课程顺序参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV14G411P7C1/">灵茶山艾府《基础算法精讲 11》</a>；题目范围参考<a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的汇总</a>。本文讲解、代码组织与图解均为独立编写。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/algorithm-11-bst-traversal/%20plong's blog%20算法基础 11｜前中后序与二叉搜索树：处理时机决定信息方向"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-12-lowest-common-ancestor/" title="算法基础 12｜最近公共祖先：让子树向上汇报找到谁"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 12｜最近公共祖先：让子树向上汇报找到谁</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-10-binary-tree-recursion-advanced/" title="算法基础 10｜二叉树递归进阶：让返回值携带足够信息">下一篇: 算法基础 10｜二叉树递归进阶：让返回值携带足够信息&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>算法基础 09｜二叉树递归基础：把大树交给两棵子树 · plong's blog</title><meta name="description" content="从最大深度出发，图解二叉树递归的返回值、基本情况和自底向上信息合并。"><link rel="canonical" href="https://ycyue.github.io/2026/09/04/algorithm-09-binary-tree-recursion/"><meta property="og:type" content="article"><meta property="og:title" content="算法基础 09｜二叉树递归基础：把大树交给两棵子树"><meta property="og:description" content="从最大深度出发，图解二叉树递归的返回值、基本情况和自底向上信息合并。"><meta property="og:url" content="https://ycyue.github.io/2026/09/04/algorithm-09-binary-tree-recursion/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="算法基础 09｜二叉树递归基础：把大树交给两棵子树"><meta name="twitter:description" content="从最大深度出发，图解二叉树递归的返回值、基本情况和自底向上信息合并。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>算法基础 09｜二叉树递归基础：把大树交给两棵子树</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/二叉树/" title="二叉树">二叉树</a><span>&nbsp;</span></span></p><div class="post-abstract"><nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-08-linked-list-deletion/">← 08 链表删除与前后指针</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-10-binary-tree-recursion-advanced/">10 二叉树递归进阶 →</a>
+</nav>
+
+<p>递归不是“函数自己调用自己”这么简单。树上递归最稳定的思考顺序是：当前函数代表哪棵子树？空树返回什么？左右子树各返回什么？当前节点怎样合并？</p>
+<p>这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。</p>
+<span id="more"></span>
+
+<h2 id="1-这节解决什么问题？"><a href="#1-这节解决什么问题？" class="headerlink" title="1. 这节解决什么问题？"></a>1. 这节解决什么问题？</h2><ul>
+<li><strong>输入</strong>：一棵二叉树的根节点。</li>
+<li><strong>输出</strong>：树的最大深度。</li>
+<li><strong>直接想法</strong>：枚举所有从根出发的路径，记录最长路径节点数。</li>
+<li><strong>真正瓶颈</strong>：若不断复制路径列表，会产生额外存储；更重要的是没有利用“整棵树深度由左右子树深度决定”的结构。</li>
+</ul>
+<h2 id="2-从暴力解法开始"><a href="#2-从暴力解法开始" class="headerlink" title="2. 从暴力解法开始"></a>2. 从暴力解法开始</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">max_depth_paths</span>(<span class="params">root</span>):</span><br><span class="line">    <span class="keyword">if</span> root <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    paths = [(root, <span class="number">1</span>)]</span><br><span class="line">    answer = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> paths:</span><br><span class="line">        node, depth = paths.pop()</span><br><span class="line">        answer = <span class="built_in">max</span>(answer, depth)</span><br><span class="line">        <span class="keyword">if</span> node.left:</span><br><span class="line">            paths.append((node.left, depth + <span class="number">1</span>))</span><br><span class="line">        <span class="keyword">if</span> node.right:</span><br><span class="line">            paths.append((node.right, depth + <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>显式栈方法是正确的 O(n) 解法，但它把递归调用栈手动写了出来。递归能更直接表达子树定义。</p>
+<p>暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。</p>
+<h2 id="3-核心思想"><a href="#3-核心思想" class="headerlink" title="3. 核心思想"></a>3. 核心思想</h2><div class="pattern-card"><strong>定义 dfs(node) 为“以 node 为根的子树最大深度”；答案就是 1 + 左右子树深度的较大值。</strong></div>
+
+<p>空节点代表空树，深度为 0。非空节点自己贡献 1 层，剩余深度来自更深的那棵子树。先得到孩子返回值再计算当前值，属于自底向上的后序递归。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/09-binary-tree-recursion/process.svg" alt="二叉树递归基础执行过程图" loading="lazy">
+  <figcaption>节点 2 收到孩子 4、5 的深度后返回 2；根节点再把它变成 3。</figcaption>
+</figure>
+
+<h2 id="4-为什么这个算法成立？"><a href="#4-为什么这个算法成立？" class="headerlink" title="4. 为什么这个算法成立？"></a>4. 为什么这个算法成立？</h2><h3 id="1-为什么能拆成左右子树"><a href="#1-为什么能拆成左右子树" class="headerlink" title="1. 为什么能拆成左右子树"></a>1. 为什么能拆成左右子树</h3><p>从当前根到任一叶子的路径，第一步只能进入左子树或右子树。最长路径必然等于两棵子树最长路径中的较大者，再加当前根这一层。</p>
+<h3 id="2-为什么空节点返回-0"><a href="#2-为什么空节点返回-0" class="headerlink" title="2. 为什么空节点返回 0"></a>2. 为什么空节点返回 0</h3><p>空树没有节点。叶子节点的左右孩子都为空，于是它返回 <code>max(0,0)+1=1</code>，与“叶子深度为 1”的定义一致。</p>
+<h3 id="3-递归为什么会停"><a href="#3-递归为什么会停" class="headerlink" title="3. 递归为什么会停"></a>3. 递归为什么会停</h3><p>每次调用都进入更小的子树，最终遇到 None。有限节点的树不可能无限下降。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/09-binary-tree-recursion/proof.svg" alt="二叉树递归基础正确性推导图" loading="lazy">
+  <figcaption>每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。</figcaption>
+</figure>
+
+<h2 id="5-Python-模板"><a href="#5-Python-模板" class="headerlink" title="5. Python 模板"></a>5. Python 模板</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TreeNode</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, val=<span class="number">0</span>, left=<span class="literal">None</span>, right=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.val = val</span><br><span class="line">        <span class="variable language_">self</span>.left = left</span><br><span class="line">        <span class="variable language_">self</span>.right = right</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">max_depth</span>(<span class="params">root</span>):</span><br><span class="line">    <span class="keyword">if</span> root <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    left_depth = max_depth(root.left)</span><br><span class="line">    right_depth = max_depth(root.right)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">max</span>(left_depth, right_depth) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>先把 <code>max_depth(root)</code> 的含义写成一句话。函数含义一旦改变，基本情况和返回式也必须一起改变。</p>
+<h2 id="6-手工模拟一次"><a href="#6-手工模拟一次" class="headerlink" title="6. 手工模拟一次"></a>6. 手工模拟一次</h2><p>输入：<code>1 的孩子是 2、3；2 的孩子是 4、5</code></p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>左子树返回</th>
+<th>右子树返回</th>
+<th>当前返回</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<p>计算顺序从叶子向根汇总，这就是后序位置使用返回值。</p>
+<h2 id="7-复杂度分析"><a href="#7-复杂度分析" class="headerlink" title="7. 复杂度分析"></a>7. 复杂度分析</h2><ul>
+<li><strong>时间复杂度：O(n)</strong>。每个非空节点进入一次，并做常数次比较。</li>
+<li><strong>空间复杂度：O(h)</strong>。递归栈深度等于树高 h；平衡树为 O(log n)，退化链状树为 O(n)。</li>
+</ul>
+<h2 id="8-什么时候想到这个算法？"><a href="#8-什么时候想到这个算法？" class="headerlink" title="8. 什么时候想到这个算法？"></a>8. 什么时候想到这个算法？</h2><div class="pattern-card"><strong>整棵树答案能由左右子树答案合并 → 定义子树递归函数</strong></div>
+
+<ul>
+<li>问题天然描述“以某节点为根的子树”。</li>
+<li>父节点只需要孩子返回少量信息。</li>
+<li>空树能给出自然的单位值或边界值。</li>
+</ul>
+<p>识别信号只是入口，最后仍要检查算法依赖的单调性、状态含义或数据结构不变量是否真的存在。</p>
+<h2 id="9-常见坑"><a href="#9-常见坑" class="headerlink" title="9. 常见坑"></a>9. 常见坑</h2><h3 id="坑-1：忘记基本情况"><a href="#坑-1：忘记基本情况" class="headerlink" title="坑 1：忘记基本情况"></a>坑 1：忘记基本情况</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">node</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + dfs(node.left)</span><br></pre></td></tr></table></figure>
+
+<p>遇到 None 后仍访问 left，会报错。先处理空节点。</p>
+<h3 id="坑-2：函数含义中途改变"><a href="#坑-2：函数含义中途改变" class="headerlink" title="坑 2：函数含义中途改变"></a>坑 2：函数含义中途改变</h3><p>不要一会儿让 dfs 返回节点数，一会儿又当边数使用；深度定义要统一。</p>
+<h3 id="坑-3：只递归不返回"><a href="#坑-3：只递归不返回" class="headerlink" title="坑 3：只递归不返回"></a>坑 3：只递归不返回</h3><p>父节点依赖子树结果时必须 <code>return</code>；仅访问节点的遍历才可能不返回值。</p>
+<h2 id="10-Python-补充"><a href="#10-Python-补充" class="headerlink" title="10. Python 补充"></a>10. Python 补充</h2><h3 id="递归调用栈"><a href="#递归调用栈" class="headerlink" title="递归调用栈"></a>递归调用栈</h3><p>每次函数调用都保存参数和返回位置。Python 默认递归深度有限，极深的链状树可能触发 <code>RecursionError</code>；题目约束很大时可改用显式栈。</p>
+<h2 id="11-典型练习题"><a href="#11-典型练习题" class="headerlink" title="11. 典型练习题"></a>11. 典型练习题</h2><p>先根据提示独立画状态，再看代码。不要把练习变成复制模板。</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/maximum-depth-of-binary-tree/">104. 二叉树的最大深度</a>（简单）<br>定义 dfs 为子树深度。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-depth-of-binary-tree/">111. 二叉树的最小深度</a>（简单）<br>只有一个孩子时不能错误地取 0。</li>
+</ul>
+<h3 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/path-sum/">112. 路径总和</a>（简单）<br>把剩余目标传给孩子。</li>
+</ul>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/sum-root-to-leaf-numbers/">129. 求根节点到叶节点数字之和</a>（中等）<br>沿路径维护当前数字。</li>
+</ul>
+<details>
+<summary>检查答案：本节核心实现</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TreeNode</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, val=<span class="number">0</span>, left=<span class="literal">None</span>, right=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.val = val</span><br><span class="line">        <span class="variable language_">self</span>.left = left</span><br><span class="line">        <span class="variable language_">self</span>.right = right</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">max_depth</span>(<span class="params">root</span>):</span><br><span class="line">    <span class="keyword">if</span> root <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    left_depth = max_depth(root.left)</span><br><span class="line">    right_depth = max_depth(root.right)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">max</span>(left_depth, right_depth) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>请先确认：你能不用代码解释“为什么这一步不会漏掉正确答案”吗？</p>
+</details>
+
+<h2 id="12-本节你应该掌握"><a href="#12-本节你应该掌握" class="headerlink" title="12. 本节你应该掌握"></a>12. 本节你应该掌握</h2><ul>
+<li><input disabled="" type="checkbox"> 能用一句话定义递归函数。</li>
+<li><input disabled="" type="checkbox"> 能解释空树返回值。</li>
+<li><input disabled="" type="checkbox"> 能区分自顶向下参数与自底向上返回值。</li>
+<li><input disabled="" type="checkbox"> 能分析递归栈空间。</li>
+<li><input disabled="" type="checkbox"> 完成 104 和 112。</li>
+</ul>
+<h2 id="下一节"><a href="#下一节" class="headerlink" title="下一节"></a>下一节</h2><p>下一节让子树返回不止一个数字，并学习在发现失败后提前终止。</p>
+<nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-08-linked-list-deletion/">← 08 链表删除与前后指针</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-10-binary-tree-recursion-advanced/">10 二叉树递归进阶 →</a>
+</nav>
+
+<p>课程顺序参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1UD4y1Y769/">灵茶山艾府《基础算法精讲 09》</a>；题目范围参考<a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的汇总</a>。本文讲解、代码组织与图解均为独立编写。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/algorithm-09-binary-tree-recursion/%20plong's blog%20算法基础 09｜二叉树递归基础：把大树交给两棵子树"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-10-binary-tree-recursion-advanced/" title="算法基础 10｜二叉树递归进阶：让返回值携带足够信息"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 10｜二叉树递归进阶：让返回值携带足够信息</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-08-linked-list-deletion/" title="算法基础 08｜链表删除：哨兵节点与固定间距">下一篇: 算法基础 08｜链表删除：哨兵节点与固定间距&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

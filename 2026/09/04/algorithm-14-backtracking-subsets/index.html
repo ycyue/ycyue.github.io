@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>算法基础 14｜子集型回溯：每个元素选还是不选 · plong's blog</title><meta name="description" content="用搜索树图解子集型回溯的选择、递归和撤销，解释为什么能且只枚举每个子集一次。"><link rel="canonical" href="https://ycyue.github.io/2026/09/04/algorithm-14-backtracking-subsets/"><meta property="og:type" content="article"><meta property="og:title" content="算法基础 14｜子集型回溯：每个元素选还是不选"><meta property="og:description" content="用搜索树图解子集型回溯的选择、递归和撤销，解释为什么能且只枚举每个子集一次。"><meta property="og:url" content="https://ycyue.github.io/2026/09/04/algorithm-14-backtracking-subsets/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="算法基础 14｜子集型回溯：每个元素选还是不选"><meta name="twitter:description" content="用搜索树图解子集型回溯的选择、递归和撤销，解释为什么能且只枚举每个子集一次。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
+<link rel="stylesheet" href="/css/theme-toggle.css">
+<link rel="stylesheet" href="/css/reading-ui.css">
+<link rel="stylesheet" href="/css/algorithm-series.css">
+<script>
+(function () {
+  var storageKey = 'plong-theme';
+  var stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch (error) {}
+
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var mode = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+  var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+  for (var index = 0; index < links.length; index += 1) {
+    var link = links[index];
+    var href = link.getAttribute('href') || '';
+    if (/\/css\/style(?:-dark)?\.css(?:\?.*)?$/.test(href)) {
+      link.id = 'theme-stylesheet';
+      link.setAttribute('href', mode === 'dark' ? '/css/style-dark.css' : '/css/style.css');
+      break;
+    }
+  }
+
+  document.documentElement.setAttribute('data-theme', mode);
+  document.documentElement.style.colorScheme = mode;
+})();
+</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container invisible" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container invisible" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>算法基础 14｜子集型回溯：每个元素选还是不选</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span><a class="a-tag" href="/tags/回溯/" title="回溯">回溯</a><span>&nbsp;</span></span></p><div class="post-abstract"><nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-13-binary-tree-bfs/">← 13 二叉树 BFS</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-15-backtracking-combinations/">15 组合型回溯 →</a>
+</nav>
+
+<p>数组 <code>[1,2,3]</code> 有 8 个子集。回溯不是神秘模板：它只是沿搜索树走一条决策路径，到叶子记录答案，再退回上一个分叉点尝试另一条路。</p>
+<p>这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。</p>
+<span id="more"></span>
+
+<h2 id="1-这节解决什么问题？"><a href="#1-这节解决什么问题？" class="headerlink" title="1. 这节解决什么问题？"></a>1. 这节解决什么问题？</h2><ul>
+<li><strong>输入</strong>：互不相同的数组 nums。</li>
+<li><strong>输出</strong>：所有可能子集。</li>
+<li><strong>直接想法</strong>：从 0 到 2ⁿ-1 枚举二进制掩码，用每一位表示选或不选。</li>
+<li><strong>真正瓶颈</strong>：位运算能做，但不容易直接推广到分割字符串、组合约束和剪枝；回溯更清楚表达决策树。</li>
+</ul>
+<h2 id="2-从暴力解法开始"><a href="#2-从暴力解法开始" class="headerlink" title="2. 从暴力解法开始"></a>2. 从暴力解法开始</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">subsets_bits</span>(<span class="params">nums</span>):</span><br><span class="line">    answer = []</span><br><span class="line">    <span class="keyword">for</span> mask <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span> &lt;&lt; <span class="built_in">len</span>(nums)):</span><br><span class="line">        subset = []</span><br><span class="line">        <span class="keyword">for</span> i, value <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">            <span class="keyword">if</span> mask &amp; (<span class="number">1</span> &lt;&lt; i):</span><br><span class="line">                subset.append(value)</span><br><span class="line">        answer.append(subset)</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>共有 2ⁿ 个掩码，每个检查 n 位，时间 O(n·2ⁿ)。回溯也必须输出这么多内容，但更便于加入题目约束。</p>
+<p>暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。</p>
+<h2 id="3-核心思想"><a href="#3-核心思想" class="headerlink" title="3. 核心思想"></a>3. 核心思想</h2><div class="pattern-card"><strong>在第 i 个元素处分成两条路：不选它，或选它；递归回来后撤销选择，恢复进入分支前的 path。</strong></div>
+
+<p><code>path</code> 表示根到当前节点已选择的元素。它是同一个列表对象，所有递归层共享，因此进入“选”分支前 append，返回后必须 pop。到 <code>i==n</code> 时，一条完整决策路径形成一个子集。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/14-backtracking-subsets/process.svg" alt="子集型回溯执行过程图" loading="lazy">
+  <figcaption>“选择 → 递归 → 撤销”让同一个 path 安全地服务所有分支。</figcaption>
+</figure>
+
+<h2 id="4-为什么这个算法成立？"><a href="#4-为什么这个算法成立？" class="headerlink" title="4. 为什么这个算法成立？"></a>4. 为什么这个算法成立？</h2><h3 id="1-为什么不会漏"><a href="#1-为什么不会漏" class="headerlink" title="1. 为什么不会漏"></a>1. 为什么不会漏</h3><p>任意一个子集都能写成长度 n 的选&#x2F;不选序列。DFS 在每一层同时探索两种决定，所以该序列对应的根到叶路径一定被访问。</p>
+<h3 id="2-为什么不会重复"><a href="#2-为什么不会重复" class="headerlink" title="2. 为什么不会重复"></a>2. 为什么不会重复</h3><p>不同子集至少在某个元素是否选择上不同，因此对应不同决策序列、不同叶子。每个叶子只访问一次。</p>
+<h3 id="3-为什么记录时要复制"><a href="#3-为什么记录时要复制" class="headerlink" title="3. 为什么记录时要复制"></a>3. 为什么记录时要复制</h3><p><code>answer.append(path)</code> 保存的是列表引用。后续 pop 会修改同一个对象，导致所有答案一起变化。<code>path.copy()</code> 创建当前快照。</p>
+<figure class="algorithm-figure">
+  <img src="/images/algorithms/14-backtracking-subsets/proof.svg" alt="子集型回溯正确性推导图" loading="lazy">
+  <figcaption>每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。</figcaption>
+</figure>
+
+<h2 id="5-Python-模板"><a href="#5-Python-模板" class="headerlink" title="5. Python 模板"></a>5. Python 模板</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">subsets</span>(<span class="params">nums</span>):</span><br><span class="line">    answer = []</span><br><span class="line">    path = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">i</span>):</span><br><span class="line">        <span class="keyword">if</span> i == <span class="built_in">len</span>(nums):</span><br><span class="line">            answer.append(path.copy())</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        dfs(i + <span class="number">1</span>)  <span class="comment"># 不选 nums[i]</span></span><br><span class="line"></span><br><span class="line">        path.append(nums[i])</span><br><span class="line">        dfs(i + <span class="number">1</span>)  <span class="comment"># 选择 nums[i]</span></span><br><span class="line">        path.pop()</span><br><span class="line"></span><br><span class="line">    dfs(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>另一种写法在每个节点都记录 path，并用循环枚举下一个选择。两种模型都正确；“选&#x2F;不选”更适合建立最初的搜索树直觉。</p>
+<h2 id="6-手工模拟一次"><a href="#6-手工模拟一次" class="headerlink" title="6. 手工模拟一次"></a>6. 手工模拟一次</h2><p>输入：<code>nums = [1,2]</code></p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>i</th>
+<th>决定</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[]</td>
+<td>0</td>
+<td>不选 1</td>
+<td>—</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>1</td>
+<td>不选 2</td>
+<td>[]</td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>2</td>
+<td>选 2</td>
+<td>[2]</td>
+</tr>
+<tr>
+<td>[1]</td>
+<td>1</td>
+<td>选 1 后不选 2</td>
+<td>[1]</td>
+</tr>
+<tr>
+<td>[1,2]</td>
+<td>2</td>
+<td>再选 2</td>
+<td>[1,2]</td>
+</tr>
+</tbody></table>
+<p>四条叶路径对应四个子集，恰好 2² 个。</p>
+<h2 id="7-复杂度分析"><a href="#7-复杂度分析" class="headerlink" title="7. 复杂度分析"></a>7. 复杂度分析</h2><ul>
+<li><strong>时间复杂度：O(n·2ⁿ)</strong>。有 2ⁿ 个答案，每次复制 path 最多 O(n)。</li>
+<li><strong>空间复杂度：O(n)</strong>。不计算输出，递归深度和 path 最多为 n。</li>
+</ul>
+<h2 id="8-什么时候想到这个算法？"><a href="#8-什么时候想到这个算法？" class="headerlink" title="8. 什么时候想到这个算法？"></a>8. 什么时候想到这个算法？</h2><div class="pattern-card"><strong>枚举所有方案 + 每个元素有若干选择 + 需要恢复路径 → 回溯</strong></div>
+
+<ul>
+<li>所有子集、所有分割或所有选择方案。</li>
+<li>答案是一组路径而非单个最优值。</li>
+<li>当前选择影响后续可选范围。</li>
+</ul>
+<p>识别信号只是入口，最后仍要检查算法依赖的单调性、状态含义或数据结构不变量是否真的存在。</p>
+<h2 id="9-常见坑"><a href="#9-常见坑" class="headerlink" title="9. 常见坑"></a>9. 常见坑</h2><h3 id="坑-1：忘记撤销"><a href="#坑-1：忘记撤销" class="headerlink" title="坑 1：忘记撤销"></a>坑 1：忘记撤销</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">path.append(nums[i])</span><br><span class="line">dfs(i + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>选分支结束后必须 pop，否则污染兄弟分支。</p>
+<h3 id="坑-2：保存-path-引用"><a href="#坑-2：保存-path-引用" class="headerlink" title="坑 2：保存 path 引用"></a>坑 2：保存 path 引用</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">answer.append(path)</span><br></pre></td></tr></table></figure>
+
+<p>保存快照 <code>path.copy()</code>。</p>
+<h3 id="坑-3：基本情况继续执行"><a href="#坑-3：基本情况继续执行" class="headerlink" title="坑 3：基本情况继续执行"></a>坑 3：基本情况继续执行</h3><p>记录叶子后立即 return，避免访问越界。</p>
+<h2 id="10-Python-补充"><a href="#10-Python-补充" class="headerlink" title="10. Python 补充"></a>10. Python 补充</h2><h3 id="list-copy-创建浅拷贝"><a href="#list-copy-创建浅拷贝" class="headerlink" title="list.copy() 创建浅拷贝"></a><code>list.copy()</code> 创建浅拷贝</h3><p>路径中存整数时浅拷贝已足够。它复制列表容器，但不会递归复制其中对象；本系列路径通常保存不可变值或节点引用。</p>
+<h2 id="11-典型练习题"><a href="#11-典型练习题" class="headerlink" title="11. 典型练习题"></a>11. 典型练习题</h2><p>先根据提示独立画状态，再看代码。不要把练习变成复制模板。</p>
+<h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/subsets/">78. 子集</a>（中等）<br>画选&#x2F;不选搜索树。</li>
+</ul>
+<h3 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number/">17. 电话号码的字母组合</a>（中等）<br>每层选择当前数字对应的一个字母。</li>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/palindrome-partitioning/">131. 分割回文串</a>（中等）<br>每层枚举下一段终点，只进入回文段。</li>
+</ul>
+<h3 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/subsets-ii/">90. 子集 II</a>（中等）<br>排序后同层跳过重复值。</li>
+</ul>
+<details>
+<summary>检查答案：本节核心实现</summary>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">subsets</span>(<span class="params">nums</span>):</span><br><span class="line">    answer = []</span><br><span class="line">    path = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">i</span>):</span><br><span class="line">        <span class="keyword">if</span> i == <span class="built_in">len</span>(nums):</span><br><span class="line">            answer.append(path.copy())</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        dfs(i + <span class="number">1</span>)  <span class="comment"># 不选 nums[i]</span></span><br><span class="line"></span><br><span class="line">        path.append(nums[i])</span><br><span class="line">        dfs(i + <span class="number">1</span>)  <span class="comment"># 选择 nums[i]</span></span><br><span class="line">        path.pop()</span><br><span class="line"></span><br><span class="line">    dfs(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> answer</span><br></pre></td></tr></table></figure>
+
+<p>请先确认：你能不用代码解释“为什么这一步不会漏掉正确答案”吗？</p>
+</details>
+
+<h2 id="12-本节你应该掌握"><a href="#12-本节你应该掌握" class="headerlink" title="12. 本节你应该掌握"></a>12. 本节你应该掌握</h2><ul>
+<li><input disabled="" type="checkbox"> 能画出两层选&#x2F;不选树。</li>
+<li><input disabled="" type="checkbox"> 能说明 path 的准确含义。</li>
+<li><input disabled="" type="checkbox"> 能解释 copy 与 pop。</li>
+<li><input disabled="" type="checkbox"> 能证明覆盖且不重复。</li>
+<li><input disabled="" type="checkbox"> 完成 78 和 17。</li>
+</ul>
+<h2 id="下一节"><a href="#下一节" class="headerlink" title="下一节"></a>下一节</h2><p>下一节要求恰好选择 k 个数，并利用“剩余元素不够”提前剪掉整棵无解子树。</p>
+<nav class="series-nav" aria-label="算法系列导航">
+  <a class="series-nav__prev" href="/2026/09/04/algorithm-13-binary-tree-bfs/">← 13 二叉树 BFS</a>
+  <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-15-backtracking-combinations/">15 组合型回溯 →</a>
+</nav>
+
+<p>课程顺序参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1mG4y1A7Gu/">灵茶山艾府《基础算法精讲 14》</a>；题目范围参考<a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的汇总</a>。本文讲解、代码组织与图解均为独立编写。</p>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/algorithm-14-backtracking-subsets/%20plong's blog%20算法基础 14｜子集型回溯：每个元素选还是不选"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-15-backtracking-combinations/" title="算法基础 15｜组合型回溯：从哪里选与剪枝"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 15｜组合型回溯：从哪里选与剪枝</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-13-binary-tree-bfs/" title="算法基础 13｜二叉树 BFS：队列如何守住层的边界">下一篇: 算法基础 13｜二叉树 BFS：队列如何守住层的边界&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

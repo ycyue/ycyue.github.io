@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">遍历与二叉搜索树：树上的信息流</title>
+  <desc id="desc">遍历与二叉搜索树：树上的信息流的教学图解</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#527987"/></marker></defs>
+  <style>
+  .bg{fill:#f7fafc}.card{fill:#fff;stroke:#a9bbc6;stroke-width:2}.accent{fill:#286f88}
+  .soft{fill:#e8f4f7}.line{stroke:#527987;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  .title{font:700 26px system-ui,sans-serif;fill:#18313b}.head{font:700 18px system-ui,sans-serif;fill:#18313b}
+  .body{font:15px system-ui,sans-serif;fill:#38505a}.small{font:14px system-ui,sans-serif;fill:#526873}
+  .node{fill:#fff;stroke:#286f88;stroke-width:2}.edge{stroke:#6a8792;stroke-width:2}.good{fill:#dff4e7;stroke:#4b9870;stroke-width:2}
+  .warn{fill:#fff0e1;stroke:#bd7740;stroke-width:2}
+</style>
+  <rect class="bg" width="960" height="540" rx="20"/>
+  <text x="48" y="52" class="title">遍历与二叉搜索树：树上的信息流</text>
+  <line x1="480" y1="150" x2="300" y2="220" class="edge"/><line x1="480" y1="150" x2="660" y2="220" class="edge"/><line x1="300" y1="260" x2="210" y2="340" class="edge"/><line x1="300" y1="260" x2="390" y2="340" class="edge"/><circle cx="480" cy="130" r="28" class="node"/><text x="480" y="136" text-anchor="middle" class="head">5</text><circle cx="300" cy="240" r="28" class="good"/><text x="300" y="246" text-anchor="middle" class="head">3</text><circle cx="660" cy="240" r="28" class="node"/><text x="660" y="246" text-anchor="middle" class="head">7</text><circle cx="210" cy="360" r="28" class="node"/><text x="210" y="366" text-anchor="middle" class="head">2</text><circle cx="390" cy="360" r="28" class="node"/><text x="390" y="366" text-anchor="middle" class="head">6</text><rect x="60" y="420" width="260" height="88" rx="12" class="card"/><text x="80" y="449" class="head">前序位置</text><text x="80" y="478" class="small">先处理根，适合向孩子传约束</text><rect x="360" y="420" width="260" height="88" rx="12" class="card"/><text x="380" y="449" class="head">中序位置</text><text x="380" y="478" class="small">左-根-右，BST 中得到严格</text>
+<text x="380" y="498" class="small">递增序列</text><rect x="660" y="420" width="260" height="88" rx="12" class="card"/><text x="680" y="449" class="head">后序位置</text><text x="680" y="478" class="small">先拿孩子结果，适合合并子树信息</text>
+</svg>
