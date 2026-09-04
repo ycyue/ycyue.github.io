@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520" role="img" aria-labelledby="title desc">
+  <title id="title">最长公共子序列：状态表</title>
+  <desc id="desc">最长公共子序列：状态表的教学图解</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#527987"/></marker></defs>
+  <style>
+  .bg{fill:#f7fafc}.card{fill:#fff;stroke:#a9bbc6;stroke-width:2}.accent{fill:#286f88}
+  .soft{fill:#e8f4f7}.line{stroke:#527987;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  .title{font:700 26px system-ui,sans-serif;fill:#18313b}.head{font:700 18px system-ui,sans-serif;fill:#18313b}
+  .body{font:15px system-ui,sans-serif;fill:#38505a}.small{font:14px system-ui,sans-serif;fill:#526873}
+  .node{fill:#fff;stroke:#286f88;stroke-width:2}.edge{stroke:#6a8792;stroke-width:2}.good{fill:#dff4e7;stroke:#4b9870;stroke-width:2}
+  .warn{fill:#fff0e1;stroke:#bd7740;stroke-width:2}
+</style>
+  <rect class="bg" width="960" height="520" rx="20"/>
+  <text x="48" y="52" class="title">最长公共子序列：状态表</text>
+  <rect x="48" y="170" width="94" height="70" class="soft"/><text x="95" y="213" text-anchor="middle" class="head">状态</text><rect x="48" y="240" width="94" height="82" class="soft"/><text x="95" y="290" text-anchor="middle" class="head">值</text><rect x="142" y="170" width="112" height="70" class="card"/><text x="198" y="213" text-anchor="middle" class="head">&quot;&quot;</text>
+    <rect x="142" y="240" width="112" height="82" class="card"/><text x="198" y="290" text-anchor="middle" class="head">0</text><rect x="254" y="170" width="112" height="70" class="card"/><text x="310" y="213" text-anchor="middle" class="head">a</text>
+    <rect x="254" y="240" width="112" height="82" class="card"/><text x="310" y="290" text-anchor="middle" class="head">1</text><rect x="366" y="170" width="112" height="70" class="card"/><text x="422" y="213" text-anchor="middle" class="head">c</text>
+    <rect x="366" y="240" width="112" height="82" class="card"/><text x="422" y="290" text-anchor="middle" class="head">1</text><rect x="478" y="170" width="112" height="70" class="card"/><text x="534" y="213" text-anchor="middle" class="head">e</text>
+    <rect x="478" y="240" width="112" height="82" class="good"/><text x="534" y="290" text-anchor="middle" class="head">2</text><rect x="70" y="375" width="250" height="104" rx="12" class="card"/><text x="90" y="406" class="head">状态</text><text x="90" y="440" class="small">dp[i][j] 对应两个前缀</text><rect x="360" y="375" width="250" height="104" rx="12" class="card"/><text x="380" y="406" class="head">初始化</text><text x="380" y="440" class="small">任一前缀为空时 LCS=0</text><rect x="650" y="375" width="250" height="104" rx="12" class="card"/><text x="670" y="406" class="head">字符相等</text><text x="670" y="440" class="small">dp[i][j]=dp[i-1</text>
+<text x="670" y="460" class="small">][j-1]+1</text>
+</svg>

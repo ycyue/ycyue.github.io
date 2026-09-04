@@ -15,7 +15,7 @@ description: 从两数之和的暴力枚举开始，用图解和严格推导理�
 <nav class="series-nav" aria-label="算法系列导航">
   <span class="series-nav__prev series-nav__pending">← 这是第一篇</span>
   <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
-  <span class="series-nav__next series-nav__pending">下一篇：容器与接雨水 →</span>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-02-two-pointers-container-rainwater/">02 容器与接雨水 →</a>
 </nav>
 
 给你一个**已经升序排列**的数组和一个目标值，怎样找出和等于目标值的两个数？
@@ -405,7 +405,7 @@ def two_sum(numbers, target):
 <nav class="series-nav" aria-label="算法系列导航">
   <span class="series-nav__prev series-nav__pending">← 这是第一篇</span>
   <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
-  <span class="series-nav__next series-nav__pending">下一篇：容器与接雨水 →</span>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-02-two-pointers-container-rainwater/">02 容器与接雨水 →</a>
 </nav>
 
 课程顺序参考：[灵茶山艾府《基础算法精讲 01》](https://www.bilibili.com/video/BV1bP411c7oJ/)；题目范围参考[课程作者维护的汇总](https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md)。本文讲解、代码组织与图解均为独立编写。

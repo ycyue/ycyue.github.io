@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">最近公共祖先：为什么成立</title>
+  <desc id="desc">最近公共祖先：为什么成立的教学图解</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#527987"/></marker></defs>
+  <style>
+  .bg{fill:#f7fafc}.card{fill:#fff;stroke:#a9bbc6;stroke-width:2}.accent{fill:#286f88}
+  .soft{fill:#e8f4f7}.line{stroke:#527987;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  .title{font:700 26px system-ui,sans-serif;fill:#18313b}.head{font:700 18px system-ui,sans-serif;fill:#18313b}
+  .body{font:15px system-ui,sans-serif;fill:#38505a}.small{font:14px system-ui,sans-serif;fill:#526873}
+  .node{fill:#fff;stroke:#286f88;stroke-width:2}.edge{stroke:#6a8792;stroke-width:2}.good{fill:#dff4e7;stroke:#4b9870;stroke-width:2}
+  .warn{fill:#fff0e1;stroke:#bd7740;stroke-width:2}
+</style>
+  <rect class="bg" width="960" height="540" rx="20"/>
+  <text x="48" y="52" class="title">最近公共祖先：为什么成立</text>
+  <rect x="150" y="108" width="660" height="74" rx="14" class="card"/>
+      <text x="180" y="138" class="head">返回语义</text>
+      <text x="350" y="138" class="body">非空结果代表子树中已发现目标或答案</text>
+<rect x="150" y="214" width="660" height="74" rx="14" class="card"/>
+      <text x="180" y="244" class="head">首次分叉</text>
+      <text x="350" y="244" class="body">左右都非空时当前节点同时覆盖两目标</text>
+<rect x="150" y="320" width="660" height="74" rx="14" class="warn"/>
+      <text x="180" y="350" class="head">最近保证</text>
+      <text x="350" y="350" class="body">更深子树若已同时覆盖，会直接返回其祖先</text>
+<rect x="150" y="426" width="660" height="74" rx="14" class="good"/>
+      <text x="180" y="456" class="head">向上传播</text>
+      <text x="350" y="456" class="body">单边结果不能在当前层形成更近汇合</text><path d="M480 184 V211" class="line"/><path d="M480 290 V317" class="line"/><path d="M480 396 V423" class="line"/>
+</svg>
