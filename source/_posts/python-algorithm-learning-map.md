@@ -1,5 +1,5 @@
 ---
-title: Python 基础算法学习地图｜27 节图解教程
+title: Python 基础算法学习地图｜27 节主线 + 扩展篇
 date: 2026-09-04 14:00:00
 permalink: 2026/09/04/python-algorithm-learning-map/
 categories:
@@ -8,7 +8,7 @@ tags:
   - Python
   - 算法基础
   - LeetCode
-description: 面向 Python 初学者的 27 节基础算法图解教程路线：从双指针、链表和二叉树，到回溯、动态规划与单调数据结构。
+description: 面向 Python 初学者的算法图解教程路线：27 节经典主线加持续扩展，从双指针、链表和二叉树，到动态规划、单调结构与前缀和差分。
 ---
 
 这是一条给 **Python 刚入门、算法基础较弱、准备 LeetCode 或面试** 的学习路线。顺序参考灵茶山艾府《基础算法精讲》，但每篇教程都从问题、暴力解法和正确性推导重新组织，重点回答“为什么能这样做”。
@@ -16,8 +16,8 @@ description: 面向 Python 初学者的 27 节基础算法图解教程路线：�
 <!-- more -->
 
 <figure class="algorithm-figure">
-  <img src="/images/algorithms/learning-map.svg" alt="Python 基础算法学习地图：数组、链表、二叉树、回溯、动态规划、树形 DP 和单调数据结构" loading="eager">
-  <figcaption>27 节已经全部完成，可以按依赖关系顺序学习，也可以从当前薄弱模块开始。</figcaption>
+  <img src="/images/algorithms/learning-map.svg" alt="Python 基础算法学习地图：27 节主线与前缀和、差分等扩展篇" loading="eager">
+  <figcaption>27 节经典主线已经完成，并从第 28 课起补充高频基础工具；可以按依赖顺序学习，也可以从当前薄弱模块开始。</figcaption>
 </figure>
 
 ## 怎么使用这套教程？
@@ -28,7 +28,7 @@ description: 面向 Python 初学者的 27 节基础算法图解教程路线：�
 4. 完成 2 道代表题，并记录识别信号和最容易错的边界。
 5. 第二天不看答案再写一次，能写出来才算掌握。
 
-<div class="algorithm-note"><strong>完成状态：</strong>27 篇正文、54 张课程图解、代码样例与上一篇/下一篇导航均已接入博客。</div>
+<div class="algorithm-note"><strong>完成状态：</strong>28 篇正文、56 张课程图解、代码样例与上一篇/下一篇导航均已接入博客。</div>
 
 ## Stage 1：数组与基础算法思想
 
@@ -92,6 +92,12 @@ description: 面向 Python 初学者的 27 节基础算法图解教程路线：�
 | 26 | 单调栈 | 标准 | <span class="course-status course-status--ready">已完成</span> | 数组、栈、下标 | [开始学习](/2026/09/04/algorithm-26-monotonic-stack/) |
 | 27 | 单调队列 | 进阶 | <span class="course-status course-status--ready">已完成</span> | 03、26、deque | [开始学习](/2026/09/04/algorithm-27-monotonic-queue/) |
 
+## Stage 8：高频基础工具（扩展篇）
+
+| # | 算法 | 难度 | 状态 | 前置知识 | 文章 |
+|---:|---|---|---|---|---|
+| 28 | 前缀和与差分：区间查询与区间修改 | 入门 | <span class="course-status course-status--ready">已完成</span> | 列表、循环、下标 | [开始学习](/2026/09/04/algorithm-28-prefix-sum-difference-array/) |
+
 ## 你会逐渐建立的能力
 
 - 用“排除哪一批候选”理解双指针和二分查找。
@@ -99,6 +105,7 @@ description: 面向 Python 初学者的 27 节基础算法图解教程路线：�
 - 把链表修改画成引用变化，把树题拆成子树返回值。
 - 把回溯画成搜索树，把动态规划落实到状态定义、转移、初始化和顺序。
 - 用“谁已经不可能成为答案”理解单调栈与单调队列。
+- 用“累计后相减”与“边界变化”理解前缀和与差分。
 
 ## 主要学习参考
 

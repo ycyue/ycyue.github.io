@@ -66,12 +66,12 @@ function walk(directory) {
   }
 }
 walk(imageRoot);
-if (files.length !== 27) failures.push(`expected 27 tutorials, got ${files.length}`);
-if (svgFiles.length !== 55) failures.push(`expected 55 algorithm SVGs, got ${svgFiles.length}`);
+if (files.length !== 28) failures.push(`expected 28 tutorials, got ${files.length}`);
+if (svgFiles.length !== 57) failures.push(`expected 57 algorithm SVGs, got ${svgFiles.length}`);
 
 if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
 
-console.log('algorithm content: 27 tutorials, 55 SVGs, required sections, exercises, and metadata passed');
+console.log('algorithm content: 28 tutorials, 57 SVGs, required sections, exercises, and metadata passed');

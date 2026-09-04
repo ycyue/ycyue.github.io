@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">前缀和与差分：差分只标记变化边界</title>
+  <desc id="desc">前缀和与差分：差分只标记变化边界的教学图解</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#527987"/></marker></defs>
+  <style>
+  .bg{fill:#f7fafc}.card{fill:#fff;stroke:#a9bbc6;stroke-width:2}.accent{fill:#286f88}
+  .soft{fill:#e8f4f7}.line{stroke:#527987;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  .title{font:700 26px system-ui,sans-serif;fill:#18313b}.head{font:700 18px system-ui,sans-serif;fill:#18313b}
+  .body{font:15px system-ui,sans-serif;fill:#38505a}.small{font:14px system-ui,sans-serif;fill:#526873}
+  .node{fill:#fff;stroke:#286f88;stroke-width:2}.edge{stroke:#6a8792;stroke-width:2}.good{fill:#dff4e7;stroke:#4b9870;stroke-width:2}
+  .warn{fill:#fff0e1;stroke:#bd7740;stroke-width:2}
+</style>
+  <rect class="bg" width="960" height="540" rx="20"/>
+  <text x="48" y="52" class="title">前缀和与差分：差分只标记变化边界</text>
+  
+    <rect x="80" y="82" width="800" height="74" rx="14" class="soft"/>
+    <text x="112" y="112" class="body">区间 [1,3] 加 2：diff[1] += 2，diff[4] -= 2</text>
+    <text x="112" y="140" class="body">区间 [2,4] 加 3：diff[2] += 3，diff[5] -= 3</text>
+    <text x="72" y="248" class="head">diff</text>
+    <rect x="176" y="212" width="104" height="60" rx="10" class="card"/>
+    <text x="228" y="249" text-anchor="middle" class="head">0</text>
+    <text x="228" y="203" text-anchor="middle" class="small">0</text>
+    <rect x="288" y="212" width="104" height="60" rx="10" class="good"/>
+    <text x="340" y="249" text-anchor="middle" class="head">2</text>
+    <text x="340" y="203" text-anchor="middle" class="small">1</text>
+    <rect x="400" y="212" width="104" height="60" rx="10" class="good"/>
+    <text x="452" y="249" text-anchor="middle" class="head">3</text>
+    <text x="452" y="203" text-anchor="middle" class="small">2</text>
+    <rect x="512" y="212" width="104" height="60" rx="10" class="card"/>
+    <text x="564" y="249" text-anchor="middle" class="head">0</text>
+    <text x="564" y="203" text-anchor="middle" class="small">3</text>
+    <rect x="624" y="212" width="104" height="60" rx="10" class="warn"/>
+    <text x="676" y="249" text-anchor="middle" class="head">-2</text>
+    <text x="676" y="203" text-anchor="middle" class="small">4</text>
+    <rect x="736" y="212" width="104" height="60" rx="10" class="warn"/>
+    <text x="788" y="249" text-anchor="middle" class="head">-3</text>
+    <text x="788" y="203" text-anchor="middle" class="small">5</text>
+    <path d="M480 292 V340" class="line"/>
+    <text x="72" y="422" class="head">累加</text>
+    <rect x="232" y="386" width="104" height="60" rx="10" class="card"/>
+    <text x="284" y="423" text-anchor="middle" class="head">0</text>
+    <text x="284" y="377" text-anchor="middle" class="small">0</text>
+    <rect x="344" y="386" width="104" height="60" rx="10" class="card"/>
+    <text x="396" y="423" text-anchor="middle" class="head">2</text>
+    <text x="396" y="377" text-anchor="middle" class="small">1</text>
+    <rect x="456" y="386" width="104" height="60" rx="10" class="card"/>
+    <text x="508" y="423" text-anchor="middle" class="head">5</text>
+    <text x="508" y="377" text-anchor="middle" class="small">2</text>
+    <rect x="568" y="386" width="104" height="60" rx="10" class="card"/>
+    <text x="620" y="423" text-anchor="middle" class="head">5</text>
+    <text x="620" y="377" text-anchor="middle" class="small">3</text>
+    <rect x="680" y="386" width="104" height="60" rx="10" class="card"/>
+    <text x="732" y="423" text-anchor="middle" class="head">3</text>
+    <text x="732" y="377" text-anchor="middle" class="small">4</text>
+    <text x="480" y="496" text-anchor="middle" class="body">从左到右求前缀和，得到最终数组 [0, 2, 5, 5, 3]</text>
+  
+</svg>

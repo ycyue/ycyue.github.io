@@ -79,12 +79,12 @@ const mapArticleLinks = new Set(Array.from(
   mapHtml.matchAll(/href="\/2026\/09\/04\/(algorithm-\d{2}-[^/]+)\/"/g),
   (match) => match[1],
 ));
-if (articleSources.length !== 27) failures.push(`expected 27 article sources, got ${articleSources.length}`);
-if (mapArticleLinks.size !== 27) failures.push(`learning map links ${mapArticleLinks.size}/27 articles`);
+if (articleSources.length !== 28) failures.push(`expected 28 article sources, got ${articleSources.length}`);
+if (mapArticleLinks.size !== 28) failures.push(`learning map links ${mapArticleLinks.size}/28 articles`);
 
 if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
 
-console.log(`algorithm series: ${pages.length} pages, 27 map links, figures, navigation, and all local links passed`);
+console.log(`algorithm series: ${pages.length} pages, 28 map links, figures, navigation, and all local links passed`);

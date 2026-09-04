@@ -63,6 +63,42 @@ function processSvg(article) {
   return svgShell(`${article.short}：执行过程`, `${cards}\n${arrows}`, 520);
 }
 
+function prefixSumSvg(article) {
+  const nums = [2, -1, 3, 5];
+  const prefix = [0, 2, 1, 4, 9];
+  const cell = (value, index, x, y, highlighted = false) => `
+    <rect x="${x}" y="${y}" width="112" height="64" rx="10" class="${highlighted ? 'good' : 'card'}"/>
+    <text x="${x + 56}" y="${y + 39}" text-anchor="middle" class="head">${value}</text>
+    <text x="${x + 56}" y="${y - 10}" text-anchor="middle" class="small">${index}</text>`;
+  const numsRow = nums.map((value, index) => cell(value, index, 210 + index * 120, 128, index >= 1 && index <= 3)).join('');
+  const prefixRow = prefix.map((value, index) => cell(value, index, 150 + index * 120, 286, index === 1 || index === 4)).join('');
+  return svgShell(`${article.short}：区间和只做一次减法`, `
+    <text x="72" y="164" class="head">nums</text>${numsRow}
+    <text x="72" y="322" class="head">prefix</text>${prefixRow}
+    <path d="M326 208 V260" class="line"/><path d="M686 208 V260" class="line"/>
+    <rect x="190" y="410" width="580" height="62" rx="14" class="soft"/>
+    <text x="480" y="448" text-anchor="middle" class="head">sum(1..3) = prefix[4] - prefix[1] = 9 - 2 = 7</text>
+  `, 520);
+}
+
+function differenceArraySvg(article) {
+  const values = [0, 2, 3, 0, -2, -3];
+  const result = [0, 2, 5, 5, 3];
+  const boxes = (items, startX, y, classFor) => items.map((value, index) => `
+    <rect x="${startX + index * 112}" y="${y}" width="104" height="60" rx="10" class="${classFor(index)}"/>
+    <text x="${startX + index * 112 + 52}" y="${y + 37}" text-anchor="middle" class="head">${value}</text>
+    <text x="${startX + index * 112 + 52}" y="${y - 9}" text-anchor="middle" class="small">${index}</text>`).join('');
+  return svgShell(`${article.short}：差分只标记变化边界`, `
+    <rect x="80" y="82" width="800" height="74" rx="14" class="soft"/>
+    <text x="112" y="112" class="body">区间 [1,3] 加 2：diff[1] += 2，diff[4] -= 2</text>
+    <text x="112" y="140" class="body">区间 [2,4] 加 3：diff[2] += 3，diff[5] -= 3</text>
+    <text x="72" y="248" class="head">diff</text>${boxes(values, 176, 212, index => index === 1 || index === 2 ? 'good' : index >= 4 ? 'warn' : 'card')}
+    <path d="M480 292 V340" class="line"/>
+    <text x="72" y="422" class="head">累加</text>${boxes(result, 232, 386, () => 'card')}
+    <text x="480" y="496" text-anchor="middle" class="body">从左到右求前缀和，得到最终数组 [0, 2, 5, 5, 3]</text>
+  `, 540);
+}
+
 function treeSvg(article) {
   const labels = article.treeLabels || ['1', '2', '3', '4', '5'];
   const nodes = [[480,130],[300,240],[660,240],[210,360],[390,360]];
@@ -97,6 +133,7 @@ function dpSvg(article) {
 }
 
 function structureSvg(article) {
+  if (article.kind === 'prefix') return prefixSumSvg(article);
   if (article.kind === 'tree') return treeSvg(article);
   if (article.kind === 'backtrack') return backtrackSvg(article);
   if (article.kind === 'dp') return dpSvg(article);
@@ -104,6 +141,7 @@ function structureSvg(article) {
 }
 
 function proofSvg(article) {
+  if (article.kind === 'prefix') return differenceArraySvg(article);
   const ys = [108, 214, 320, 426];
   const blocks = article.proofSteps.map((step,i)=>{
     const cls = i === 3 ? 'good' : i === 2 ? 'warn' : 'card';
@@ -118,7 +156,7 @@ function proofSvg(article) {
 function nav(prev, next) {
   const nextItem = next
     ? `<a class="series-nav__next" href="/${next.permalink}">${String(next.n).padStart(2,'0')} ${next.short} →</a>`
-    : '<span class="series-nav__next series-nav__pending">27 节主线完成 ✓</span>';
+    : '<span class="series-nav__next series-nav__pending">28 扩展篇完成 ✓</span>';
   return `<nav class="series-nav" aria-label="算法系列导航">
   <a class="series-nav__prev" href="/${prev.permalink}">← ${String(prev.n).padStart(2,'0')} ${prev.short}</a>
   <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
@@ -138,7 +176,7 @@ function exerciseMarkdown(exercises) {
 function articleMarkdown(article, index, all) {
   const prev = all[index - 1];
   const next = all[index + 1];
-  const dateMinutes = 30 + (article.n - 1) * 10;
+  const dateMinutes = 30 + (article.n - 1) * 10 + (article.n >= 28 ? 10 : 0);
   const hour = 9 + Math.floor(dateMinutes / 60);
   const minute = dateMinutes % 60;
   const topNav = nav(prev, next);
@@ -153,7 +191,7 @@ categories:
 tags:
   - Python
   - ${article.tag}
-  - LeetCode
+${(article.extraTags || []).map(tag => `  - ${tag}`).join('\n')}${article.extraTags?.length ? '\n' : ''}  - LeetCode
   - 算法基础
 description: ${article.description}
 ---
@@ -200,7 +238,7 @@ ${article.proof.map((p,i)=>`### ${i+1}. ${p[0]}\n\n${p[1]}`).join('\n\n')}
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/${String(article.n).padStart(2,'0')}-${article.slug}/proof.svg" alt="${article.short}正确性推导图" loading="lazy">
-  <figcaption>每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。</figcaption>
+  <figcaption>${article.proofCaption || '每次转移、剪枝或淘汰都必须维护同一个不变量，而不是凭感觉移动。'}</figcaption>
 </figure>
 
 ## 5. Python 模板
@@ -272,7 +310,7 @@ ${article.nextIntro}
 
 ${topNav}
 
-课程顺序参考：[灵茶山艾府《基础算法精讲 ${String(article.n).padStart(2,'0')}》](${article.video})；题目范围参考[课程作者维护的汇总](https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md)。本文讲解、代码组织与图解均为独立编写。
+${article.referenceNote || `课程顺序参考：[灵茶山艾府《基础算法精讲 ${String(article.n).padStart(2,'0')}》](${article.video})；题目范围参考[课程作者维护的汇总](https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md)。`}本文讲解、代码组织与图解均为独立编写。
 `;
 }
 
@@ -282,7 +320,7 @@ function mapMarkdown(all) {
     return `## ${stage.name}\n\n| # | 算法 | 难度 | 状态 | 前置知识 | 文章 |\n|---:|---|---|---|---|---|\n${rows}`;
   }).join('\n\n');
   return `---
-title: Python 基础算法学习地图｜27 节图解教程
+title: Python 基础算法学习地图｜27 节主线 + 扩展篇
 date: 2026-09-04 14:00:00
 permalink: 2026/09/04/python-algorithm-learning-map/
 categories:
@@ -291,7 +329,7 @@ tags:
   - Python
   - 算法基础
   - LeetCode
-description: 面向 Python 初学者的 27 节基础算法图解教程路线：从双指针、链表和二叉树，到回溯、动态规划与单调数据结构。
+description: 面向 Python 初学者的算法图解教程路线：27 节经典主线加持续扩展，从双指针、链表和二叉树，到动态规划、单调结构与前缀和差分。
 ---
 
 这是一条给 **Python 刚入门、算法基础较弱、准备 LeetCode 或面试** 的学习路线。顺序参考灵茶山艾府《基础算法精讲》，但每篇教程都从问题、暴力解法和正确性推导重新组织，重点回答“为什么能这样做”。
@@ -299,8 +337,8 @@ description: 面向 Python 初学者的 27 节基础算法图解教程路线：�
 <!-- more -->
 
 <figure class="algorithm-figure">
-  <img src="/images/algorithms/learning-map.svg" alt="Python 基础算法学习地图：数组、链表、二叉树、回溯、动态规划、树形 DP 和单调数据结构" loading="eager">
-  <figcaption>27 节已经全部完成，可以按依赖关系顺序学习，也可以从当前薄弱模块开始。</figcaption>
+  <img src="/images/algorithms/learning-map.svg" alt="Python 基础算法学习地图：27 节主线与前缀和、差分等扩展篇" loading="eager">
+  <figcaption>27 节经典主线已经完成，并从第 28 课起补充高频基础工具；可以按依赖顺序学习，也可以从当前薄弱模块开始。</figcaption>
 </figure>
 
 ## 怎么使用这套教程？
@@ -311,7 +349,7 @@ description: 面向 Python 初学者的 27 节基础算法图解教程路线：�
 4. 完成 2 道代表题，并记录识别信号和最容易错的边界。
 5. 第二天不看答案再写一次，能写出来才算掌握。
 
-<div class="algorithm-note"><strong>完成状态：</strong>27 篇正文、54 张课程图解、代码样例与上一篇/下一篇导航均已接入博客。</div>
+<div class="algorithm-note"><strong>完成状态：</strong>${all.length} 篇正文、${all.length * 2} 张课程图解、代码样例与上一篇/下一篇导航均已接入博客。</div>
 
 ${stageTables}
 
@@ -322,6 +360,7 @@ ${stageTables}
 - 把链表修改画成引用变化，把树题拆成子树返回值。
 - 把回溯画成搜索树，把动态规划落实到状态定义、转移、初始化和顺序。
 - 用“谁已经不可能成为答案”理解单调栈与单调队列。
+- 用“累计后相减”与“边界变化”理解前缀和与差分。
 
 ## 主要学习参考
 
@@ -480,8 +519,17 @@ assert max_sliding_window([1, 3, -1, -3, 5, 3, 6, 7], 3) == [3, 3, 5, 5, 6, 7]
 assert max_sliding_window([], 3) == [] and max_sliding_window([1], 1) == [1]
 assert max_sliding_window([2, 2, 2], 2) == [2, 2]
 
-print('algorithm series: all 26 generated article implementations passed')
+prefix = build_prefix([2, -1, 3, 5])
+assert prefix == [0, 2, 1, 4, 9]
+assert range_sum(prefix, 1, 3) == 7
+assert range_sum(prefix, 0, 0) == 2
+assert build_prefix([]) == [0]
+assert apply_range_updates(5, [(1, 3, 2), (2, 4, 3)]) == [0, 2, 5, 5, 3]
+assert apply_range_updates(0, []) == []
+assert apply_range_updates(3, [(0, 2, -1)]) == [-1, -1, -1]
+
+print('algorithm series: all generated article implementations passed')
 `;
 fs.writeFileSync(path.join(root, 'tests', 'test_algorithm_series_all.py'), testImplementations + testCases);
 
-console.log(`generated ${articles.length} articles, ${articles.length * 2} SVG diagrams, and the full test suite`);
+console.log(`generated ${articles.length} articles plus the hand-written first lesson, ${articles.length * 2 + 2} lesson SVG diagrams, and the full test suite`);

@@ -20,6 +20,7 @@ export const stages = [
   { name: 'Stage 5：动态规划', courses: [17,18,19,20,21,22] },
   { name: 'Stage 6：树形 DP', courses: [23,24,25] },
   { name: 'Stage 7：单调数据结构', courses: [26,27] },
+  { name: 'Stage 8：高频基础工具（扩展篇）', courses: [28] },
 ];
 
 export const articles = [
@@ -1366,6 +1367,73 @@ def max_sliding_window(nums, k):
     python: { title: '`deque` 的两端操作', body: '`popleft()` 删除过期队头，`pop()` 删除劣势队尾，`append()` 加入新下标；三者都是 O(1)。' },
     exercises: [q('入门','239','滑动窗口最大值','sliding-window-maximum','困难','下标递增、值递减的 deque。'),q('标准','1438','绝对差不超过限制的最长连续子数组','longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit','中等','同时维护最大与最小两个单调队列。'),q('标准','1696','跳跃游戏 VI','jump-game-vi','中等','维护最近 k 个 dp 值最大值。'),q('进阶','862','和至少为 K 的最短子数组','shortest-subarray-with-sum-at-least-k','困难','对前缀和维护单调队列。')],
     checklist: ['能区分队头过期与队尾支配。','能证明更晚且更大者支配旧值。','能写窗口形成条件。','能用入队出队次数分析 O(n)。','完成 239 和 1438。'],
-    nextIntro: '27 节主线到这里结束。回到学习地图按模块复盘，并优先重做每篇的两道入门/标准题。'
+    nextIntro: '27 节经典主线到这里结束。下一课进入扩展篇，用前缀和把重复区间求和压缩成一次减法，再用差分数组批量处理区间修改。'
+  },
+  {
+    n: 28, slug: 'prefix-sum-difference-array', file: 'algorithm-28-prefix-sum-difference-array', permalink: '2026/09/04/algorithm-28-prefix-sum-difference-array/',
+    short: '前缀和与差分', mapTitle: '前缀和与差分：区间查询与区间修改', title: '前缀和与差分：把区间操作压缩到 O(1)', tag: '前缀和', extraTags: ['差分数组'], difficulty: '入门', prerequisite: '列表、循环、下标',
+    description: '从重复区间求和出发，图解前缀和与差分数组的互逆关系，掌握闭区间边界、区间查询和批量区间修改。',
+    lead: '同一个数组被反复询问“从 left 到 right 的和”时，每次重新相加会重复做大量工作。前缀和把历史累计起来，让一次区间查询只剩一次减法；差分数组则反过来，用两个边界标记一次区间修改。',
+    problem: { input: '一个数组，以及多次闭区间 `[left, right]` 求和或区间加值操作。', output: '快速回答每个区间和；或在全部修改结束后还原最终数组。', brute: '每次查询都遍历区间求和；每次修改都逐个更新区间内元素。', bottleneck: '若数组和操作数都接近 n，逐段扫描最坏需要 O(n²) 时间。' },
+    bruteCode: `def range_sum_brute(nums, left, right):
+    total = 0
+    for index in range(left, right + 1):
+        total += nums[index]
+    return total
+
+
+def apply_updates_brute(length, updates):
+    nums = [0] * length
+    for left, right, delta in updates:
+        for index in range(left, right + 1):
+            nums[index] += delta
+    return nums`,
+    bruteAnalysis: '一次操作没有问题，真正的浪费发生在“同一段元素被反复经过”。优化方向不是让加法更快，而是提前保存累计结果，或只记录数值发生变化的位置。',
+    core: '前缀和保存“到这里一共多少”；差分数组保存“从这里开始改变多少”。',
+    coreDetail: '令 `prefix[0]=0`，`prefix[i+1]=prefix[i]+nums[i]`，则闭区间 `[left,right]` 的和是 `prefix[right+1]-prefix[left]`。差分更新 `[left,right]` 加 `delta` 时，只做 `diff[left]+=delta` 与 `diff[right+1]-=delta`，最后从左向右累加还原。',
+    kind: 'prefix', steps: [['多留一个零','prefix 长度为 n+1，prefix[0]=0'],['向右累计','prefix[i+1]=prefix[i]+nums[i]'],['切掉左侧','区间和=prefix[right+1]-prefix[left]'],['一次减法','预处理 O(n)，每次查询 O(1)']],
+    proofSteps: [['前缀含义','prefix[i] 恰好是 nums[0:i] 的元素和'],['区间相减','右端累计减去 left 之前的累计，只剩目标区间'],['边界标记','diff[left] 开启增量，diff[right+1] 关闭增量'],['累加还原','每个位置收到此前尚未关闭的全部增量']],
+    figureCaption: '多出的 prefix[0] 让 left=0 不再需要特判；两个前缀相减，重叠部分会完整抵消。',
+    proofCaption: '差分数组记录的是相邻位置的变化量：左边界打开增量，右边界之后关闭增量。',
+    proof: [['为什么区间和是两个前缀相减','`prefix[right+1]` 包含 `nums[0]` 到 `nums[right]`，`prefix[left]` 包含 `nums[0]` 到 `nums[left-1]`。两者相减后，公共的左侧部分抵消，只剩 `nums[left:right+1]`。'],['为什么前缀数组要多一个位置','若 `prefix[i]` 表示前 i 个元素之和，那么空前缀自然是 `prefix[0]=0`。原数组下标 i 对应 `prefix[i+1]`，查询从 0 开始的区间也统一使用同一公式。'],['为什么差分只改两个边界','`diff[left]+=delta` 表示从 left 起累计值增加 delta；`diff[right+1]-=delta` 表示越过 right 后取消这份增量。中间位置虽然没逐个修改，但还原时的连续累加会自动携带 delta。']],
+    template: `def build_prefix(nums):
+    prefix = [0] * (len(nums) + 1)
+    for index, value in enumerate(nums):
+        prefix[index + 1] = prefix[index] + value
+    return prefix
+
+
+def range_sum(prefix, left, right):
+    return prefix[right + 1] - prefix[left]
+
+
+def apply_range_updates(length, updates):
+    diff = [0] * (length + 1)
+    for left, right, delta in updates:
+        diff[left] += delta
+        diff[right + 1] -= delta
+
+    nums = [0] * length
+    running = 0
+    for index in range(length):
+        running += diff[index]
+        nums[index] = running
+    return nums`,
+    templateNotes: '`prefix` 和 `diff` 都多开一个位置，用空间换掉边界特判。模板约定输入区间是闭区间 `[left,right]`；若题目使用半开区间，公式要随定义一起调整。',
+    example: { input: 'nums=[2,-1,3,5]，查询 [1,3]', headers: ['步骤','读取/写入','结果','含义'], rows: [['初始化','prefix[0]','0','空前缀'],['加入 nums[0]=2','prefix[1]','2','前 1 个元素和'],['加入 nums[1]=-1','prefix[2]','1','前 2 个元素和'],['继续累计','prefix[4]','9','全部元素和'],['查询 [1,3]','prefix[4]-prefix[1]','7','-1+3+5']], conclusion: '前缀数组是 `[0,2,1,4,9]`。无论区间多长，建表后每次查询都只访问两个位置。' },
+    time: '前缀和 O(n+q)，差分 O(n+q)', timeWhy: '预处理或还原各扫描一次数组，每个查询/更新只做 O(1) 次操作。', space: 'O(n)', spaceWhy: '额外保存长度 n+1 的 prefix 或 diff 数组。',
+    signalFormula: '多次区间求和 → 前缀和；多次区间加值、最后统一查看 → 差分数组',
+    signals: ['同一份数组上有很多区间和查询。','很多区间统一加减，修改期间不要求立刻查询单点。','题目出现“连续子数组之和”，可考虑前缀和配合哈希表。'],
+    pitfalls: [p('少写 right+1','return prefix[right] - prefix[left]','闭区间右端也属于答案，应使用 `prefix[right+1]`。'),p('prefix 长度仍是 n','prefix = [0] * len(nums)','长度 n+1 才能让空前缀和从 0 开始的查询统一处理。'),p('差分忘记关闭增量','diff[left] += delta','还要在 `right+1` 减去 delta，否则增量会一直延续到数组末尾。')],
+    python: { title: '`enumerate` 与半开切片', body: '`enumerate(nums)` 同时提供下标和值。Python 切片 `nums[left:right+1]` 是半开区间，而本节题目使用闭区间；写公式前先明确区间定义。', code: `nums = [2, -1, 3, 5]
+for index, value in enumerate(nums):
+    print(index, value)
+
+# 闭区间 [left, right] 对应切片：
+part = nums[left:right + 1]` },
+    exercises: [q('入门','303','区域和检索 - 数组不可变','range-sum-query-immutable','简单','构建 n+1 长度的前缀数组。'),q('标准','724','寻找数组的中心下标','find-pivot-index','简单','总和减左侧与当前值，得到右侧和。'),q('标准','560','和为 K 的子数组','subarray-sum-equals-k','中等','前缀和配合计数哈希表。'),q('进阶','1109','航班预订统计','corporate-flight-bookings','中等','每条预订是一次闭区间加值。')],
+    checklist: ['能解释 `prefix[i]` 表示前 i 个元素之和。','能独立写出闭区间求和公式。','能解释差分数组为什么只修改两个边界。','能区分查询多与修改多时该选哪个工具。','完成 303 和 1109。'],
+    nextIntro: '完成这一课后，先回到学习地图复盘数组模块：双指针解决“如何移动”，滑动窗口解决“如何维护连续区间”，前缀和与差分解决“如何复用区间累计结果”。',
+    referenceNote: '本课是 27 节经典主线之后的原创扩展篇；练习题链接来自 LeetCode 中国站。'
   },
 ];

@@ -15,7 +15,7 @@ description: 图解滑动窗口最大值的单调队列，解释队头过期、�
 <nav class="series-nav" aria-label="算法系列导航">
   <a class="series-nav__prev" href="/2026/09/04/algorithm-26-monotonic-stack/">← 26 单调栈</a>
   <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
-  <span class="series-nav__next series-nav__pending">27 节主线完成 ✓</span>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-28-prefix-sum-difference-array/">28 前缀和与差分 →</a>
 </nav>
 
 滑动窗口每移动一步，都要删除最左元素、加入最右元素并询问最大值。普通队列能处理进出，却不能 O(1) 找最大；堆能找最大，但删除过期元素较绕。单调队列同时维护有效期和竞争力。
@@ -225,12 +225,12 @@ def max_sliding_window(nums, k):
 
 ## 下一节
 
-27 节主线到这里结束。回到学习地图按模块复盘，并优先重做每篇的两道入门/标准题。
+27 节经典主线到这里结束。下一课进入扩展篇，用前缀和把重复区间求和压缩成一次减法，再用差分数组批量处理区间修改。
 
 <nav class="series-nav" aria-label="算法系列导航">
   <a class="series-nav__prev" href="/2026/09/04/algorithm-26-monotonic-stack/">← 26 单调栈</a>
   <a class="series-nav__map" href="/2026/09/04/python-algorithm-learning-map/">算法学习地图</a>
-  <span class="series-nav__next series-nav__pending">27 节主线完成 ✓</span>
+  <a class="series-nav__next" href="/2026/09/04/algorithm-28-prefix-sum-difference-array/">28 前缀和与差分 →</a>
 </nav>
 
 课程顺序参考：[灵茶山艾府《基础算法精讲 27》](https://www.bilibili.com/video/BV1bM411X72E/)；题目范围参考[课程作者维护的汇总](https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md)。本文讲解、代码组织与图解均为独立编写。

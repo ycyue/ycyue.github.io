@@ -507,6 +507,32 @@ def max_sliding_window(nums, k):
     return answer
 
 
+# Article 28: 前缀和与差分
+def build_prefix(nums):
+    prefix = [0] * (len(nums) + 1)
+    for index, value in enumerate(nums):
+        prefix[index + 1] = prefix[index] + value
+    return prefix
+
+
+def range_sum(prefix, left, right):
+    return prefix[right + 1] - prefix[left]
+
+
+def apply_range_updates(length, updates):
+    diff = [0] * (length + 1)
+    for left, right, delta in updates:
+        diff[left] += delta
+        diff[right + 1] -= delta
+
+    nums = [0] * length
+    running = 0
+    for index in range(length):
+        running += diff[index]
+        nums[index] = running
+    return nums
+
+
 def linked(values, cycle_at=None):
     nodes = [ListNode(value) for value in values]
     for left, right in zip(nodes, nodes[1:]):
@@ -632,4 +658,13 @@ assert max_sliding_window([1, 3, -1, -3, 5, 3, 6, 7], 3) == [3, 3, 5, 5, 6, 7]
 assert max_sliding_window([], 3) == [] and max_sliding_window([1], 1) == [1]
 assert max_sliding_window([2, 2, 2], 2) == [2, 2]
 
-print('algorithm series: all 26 generated article implementations passed')
+prefix = build_prefix([2, -1, 3, 5])
+assert prefix == [0, 2, 1, 4, 9]
+assert range_sum(prefix, 1, 3) == 7
+assert range_sum(prefix, 0, 0) == 2
+assert build_prefix([]) == [0]
+assert apply_range_updates(5, [(1, 3, 2), (2, 4, 3)]) == [0, 2, 5, 5, 3]
+assert apply_range_updates(0, []) == []
+assert apply_range_updates(3, [(0, 2, -1)]) == [-1, -1, -1]
+
+print('algorithm series: all generated article implementations passed')
