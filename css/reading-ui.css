@@ -327,11 +327,25 @@ html[data-theme='dark'] .post-page code:not([class*='language-']) {
 }
 
 .post-page figure.highlight pre,
-.post-page figure.highlight pre *,
 .post-page figure.highlight td {
   color: var(--code-ink) !important;
   background: transparent !important;
 }
+
+/* Hexo emits highlight.js token classes; keep the dark code surface in both themes. */
+.post-page figure.highlight .line { color: var(--code-ink); }
+.post-page figure.highlight .keyword,
+.post-page figure.highlight .selector-tag { color: #c4a7ff; }
+.post-page figure.highlight .string,
+.post-page figure.highlight .attr { color: #a6e3a1; }
+.post-page figure.highlight .number,
+.post-page figure.highlight .literal { color: #f9c78d; }
+.post-page figure.highlight .built_in,
+.post-page figure.highlight .title { color: #89dceb; }
+.post-page figure.highlight .comment,
+.post-page figure.highlight .meta { color: #a3b1c2; }
+.post-page figure.highlight .params,
+.post-page figure.highlight .subst { color: var(--code-ink); }
 
 .post-page figure.highlight pre {
   margin: 0;
