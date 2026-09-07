@@ -6,6 +6,8 @@ on:
     paths:
       - "source/**"
       - "scripts/**"
+      - "tools/**"
+      - "tests/**"
       - "_config.yml"
       - "_config.typography.yml"
       - "package.json"
@@ -47,10 +49,18 @@ jobs:
       - name: Build static site
         run: npm run build
 
-      - name: Copy generated pages to repository root
+      - name: Verify content and generated pages
         run: |
-          rsync -a public/ ./
-          touch .nojekyll
+          node tests/check-algorithm-content.js
+          node tests/check-algorithm-series.js
+          node tests/check-algorithm-responsive.js
+          node tests/check-blog-output.js
+          node tests/check-generated-sync.js
+          python3 tests/test_algorithm_01_two_pointers.py
+          python3 tests/test_algorithm_series_all.py
+
+      - name: Copy generated pages to repository root
+        run: node tools/sync-generated.js
 
       - name: Publish generated pages
         run: |
