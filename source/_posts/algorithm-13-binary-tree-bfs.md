@@ -1,5 +1,6 @@
 ---
 title: 算法基础 13｜二叉树 BFS：队列如何守住层的边界
+updated: 2026-09-27
 date: 2026-09-04 11:30:00
 permalink: 2026/09/04/algorithm-13-binary-tree-bfs/
 categories:
@@ -19,8 +20,6 @@ description: 用队列变化图解二叉树层序遍历，解释为什么先记�
 </nav>
 
 BFS（广度优先搜索）像水波一样从根向外扩散。队列保证先进入的节点先处理，因此深度小的节点一定先于深度大的节点出队。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -50,13 +49,11 @@ def level_order_dfs(root):
 
 DFS 同样是 O(n)，说明“暴力”并不总更慢。选择 BFS 的原因是它天然按距离/层次处理，扩展到无权图最短路时尤其重要。
 
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
-
 ## 3. 核心思想
 
 <div class="pattern-card"><strong>每层开始先冻结 `level_size = len(queue)`；本轮只弹出这批旧节点，新加入的孩子留给下一层。</strong></div>
 
-Python 的 `deque` 支持 O(1) 的左端弹出。若在 `for` 循环条件中动态读取队列长度，新孩子会混进当前层；先保存长度就是在队列中画出层边界。
+Python 的 `deque` 支持 O(1) 的左端弹出。`for _ in range(len(queue))` 只在进入循环时计算一次长度，本身正确。若改用动态读取长度的 while，才可能把新孩子混进当前层；显式 level_size 更便于读者看清边界。
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/13-binary-tree-bfs/process.svg" alt="二叉树 BFS执行过程图" loading="lazy">
@@ -126,7 +123,7 @@ def level_order(root):
 ## 7. 复杂度分析
 
 - **时间复杂度：O(n)**。每个节点入队一次、出队一次。
-- **空间复杂度：O(w)**。队列最大长度等于树的最大层宽 w，最坏 O(n)。
+- **空间复杂度：O(w)**。队列处理中可能同时保存本层剩余节点与下一层已加入节点，不一定恰好等于最大层宽 w，但仍为 O(w)，最坏 O(n)。输出列表另占 O(n)。
 
 ## 8. 什么时候想到这个算法？
 
@@ -148,14 +145,16 @@ node = queue.pop(0)
 
 列表头部删除需要搬移元素，使用 `deque.popleft()`。
 
-### 坑 2：循环中动态使用 len(queue)
+### 坑 2：把新孩子也算进当前层
 
 ```python
+# 错误思路：把队列清空才结束当前层
 while queue:
-    for _ in range(len(queue)):
+    node = queue.popleft()
+    # 将 node 的孩子继续加入 queue
 ```
 
-这里只在进入 for 时求值一次尚可，但应显式保存 `level_size`，避免改写时混淆层边界。
+这个循环能遍历节点，却没有层边界。按层输出时应先保存 level_size，再只弹出这批节点。
 
 ### 坑 3：空树仍把 None 入队
 
@@ -233,6 +232,27 @@ def level_order(root):
 - [ ] 能写 level_size 分层模板。
 - [ ] 能区分 O(h) DFS 栈与 O(w) BFS 队列。
 - [ ] 完成 102 和 994。
+
+## 边界自测与迁移
+
+本节沿用第 09 课的 TreeNode。若推广到可能有环的图，应在节点入队时标记已发现，防止重复入队。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert level_order(None) == []
+assert level_order(TreeNode(1)) == [[1]]
+assert level_order(TreeNode(1, TreeNode(2), TreeNode(3))) == [[1], [2, 3]]
+```
+
+**想一想：for _ in range(len(queue)) 会随 append 改变循环次数吗？**
+
+<details>
+<summary>核对思路</summary>
+
+不会，range 在进入循环时已创建。真正的问题是用动态长度控制 while，或把整条队列清空才结束一层。
+
+</details>
 
 ## 下一节
 

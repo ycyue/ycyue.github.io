@@ -1,5 +1,6 @@
 ---
 title: 算法基础 10｜二叉树递归进阶：让返回值携带足够信息
+updated: 2026-09-27
 date: 2026-09-04 11:00:00
 permalink: 2026/09/04/algorithm-10-binary-tree-recursion-advanced/
 categories:
@@ -20,8 +21,6 @@ description: 用平衡二叉树图解如何设计复合返回信息和失败哨�
 
 判断平衡树时，父节点既需要孩子高度，又需要知道孩子内部是否已经不平衡。若每个节点都重新计算高度，会反复遍历同一子树。更好的办法是让一次递归同时汇报足够信息。
 
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
-
 <!-- more -->
 
 ## 1. 这节解决什么问题？
@@ -29,7 +28,7 @@ description: 用平衡二叉树图解如何设计复合返回信息和失败哨�
 - **输入**：一棵二叉树。
 - **输出**：判断任意节点左右子树高度差是否都不超过 1。
 - **直接想法**：对每个节点分别调用高度函数，再递归检查孩子。
-- **真正瓶颈**：高度函数会重复访问后代；链状树最坏达到 O(n²)。
+- **真正瓶颈**：高度函数会重复访问后代；若逐节点完整重复求高可达 O(n²)。下面保留这种教学基线；短路判断会改变具体输入的访问次数。
 
 ## 2. 从暴力解法开始
 
@@ -42,14 +41,13 @@ def height(node):
 def is_balanced_brute(root):
     if root is None:
         return True
-    return (abs(height(root.left) - height(root.right)) <= 1
-            and is_balanced_brute(root.left)
-            and is_balanced_brute(root.right))
+    left_ok = is_balanced_brute(root.left)
+    right_ok = is_balanced_brute(root.right)
+    local_ok = abs(height(root.left) - height(root.right)) <= 1
+    return left_ok and right_ok and local_ok
 ```
 
 每个节点都可能再次遍历整棵子树。优化后每个节点只计算一次高度，并用 -1 表示“这棵子树已不平衡”。
-
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
 
 ## 3. 核心思想
 
@@ -106,12 +104,13 @@ def is_balanced(root):
 
 ## 6. 手工模拟一次
 
-输入：`根的左子树高度 3，右子树高度 1`
+输入：根为 1，左侧是一条 `2 → 3 → 4` 的单链，右侧是叶子 5；表中按递归实际顺序列出返回。
 
 | 节点 | 左返回 | 右返回 | 当前返回 |
 |---|---|---|---|
-| 左侧叶子 | 0 | 0 | 1 |
-| 左侧父节点 | 2 | 0 | -1 |
+| 叶子 4 | 0 | 0 | 1 |
+| 节点 3 | 1 | 0 | 2 |
+| 节点 2 | 2 | 0 | -1 |
 | 根 | -1 | 未再计算 | -1 |
 
 一旦左子树返回 -1，根可直接判定失败，避免无意义遍历。
@@ -154,7 +153,6 @@ return max(left_height, right_height) + 1
 ### 嵌套函数
 
 把 `dfs` 定义在 `is_balanced` 内，表示它是实现细节，也能自然访问外层变量。每次调用外层函数都会创建独立的 dfs 环境。
-
 
 
 ## 11. 典型练习题
@@ -210,6 +208,27 @@ def is_balanced(root):
 - [ ] 能解释失败为何可向上传播。
 - [ ] 能写出一次遍历版本。
 - [ ] 完成 110 和 101。
+
+## 边界自测与迁移
+
+本节沿用第 09 课的 TreeNode；平衡条件要对每个节点成立，不只检查根。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert is_balanced(None) is True
+assert is_balanced(TreeNode(1, TreeNode(2))) is True
+assert is_balanced(TreeNode(1, TreeNode(2, TreeNode(3)))) is False
+```
+
+**想一想：为什么不能把 -1 与另一侧高度一起取 max？**
+
+<details>
+<summary>核对思路</summary>
+
+-1 表示子树已失败，不是较矮的一棵树。继续求高度会吞掉失败信息。
+
+</details>
 
 ## 下一节
 

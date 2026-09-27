@@ -1,5 +1,6 @@
 ---
 title: 算法基础 22｜区间 DP：从短区间推到长区间
+updated: 2026-09-27
 date: 2026-09-04 13:00:00
 permalink: 2026/09/04/algorithm-22-interval-dp/
 categories:
@@ -19,8 +20,6 @@ description: 用最长回文子序列图解区间状态、两端决策和按长�
 </nav>
 
 当一次决策会删掉左端、右端或把区间分成两段时，前缀 dp 很难表达。区间 DP 直接定义 `dp[left][right]`，让更长区间依赖更短区间。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -47,8 +46,6 @@ def lps_brute(s):
 ```
 
 递归状态只有 O(n²) 个。区间表按长度递增填充，确保 `[left+1,right-1]`、`[left+1,right]`、`[left,right-1]` 都已计算。
-
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
 
 ## 3. 核心思想
 
@@ -163,7 +160,6 @@ dp[left + 1][right - 1]
 Python 切片右端不包含，而本文 dp 使用闭区间。写 `s[left:right+1]` 才对应 dp 的范围；不要让两套边界混在一起。
 
 
-
 ## 11. 典型练习题
 
 先根据提示独立画状态，再看代码。不要把练习变成复制模板。
@@ -219,6 +215,27 @@ def longest_palindrome_subseq(s):
 - [ ] 能按长度确定遍历顺序。
 - [ ] 能处理单字符、空区间。
 - [ ] 完成 516 和 1039。
+
+## 边界自测与迁移
+
+这里找的是可跳字符的回文子序列。区间连续不表示选出的答案也连续。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert longest_palindrome_subseq("") == 0
+assert longest_palindrome_subseq("aa") == 2
+assert longest_palindrome_subseq("bbbab") == 4
+```
+
+**想一想：所有区间 DP 都是 O(n²) 吗？**
+
+<details>
+<summary>核对思路</summary>
+
+不是。这里每个状态只有常数个转移；若每个区间还枚举 O(n) 个分割点，总时间通常为 O(n³)。
+
+</details>
 
 ## 下一节
 

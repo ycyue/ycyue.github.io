@@ -1,5 +1,6 @@
 ---
 title: 算法基础 21｜状态机 DP：把股票交易画成状态转移
+updated: 2026-09-27
 date: 2026-09-04 12:50:00
 permalink: 2026/09/04/algorithm-21-state-machine-dp/
 categories:
@@ -19,8 +20,6 @@ description: 用持有、空仓、冷冻状态图解股票 DP，解释每条转�
 </nav>
 
 股票题难在“同一天、同一价格”下可能处于不同状态：手里持有股票与空仓的未来选择完全不同。一个 dp 值不够，需要把状态也放进下标。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -48,8 +47,6 @@ def max_profit_brute(prices):
 ```
 
 每个状态有少量分支。把 `(day, state)` 缓存后为 O(n)，递推只需维护持有、刚卖出、空闲三个状态。
-
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
 
 ## 3. 核心思想
 
@@ -92,7 +89,8 @@ def max_profit_with_cooldown(prices):
     sold = float('-inf')
     rest = 0
 
-    for price in prices[1:]:
+    for day in range(1, len(prices)):
+        price = prices[day]
         new_hold = max(hold, rest - price)
         new_sold = hold + price
         new_rest = max(rest, sold)
@@ -166,7 +164,6 @@ return max(hold, sold, rest)
 `float("-inf")` 参与 max 时不会胜过合法利润，但从合法状态转移后可以变为有限值，适合最大化 DP 的不可能状态。
 
 
-
 ## 11. 典型练习题
 
 先根据提示独立画状态，再看代码。不要把练习变成复制模板。
@@ -200,7 +197,8 @@ def max_profit_with_cooldown(prices):
     sold = float('-inf')
     rest = 0
 
-    for price in prices[1:]:
+    for day in range(1, len(prices)):
+        price = prices[day]
         new_hold = max(hold, rest - price)
         new_sold = hold + price
         new_rest = max(rest, sold)
@@ -219,6 +217,27 @@ def max_profit_with_cooldown(prices):
 - [ ] 能正确初始化不可达状态。
 - [ ] 能避免滚动更新污染。
 - [ ] 完成 122 和 309。
+
+## 边界自测与迁移
+
+模型假定价格非负、最多持有一股、卖出后的下一天禁止买入；没有手续费。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert max_profit_with_cooldown([]) == 0
+assert max_profit_with_cooldown([3, 2, 1]) == 0
+assert max_profit_with_cooldown([1, 2, 3, 0, 2]) == 3
+```
+
+**想一想：为什么普通无限交易的答案 4 在最后一个例子中不合法？**
+
+<details>
+<summary>核对思路</summary>
+
+买 1 卖 3 后，价格为 0 的那天是冷冻日，不能立即买入；必须把冷冻约束编码进状态。
+
+</details>
 
 ## 下一节
 

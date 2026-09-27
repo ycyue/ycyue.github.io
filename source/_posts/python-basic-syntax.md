@@ -1,5 +1,6 @@
 ---
 title: Python 基础语法：零基础入门与实用速查
+updated: 2026-09-27
 date: 2026-09-02 18:30:00
 categories:
   - 编程基础
@@ -7,7 +8,7 @@ tags:
   - Python
   - 基础语法
   - 入门
-description: 从变量、数据类型、条件判断、循环、函数到异常处理，用一篇文章掌握 Python 最常用的基础语法。
+description: 从变量、数据类型、条件判断、循环、函数到异常处理，通过示例练习 Python 最常用的基础语法。
 ---
 
 Python 的语法简洁、可读性强，适合作为第一门编程语言。学习基础语法时，不必一次记住所有细节。先掌握变量、判断、循环、函数和常用容器，就可以开始写小程序，并在项目中继续补充知识。
@@ -130,7 +131,7 @@ print(len(skills))
 
 ### 元组 tuple
 
-元组有顺序，但创建后通常不修改。
+元组有顺序，创建后不能增删或替换其中的元素；如果元素引用了列表，列表自身仍可修改。
 
 ```python
 point = (10, 20)
@@ -289,7 +290,7 @@ if __name__ == "__main__":
 - `TypeError`：对不兼容的数据类型执行操作。
 - `IndexError`：列表索引超出范围。
 - `KeyError`：访问了字典中不存在的键。
-- `ValueError`：数据类型可以转换，但具体值不合法。
+- `ValueError`：参数类型合适，但具体值不合法，例如 int("abc")。
 
 看报错时，先读最后一行的错误类型和说明，再根据文件名与行号定位代码。
 
@@ -300,6 +301,37 @@ if __name__ == "__main__":
 3. 用字典保存三名学生的成绩，输出平均分最高的学生。
 4. 读取一个文本文件，统计其中每个单词出现的次数。
 5. 写一个命令行待办清单，支持添加、查看和完成任务。
+
+## 把零散语法连成一个程序
+
+保存为 `scores.py`，用 `python3 scores.py` 执行。此例约定成绩是 0～100 的整数，空列表没有平均分；先验证全部输入，再计算结果。
+
+```python
+def average_score(scores):
+    if not scores:
+        raise ValueError("至少提供一个成绩")
+    for score in scores:
+        if type(score) is not int or not 0 <= score <= 100:
+            raise ValueError("成绩必须是 0～100 的整数")
+    return sum(scores) / len(scores)
+
+assert average_score([60, 80, 100]) == 80
+assert average_score([0]) == 0
+for invalid in ([], [-1], [101], [True], ["80"]):
+    try:
+        average_score(invalid)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("无效成绩没有被拒绝")
+print(f"平均分：{average_score([60, 80, 100]):.1f}")
+```
+
+预期输出 `平均分：80.0`。尝试把成绩范围改为 0～150，同时调整测试边界，检查自己是否真正理解条件表达式。
+
+还有三个容易遗漏的细节：`-7 // 3 == -3`，整除向负无穷取整；空集合写 `set()`，`{}` 是空字典，集合输出顺序不可依赖；以 `w` 模式打开已有文件会先截断内容。使用 `input()` 接收数字时，仍需处理转换失败。
+
+参考：[Python 容器教程](https://docs.python.org/3/tutorial/datastructures.html)。
 
 ## 总结
 

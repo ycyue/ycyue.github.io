@@ -28,9 +28,10 @@
 需要 Node.js 20 和 Git：
 
 ```bash
-npm install
+npm ci
 git clone https://github.com/SumiMakito/hexo-theme-typography.git themes/typography
 git -C themes/typography checkout ddbe45aabe5ee3d431426cbd6c2f62ae448fc6d1
+node scripts/patch-typography-theme.js
 npm run preview
 ```
 
@@ -42,3 +43,12 @@ npm run preview
 npm run build    # 生成静态页面
 npm run preview  # 本地预览
 ```
+
+## 界面重构
+
+- `scripts/notebook-layout.js`：构建时添加首页学习地图、跳至正文入口和页面语义，移除旧侧栏定位脚本。
+- `source/css/notebook-layout.css`：顶部导航、文章列表、正文与目录布局、浅色 / 深色和移动端样式。
+- 文章 Markdown、永久链接、RSS、分类和标签沿用原有结构。
+- `npm run build` 后可运行 `node tests/check-blog-output.js` 检查站内引用；使用 `node tools/sync-generated.js` 同步 GitHub Pages 根目录产物。
+
+本次改动尚未推送到远程仓库。

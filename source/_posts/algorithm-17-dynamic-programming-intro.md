@@ -1,5 +1,6 @@
 ---
 title: 算法基础 17｜动态规划入门：从记忆化搜索到递推
+updated: 2026-09-27
 date: 2026-09-04 12:10:00
 permalink: 2026/09/04/algorithm-17-dynamic-programming-intro/
 categories:
@@ -19,8 +20,6 @@ description: 从打家劫舍出发，完整推导 DP 状态、转移、初始化
 </nav>
 
 动态规划不是先猜公式。最自然的起点是暴力搜索：面对第 i 间房，选它还是不选？当你发现相同的 `dfs(i)` 被反复计算，缓存与递推就顺理成章。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -44,13 +43,11 @@ def rob_brute(nums):
 
 状态只有 n 个，暴力却形成两叉递归树。给 `dfs(i)` 缓存后，每个状态只计算一次；再按依赖顺序倒推即可去掉递归。
 
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
-
 ## 3. 核心思想
 
 <div class="pattern-card"><strong>先定义状态，再写选择：dfs(i) 表示从第 i 间及以后能偷到的最大金额。</strong></div>
 
-不偷第 i 间得到 `dfs(i+1)`；偷它就必须跳过相邻房，得到 `nums[i]+dfs(i+2)`。两种选择覆盖所有合法方案，取较大值。递推可改成 `dp[i]=max(dp[i-1],dp[i-2]+nums[i])`。
+不偷第 i 间得到 `dfs(i+1)`；偷它就必须跳过相邻房，得到 `nums[i]+dfs(i+2)`。两种选择覆盖所有合法方案，取较大值。下面递推改用前缀定义：`dp[i]` 表示下标 0..i 的最大收益，转移为 `dp[i]=max(dp[i-1],dp[i-2]+nums[i])`。从后缀改成前缀时，状态含义与遍历方向要一起改变。
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/17-dynamic-programming-intro/process.svg" alt="动态规划入门执行过程图" loading="lazy">
@@ -158,9 +155,13 @@ prev2 = prev1
 ```python
 from functools import cache
 
-@cache
-def dfs(i):
-    ...
+def rob_memo(nums):
+    @cache
+    def dfs(i):
+        if i >= len(nums):
+            return 0
+        return max(dfs(i + 1), nums[i] + dfs(i + 2))
+    return dfs(0)
 ```
 
 ## 11. 典型练习题
@@ -211,9 +212,30 @@ def rob(nums):
 - [ ] 能安全做空间压缩。
 - [ ] 完成 198 和 746。
 
+## 边界自测与迁移
+
+房屋金额按非负数处理，允许一间也不选。递归与递推都求金额，不直接恢复选中的房屋。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert rob([]) == 0
+assert rob([2, 1, 2]) == 4
+assert rob([2, 7, 9, 3, 1]) == 12
+```
+
+**想一想：滚动变量为什么不能直接告诉你偷了哪几间？**
+
+<details>
+<summary>核对思路</summary>
+
+它只保留局部最优值，没有保留选择历史。恢复方案需要完整表或额外前驱记录。
+
+</details>
+
 ## 下一节
 
-下一节把“选或不选”放进容量限制中，系统区分 0-1 背包、完全背包以及至多、恰好、至少三种状态语义。
+下一节把“选或不选”放进容量限制中，系统区分 0-1 背包、完全背包以及至多和恰好两种状态语义。
 
 <nav class="series-nav" aria-label="算法系列导航">
   <a class="series-nav__prev" href="/2026/09/04/algorithm-16-backtracking-permutations/">← 16 排列型回溯</a>

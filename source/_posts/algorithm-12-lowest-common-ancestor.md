@@ -1,5 +1,6 @@
 ---
 title: 算法基础 12｜最近公共祖先：让子树向上汇报找到谁
+updated: 2026-09-27
 date: 2026-09-04 11:20:00
 permalink: 2026/09/04/algorithm-12-lowest-common-ancestor/
 categories:
@@ -19,8 +20,6 @@ description: 用后序递归分类讨论最近公共祖先，解释返回目标�
 </nav>
 
 最近公共祖先是同时包含 p、q 的最深节点。与其从根向下猜方向，不如让左右子树向上汇报：“我这里找到了 p、q，还是已经找到了它们的公共祖先？”
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -59,8 +58,6 @@ def lowest_common_ancestor_with_paths(root, p, q):
 
 路径法是 O(n) 时间。后序方法同样 O(n)，但返回值直接表达“当前子树发现的有效节点”，不需要保存两条完整路径。
 
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
-
 ## 3. 核心思想
 
 <div class="pattern-card"><strong>dfs 返回当前子树中的有效发现：None、p/q 本身，或已经确定的最近公共祖先。</strong></div>
@@ -80,7 +77,7 @@ def lowest_common_ancestor_with_paths(root, p, q):
 
 ### 2. 一个节点是另一个祖先怎么办
 
-遇到 p 时直接返回 p，不再向下找 q。上层最终只会收到 p 这一条非空结果并返回 p。由于题目保证 q 存在于 p 的子树或其他结构中，p 正是公共祖先。标准证明依赖两个目标均存在。
+遇到 p 时直接返回 p，不再向下找 q。上层最终只会收到 p 这一条非空结果并返回 p。在本小节假设的“p 是 q 的祖先”场景中，q 位于 p 子树内，所以 p 就是答案。若 q 在另一分支，该分支会返回 q，最终应返回更高的汇合点，而非 p。标准证明依赖两个目标均存在。
 
 ### 3. 为什么子树已有答案不会被覆盖
 
@@ -160,7 +157,6 @@ if root.val == p.val:
 `left if left is not None else right` 表示优先返回非空的左结果，否则返回右结果；两者都空时自然返回 None。
 
 
-
 ## 11. 典型练习题
 
 先根据提示独立画状态，再看代码。不要把练习变成复制模板。
@@ -208,6 +204,29 @@ def lowest_common_ancestor(root, p, q):
 - [ ] 能解释“最近”如何保证。
 - [ ] 知道存在性假设。
 - [ ] 完成 235 和 236。
+
+## 边界自测与迁移
+
+本节沿用第 09 课的 TreeNode；p、q 是树中已有的两个节点引用。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+p, q = TreeNode(5), TreeNode(1)
+root = TreeNode(3, p, q)
+assert lowest_common_ancestor(root, p, q) is root
+p.left = TreeNode(6)
+assert lowest_common_ancestor(root, p, p.left) is p
+```
+
+**想一想：如果 q 不存在，这个模板会怎样？**
+
+<details>
+<summary>核对思路</summary>
+
+它可能返回 p，但这不证明两者有公共祖先。需另行验证存在性或返回发现目标的数量。
+
+</details>
 
 ## 下一节
 

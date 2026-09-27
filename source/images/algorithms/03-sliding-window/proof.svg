@@ -21,8 +21,8 @@
       <text x="350" y="244" class="body">扩右只增大和，缩左只减小和</text>
 <rect x="150" y="320" width="660" height="74" rx="14" class="warn"/>
       <text x="180" y="350" class="head">最优时机</text>
-      <text x="350" y="350" class="body">可行时持续缩左，枚举当前右端的最短窗口</text>
+      <text x="350" y="350" class="body">可行时记录答案，再持续缩左</text>
 <rect x="150" y="426" width="660" height="74" rx="14" class="good"/>
       <text x="180" y="456" class="head">完整性</text>
-      <text x="350" y="456" class="body">每个右端对应的最短可行左端都被检查</text><path d="M480 184 V211" class="line"/><path d="M480 290 V317" class="line"/><path d="M480 396 V423" class="line"/>
+      <text x="350" y="456" class="body">已移走的左端，未来不会产生更短答案</text><path d="M480 184 V211" class="line"/><path d="M480 290 V317" class="line"/><path d="M480 396 V423" class="line"/>
 </svg>

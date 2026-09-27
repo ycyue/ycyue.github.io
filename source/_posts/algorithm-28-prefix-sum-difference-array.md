@@ -1,5 +1,6 @@
 ---
 title: 算法基础 28｜前缀和与差分：把区间操作压缩到 O(1)
+updated: 2026-09-27
 date: 2026-09-04 14:10:00
 permalink: 2026/09/04/algorithm-28-prefix-sum-difference-array/
 categories:
@@ -20,8 +21,6 @@ description: 从重复区间求和出发，图解前缀和与差分数组的互�
 </nav>
 
 同一个数组被反复询问“从 left 到 right 的和”时，每次重新相加会重复做大量工作。前缀和把历史累计起来，让一次区间查询只剩一次减法；差分数组则反过来，用两个边界标记一次区间修改。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -51,8 +50,6 @@ def apply_updates_brute(length, updates):
 ```
 
 一次操作没有问题，真正的浪费发生在“同一段元素被反复经过”。优化方向不是让加法更快，而是提前保存累计结果，或只记录数值发生变化的位置。
-
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
 
 ## 3. 核心思想
 
@@ -181,6 +178,7 @@ for index, value in enumerate(nums):
     print(index, value)
 
 # 闭区间 [left, right] 对应切片：
+left, right = 1, 3
 part = nums[left:right + 1]
 ```
 
@@ -244,6 +242,28 @@ def apply_range_updates(length, updates):
 - [ ] 能解释差分数组为什么只修改两个边界。
 - [ ] 能区分查询多与修改多时该选哪个工具。
 - [ ] 完成 303 和 1109。
+
+## 边界自测与迁移
+
+查询要求 0<=left<=right<len(nums)。差分模板从全零数组开始，适合全部更新完成后统一还原。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+p = build_prefix([2, -1, 3, 5])
+assert range_sum(p, 0, 3) == 9
+assert range_sum(p, 1, 1) == -1
+assert apply_range_updates(5, [(1, 3, 2), (2, 4, 3)]) == [0, 2, 5, 5, 3]
+```
+
+**想一想：更新与区间查询交替发生时，能否仍宣称每步 O(1)？**
+
+<details>
+<summary>核对思路</summary>
+
+不能。普通前缀和需要维护受影响后缀，差分也需累计才能读值；频繁交错操作可考虑树状数组或线段树。
+
+</details>
 
 ## 下一节
 

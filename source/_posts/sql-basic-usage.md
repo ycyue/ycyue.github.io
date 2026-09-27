@@ -1,5 +1,6 @@
 ---
 title: SQL 基础用法：从查询到增删改的入门指南
+updated: 2026-09-27
 date: 2026-09-02 18:50:00
 categories:
   - 数据库
@@ -14,6 +15,8 @@ description: 通过一套示例数据学习 SQL 查询、筛选、排序、聚�
 SQL 是操作关系型数据库的通用语言。MySQL、PostgreSQL、SQLite 和 SQL Server 的细节略有差异，但核心查询思路基本一致。对于开发和软件测试岗位，重点是能够读取数据、构造测试数据、验证业务结果，并安全地执行修改操作。
 
 <!-- more -->
+
+**运行环境：MySQL 8.4，使用 InnoDB 表。** 在独立练习数据库中先运行下方建表和种子数据，再执行查询。第 10～13 节会修改数据；需要复现前面结果时，请重新创建练习数据库。其他数据库的日期函数、占位符、事务和自增语法需要调整。
 
 ## 1. 表、行、列与主键
 
@@ -46,6 +49,21 @@ CREATE TABLE orders (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 ```
+
+先装入数据，让每条查询都有可以核对的结果：
+
+```sql
+INSERT INTO users (id, name, email, age, city) VALUES
+(1, '小明', 'xiaoming@example.com', 22, '西安'),
+(2, '小红', 'xiaohong@example.com', 24, '北京'),
+(3, '小李', NULL, 20, '西安');
+INSERT INTO orders (id, user_id, amount, status) VALUES
+(10001, 1, 100.00, 'paid'),
+(10002, 1, 50.00, 'pending'),
+(10003, 2, 200.00, 'paid');
+```
+
+核对基准：3 个用户、3 笔订单；已支付总额为 300；小李没有订单。未指定 `ORDER BY` 时，不要依赖结果行顺序。
 
 不同数据库的自增主键写法不同。例如 MySQL 常用 `AUTO_INCREMENT`，PostgreSQL 可使用 identity 列。
 
@@ -212,9 +230,21 @@ LEFT JOIN orders AS o
 WHERE o.id IS NULL;
 ```
 
+### LEFT JOIN 后怎样保留零订单用户
+
+```sql
+SELECT u.id, u.name, COUNT(o.id) AS order_count
+FROM users AS u
+LEFT JOIN orders AS o ON o.user_id = u.id
+GROUP BY u.id, u.name
+ORDER BY u.id;
+```
+
+种子数据的订单数依次为 2、1、0。这里用 `COUNT(o.id)`；`COUNT(*)` 会把左连接为小李保留的那一行也算进去，得到 1。查询“没有订单”优先使用上述反连接或 `NOT EXISTS`；`NOT IN` 的子查询一旦包含 NULL，结果可能不符合直觉。
+
 ## 9. 子查询
 
-查询订单总额高于平均值的订单：
+查询单笔金额高于所有订单平均金额的订单（结果为 10003）：
 
 ```sql
 SELECT id, user_id, amount
@@ -231,7 +261,7 @@ WHERE amount > (
 
 ```sql
 INSERT INTO users (id, name, email, age, city)
-VALUES (1, '小明', 'xiaoming@example.com', 22, '西安');
+VALUES (4, '小王', 'xiaowang@example.com', 22, '西安');
 ```
 
 一次插入多行：
@@ -239,8 +269,8 @@ VALUES (1, '小明', 'xiaoming@example.com', 22, '西安');
 ```sql
 INSERT INTO users (id, name, email, age, city)
 VALUES
-    (2, '小红', 'xiaohong@example.com', 24, '北京'),
-    (3, '小李', 'xiaoli@example.com', 20, '西安');
+    (5, '小赵', 'xiaozhao@example.com', 24, '北京'),
+    (6, '小周', 'xiaozhou@example.com', 20, '西安');
 ```
 
 应明确列名，避免表结构变化导致数据错位。
@@ -274,29 +304,18 @@ WHERE id = 3;
 
 ## 13. 事务
 
-事务让一组操作要么全部成功，要么全部失败。以转账为例：
+事务提供一组修改的提交边界。以下例子使用已经创建的 `users`，先观察临时修改，再撤销：
 
 ```sql
 BEGIN;
-
-UPDATE accounts
-SET balance = balance - 100
-WHERE id = 1;
-
-UPDATE accounts
-SET balance = balance + 100
-WHERE id = 2;
-
-COMMIT;
-```
-
-如果中途发现问题，可以执行：
-
-```sql
+SELECT city FROM users WHERE id = 1;
+UPDATE users SET city = '杭州' WHERE id = 1;
+SELECT city FROM users WHERE id = 1; -- 本事务中看到杭州
 ROLLBACK;
+SELECT city FROM users WHERE id = 1; -- 恢复事务开始前的城市
 ```
 
-不同数据库的事务语法和自动提交设置可能不同，在修改生产数据前必须确认当前环境。
+想保留修改时，将上例的 `ROLLBACK` 换成 `COMMIT`；两者是不同结束方式。**提交成功后，不能再用 ROLLBACK 撤销该次提交。** 默认自动提交下，事务外的一条成功更新通常已提交。某条语句失败也不意味着整个事务必然自动回滚，应用需要处理错误并决定如何结束事务。MySQL 的部分 DDL 会隐式提交，练习回滚时不要混入建表语句。参见 [MySQL 事务文档](https://dev.mysql.com/doc/refman/8.4/en/commit.html)。
 
 ## 14. 约束
 
@@ -304,7 +323,7 @@ ROLLBACK;
 
 - `PRIMARY KEY`：主键，唯一且非空。
 - `NOT NULL`：不允许空值。
-- `UNIQUE`：不允许重复。
+- `UNIQUE`：约束非 NULL 值的唯一性；MySQL 允许唯一列包含多个 NULL。
 - `DEFAULT`：设置默认值。
 - `CHECK`：限制数据范围。
 - `FOREIGN KEY`：维护表之间的引用关系。
@@ -323,15 +342,17 @@ CREATE TABLE products (
 索引可以加速查询，但会占用空间，并增加写入成本。
 
 ```sql
-CREATE INDEX idx_users_email
-ON users(email);
+CREATE INDEX idx_users_city
+ON users(city);
 ```
+
+`email UNIQUE` 已有唯一索引，无需再建相同的普通索引。小表走全表扫描也可能更合适；有索引不等于一定使用它。
 
 通常适合为经常出现在 `WHERE`、`JOIN` 和 `ORDER BY` 中的列设计索引。不要看到查询慢就随意添加大量索引，应先查看执行计划。
 
 ```sql
 EXPLAIN
-SELECT * FROM users WHERE email = 'xiaoming@example.com';
+SELECT * FROM users WHERE city = '西安';
 ```
 
 ## 16. SQL 执行顺序
@@ -401,9 +422,12 @@ WHERE id = 10001;
 ```sql
 SELECT email, COUNT(*) AS count
 FROM users
+WHERE email IS NOT NULL
 GROUP BY email
 HAVING COUNT(*) > 1;
 ```
+
+当前表有唯一约束，这条重复邮箱查询应返回空集；它也适合检查导入暂存表。
 
 ### 检查孤立订单
 
@@ -415,13 +439,15 @@ LEFT JOIN users AS u
 WHERE u.id IS NULL;
 ```
 
+外键正常生效时，孤立订单查询也应为空。不要为制造异常而关闭正式数据库的约束。
+
 ## 19. 入门练习
 
 1. 查询年龄在 18 到 25 岁之间的西安用户。
 2. 统计每种订单状态的数量和总金额。
 3. 查询订单总金额最高的三个用户。
 4. 查询最近 7 天注册但没有下单的用户。
-5. 在事务中创建订单并扣减库存，任一步失败时回滚。
+5. 使用第 13 节的数据更新分别演示提交和回滚，并记录三个 SELECT 的结果。
 
 ## 总结
 

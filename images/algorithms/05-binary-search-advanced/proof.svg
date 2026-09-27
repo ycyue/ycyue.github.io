@@ -14,13 +14,13 @@
   <text x="48" y="52" class="title">二分查找变形：为什么成立</text>
   <rect x="150" y="108" width="660" height="74" rx="14" class="card"/>
       <text x="180" y="138" class="head">结构保证</text>
-      <text x="350" y="138" class="body">数组虽非整体有序，但由两段单调结构组成</text>
+      <text x="350" y="138" class="body">峰值题：相邻不等，区间内至少有峰</text>
 <rect x="150" y="214" width="660" height="74" rx="14" class="card"/>
       <text x="180" y="244" class="head">局部判定</text>
-      <text x="350" y="244" class="body">一次比较能识别 mid 所属区域</text>
+      <text x="350" y="244" class="body">根据相邻坡向，保留至少含一峰的一侧</text>
 <rect x="150" y="320" width="660" height="74" rx="14" class="warn"/>
       <text x="180" y="350" class="head">方向确定</text>
-      <text x="350" y="350" class="body">被丢弃区域内不可能有目标边界</text>
+      <text x="350" y="350" class="body">不必排除全部峰，只需保留一个答案</text>
 <rect x="150" y="426" width="660" height="74" rx="14" class="good"/>
       <text x="180" y="456" class="head">边界收敛</text>
       <text x="350" y="456" class="body">每轮区间变短且保留至少一个答案</text><path d="M480 184 V211" class="line"/><path d="M480 290 V317" class="line"/><path d="M480 396 V423" class="line"/>

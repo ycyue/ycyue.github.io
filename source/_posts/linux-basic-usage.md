@@ -1,5 +1,6 @@
 ---
 title: Linux 基础用法：开发与测试常用命令入门
+updated: 2026-09-27
 date: 2026-09-02 18:40:00
 categories:
   - 开发工具
@@ -10,9 +11,12 @@ tags:
 description: 面向开发与软件测试初学者，掌握目录、文件、权限、进程、日志、网络和软件安装等 Linux 高频操作。
 ---
 
-Linux 广泛用于服务器、云平台、容器和开发环境。初学者不需要立刻学习系统底层，只要先掌握文件操作、权限、进程、日志和网络排查，就能完成大部分开发与软件测试任务。
+Linux 广泛用于服务器、云平台、容器和开发环境。初学者不需要立刻学习系统底层，只要先掌握文件操作、权限、进程、日志和网络排查，便能开始进行常见的服务器操作与排查。
 
 <!-- more -->
+
+本文以 GNU/Linux 和 Bash 为例。发行版的软件包管理器不同，`systemctl` 仅适用于使用 systemd 的环境；macOS、精简容器中不一定存在这些命令。示例中的 PID、路径和服务名需要替换为当前环境的实际值。
+
 
 ## 1. 终端、Shell 与命令
 
@@ -281,6 +285,28 @@ python app.py > app.log 2>&1 &
 3. 找出当前系统最占磁盘空间的几个目录。
 4. 启动一个 Python HTTP 服务，查看其进程与监听端口。
 5. 编写 `backup.sh`，把指定目录打包为带日期的压缩文件。
+
+## 一次可复现的日志练习
+
+以下命令在新建的临时目录中生成模拟日志，不需要已有服务器或管理员权限：
+
+```bash
+practice_dir=$(mktemp -d)
+printf 'INFO start\nERROR timeout\nINFO retry\nERROR refused\n' > "$practice_dir/app.log"
+grep -n 'ERROR' "$practice_dir/app.log"
+grep -c 'ERROR' "$practice_dir/app.log"
+```
+
+前一条输出 `2:ERROR timeout` 和 `4:ERROR refused`，后一条输出 `2`。先按关键字定位，再结合前后文和请求标识分析；仅出现 ERROR 不能直接推断根因。
+
+排查时还需区分以下行为：
+
+- 目录的 `r` 用于列出名称，`x` 用于穿过目录访问条目，`w` 与 `x` 配合影响创建和删除条目；文件是否可删除不只取决于文件自身的写权限。
+- `kill PID` 默认发送 SIGTERM，是退出请求，进程可能捕获或忽略它。
+- `ping` 检查 ICMP，失败不证明 HTTP 服务不可用；`curl -I` 发 HEAD 请求，也不能代替完整 GET 业务检查。
+- 日志轮转时可考虑 `tail -F`，它会按文件名重新跟踪。
+- Bash 管道默认取末条命令状态；需要发现前段失败时使用 `set -o pipefail`。`>file 2>&1` 与 `2>&1 >file` 的重定向顺序不同。
+- `command &` 只表示后台运行，不保证退出终端后任务继续，也不提供服务自动重启。
 
 ## 总结
 

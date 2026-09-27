@@ -58,6 +58,7 @@ jobs:
           node tests/check-generated-sync.js
           python3 tests/test_algorithm_01_two_pointers.py
           python3 tests/test_algorithm_series_all.py
+          python3 tests/test_article_examples.py
 
       - name: Copy generated pages to repository root
         run: node tools/sync-generated.js

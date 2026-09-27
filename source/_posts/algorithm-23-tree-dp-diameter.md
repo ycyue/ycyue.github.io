@@ -1,5 +1,6 @@
 ---
 title: 算法基础 23｜树形 DP（一）：返回单链，更新两链之和
+updated: 2026-09-27
 date: 2026-09-04 13:10:00
 permalink: 2026/09/04/algorithm-23-tree-dp-diameter/
 categories:
@@ -19,8 +20,6 @@ description: 图解树的直径：递归向父节点返回最长单链，在当�
 </nav>
 
 树的直径可能经过根，也可能完全藏在某棵子树中。关键是区分两种量：向父节点只能贡献一条向下路径；全局答案可以在当前节点拼接左右两条路径。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -49,11 +48,9 @@ def diameter_brute(graph):
 
 对每个起点重新遍历整棵树会重复 O(n) 次。树形 DP 在每个节点汇总孩子信息，全局只遍历一次。
 
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
-
 ## 3. 核心思想
 
-<div class="pattern-card"><strong>dfs(node) 返回从 node 向下的最长链长；在 node 处用 left_chain + right_chain 更新全局直径。</strong></div>
+<div class="pattern-card"><strong>dfs(node) 返回以 node 为根的子树高度（按节点数）；在 node 处用 left_chain + right_chain 更新全局直径。</strong></div>
 
 返回给父节点的路径不能同时进入左右孩子，否则会在当前节点分叉，不再是一条简单链；但作为完整直径，恰好可以把两条向下链拼起来。
 
@@ -74,7 +71,7 @@ def diameter_brute(graph):
 
 ### 3. 边数与节点数如何统一
 
-空节点返回 0，孩子链长加 1 表示经过一条边。`left+right` 自然是边数。若题目要求节点数，定义和公式要相应调整。
+空节点返回 0，叶子返回 1，所以 dfs 返回的是节点数高度。某个孩子的高度恰好等于从当前节点走进该孩子方向的最长边数，因此 `left+right` 是经过当前节点的路径边数。返回父亲时 `max(left,right)+1` 中的 1 计入当前节点。
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/23-tree-dp-diameter/proof.svg" alt="树形 DP：直径正确性推导图" loading="lazy">
@@ -160,7 +157,6 @@ answer = max(answer, left + right)
 嵌套函数中给外层局部变量赋值，需要 `nonlocal answer`。若只读取或修改列表内容，则不一定需要。
 
 
-
 ## 11. 典型练习题
 
 先根据提示独立画状态，再看代码。不要把练习变成复制模板。
@@ -212,6 +208,27 @@ def diameter_of_binary_tree(root):
 - [ ] 能处理边数定义。
 - [ ] 能写后序单链模板。
 - [ ] 完成 543 和 124。
+
+## 边界自测与迁移
+
+本节沿用第 09 课的 TreeNode。返回值按节点数计高度，全局直径按边数计。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert diameter_of_binary_tree(None) == 0
+assert diameter_of_binary_tree(TreeNode(1)) == 0
+assert diameter_of_binary_tree(TreeNode(1, TreeNode(2), TreeNode(3))) == 2
+```
+
+**想一想：路径和题有负数时，为什么全局答案不能总初始化为 0？**
+
+<details>
+<summary>核对思路</summary>
+
+若要求路径非空且所有节点为负，答案应是某个负数。直径的 0 初始化不能原样搬到最大路径和。
+
+</details>
 
 ## 下一节
 

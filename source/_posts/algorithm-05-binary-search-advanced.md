@@ -1,5 +1,6 @@
 ---
-title: 算法基础 05｜二分查找变形：自己设计单调判定
+title: 算法基础 05｜二分查找变形：保留答案的区间判断
+updated: 2026-09-27
 date: 2026-09-04 10:10:00
 permalink: 2026/09/04/algorithm-05-binary-search-advanced/
 categories:
@@ -18,15 +19,15 @@ description: 通过寻找峰值和旋转数组最小值，学习在非整体有�
   <a class="series-nav__next" href="/2026/09/04/algorithm-06-reverse-linked-list/">06 反转链表 →</a>
 </nav>
 
-很多二分题没有直接给出“升序数组”。真正可二分的是一个单调的真假判定：只要能把候选划分成两块，并证明答案所在的一块，就能丢掉另一半。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
+二分每轮都要证明保留的一半仍有答案。边界查找常靠单调真假判定；一般数组寻找峰值则靠局部斜率与两端条件保证“这一侧至少有一个峰”，不要求整段斜率单调。
 
 <!-- more -->
 
+峰值题的输入约束可对照 [LeetCode 162 题面](https://leetcode.com/problems/find-peak-element/)：数组非空、相邻元素不相等，返回任意一个峰的位置。
+
 ## 1. 这节解决什么问题？
 
-- **输入**：先严格递增后严格递减的数组，或由升序数组旋转得到的数组。
+- **输入**：非空、相邻元素不同的数组（可有多个峰），或由严格升序数组旋转得到的非空数组。
 - **输出**：峰值下标，或旋转数组中的最小值。
 - **直接想法**：线性扫描相邻元素或整段最小值。
 - **真正瓶颈**：O(n) 扫描没有利用局部斜率或旋转点两侧的结构。
@@ -43,24 +44,22 @@ def find_peak_brute(nums):
 
 线性法正确但最坏检查 n 个位置。峰值题可把 `nums[mid] < nums[mid+1]` 视为“仍在上坡”，把另一种情况视为“峰值在左边或就是 mid”。
 
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
-
 ## 3. 核心思想
 
-<div class="pattern-card"><strong>二分的对象不是数组本身，而是你设计出的、沿搜索方向只改变一次的判定。</strong></div>
+<div class="pattern-card"><strong>先说明保留区间为何仍有答案：峰值靠存在性，旋转最小值靠分段有序性。</strong></div>
 
 寻找峰值时比较 `mid` 与 `mid+1`，判断当前位于上坡还是下坡；寻找旋转数组最小值时比较 `mid` 与最右值，判断 `mid` 属于最小值左边的“大数段”还是右边的“小数段”。
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/05-binary-search-advanced/process.svg" alt="二分查找变形执行过程图" loading="lazy">
-  <figcaption>先为每个位置定义“颜色”，再复用二分边界；不要先写模板再猜条件。</figcaption>
+  <figcaption>比较局部结构，并证明保留区间中仍有答案；多峰情况下不要求判定只变色一次。</figcaption>
 </figure>
 
 ## 4. 为什么这个算法成立？
 
 ### 1. 峰值为何能看斜率
 
-若 `nums[mid] < nums[mid+1]`，从 mid 到 mid+1 正在上升。右侧最终要么继续上升到末端，要么某处转为下降，两种情况都保证右侧存在峰值，所以可令 `left=mid+1`。否则 mid 已在下降侧或就是峰值，令 `right=mid`。
+若 `nums[mid] < nums[mid+1]`，从 mid 到 mid+1 正在上升。右侧最终要么继续上升到末端，要么某处转为下降，两种情况都保证右侧存在峰值，所以可令 `left=mid+1`。否则向左同理可保证 `[left,mid]` 内存在峰值，令 `right=mid`。例如 `[1,3,2,4,1]` 的斜率反复变化，算法仍能返回任意一个峰；它不承诺找到最大峰。
 
 ### 2. 旋转数组为何与末尾比较
 
@@ -121,9 +120,9 @@ def find_min_rotated(nums):
 
 ## 8. 什么时候想到这个算法？
 
-<div class="pattern-card"><strong>非整体有序 + 能按局部特征分成两类 + 目标是分界点 → 设计判定后二分</strong></div>
+<div class="pattern-card"><strong>每次比较可证明一半区间仍有解 → 收缩区间；全局单调只是其中一种依据</strong></div>
 
-- 峰值、谷值或旋转点。
+- 满足相邻值不等和边界约定的峰值，或结构已知的旋转点。
 - 答案越大越容易/越难满足某条件。
 - 可以回答“mid 位于目标左边还是右边”。
 
@@ -154,9 +153,12 @@ if nums[mid] < nums[mid + 1]:
 
 答案二分时可把条件封装为 `check(value)`。主循环只关心 False/True 分界，具体计算留在函数内，便于测试。
 
+以下只演示判定函数；piles 为正整数列表，speed>0，limit 为允许的小时数：
+
 ```python
-def check(speed):
-    return required_hours(speed) <= limit
+def check(speed, piles, limit):
+    required_hours = sum((pile + speed - 1) // speed for pile in piles)
+    return required_hours <= limit
 ```
 
 ## 11. 典型练习题
@@ -211,11 +213,34 @@ def find_min_rotated(nums):
 
 ## 12. 本节你应该掌握
 
-- [ ] 能把局部比较解释成颜色判定。
+- [ ] 能区分全局单调判定与局部存在性证明。
 - [ ] 能证明峰值向哪侧存在。
 - [ ] 能写出旋转数组最小值模板。
 - [ ] 知道重复值为何导致退化。
 - [ ] 完成 162 和 153。
+
+## 边界自测与迁移
+
+峰值输入必须非空且相邻值不同，两端外侧视为负无穷；旋转数组模板要求非空且元素互异。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert find_peak([1]) == 0
+a = [1, 3, 2, 4, 1]
+i = find_peak(a)
+assert (i == 0 or a[i] > a[i-1]) and (i == len(a)-1 or a[i] > a[i+1])
+assert find_min_rotated([4, 5, 1, 2, 3]) == 1
+```
+
+**想一想：为什么不能只断言多峰数组的返回下标为 1？**
+
+<details>
+<summary>核对思路</summary>
+
+题目允许任意峰值。应验证返回位置两侧都更低，而不是绑定某一个正确答案。
+
+</details>
 
 ## 下一节
 

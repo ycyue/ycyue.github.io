@@ -17,7 +17,7 @@
       <circle cx="84" cy="128" r="20" class="accent"/>
       <text x="84" y="134" text-anchor="middle" style="font:700 15px system-ui;fill:#fff">1</text>
       <text x="118" y="126" class="head">定义区间</text>
-      <text x="72" y="184" class="body">候选答案位于 [left, right)</text>
+      <text x="72" y="184" class="body">待查元素位于 [left, right)</text>
     </g>
 <g>
       <rect x="504" y="92" width="408" height="166" rx="16" class="card"/>

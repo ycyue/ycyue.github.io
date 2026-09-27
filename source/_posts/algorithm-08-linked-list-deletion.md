@@ -1,5 +1,6 @@
 ---
 title: 算法基础 08｜链表删除：哨兵节点与固定间距
+updated: 2026-09-27
 date: 2026-09-04 10:40:00
 permalink: 2026/09/04/algorithm-08-linked-list-deletion/
 categories:
@@ -19,8 +20,6 @@ description: 用哨兵节点和前后指针图解删除倒数第 N 个节点，�
 </nav>
 
 删除链表节点真正需要的是它的前驱：执行 `prev.next = prev.next.next`。头节点没有天然前驱，所以边界处理很容易把主逻辑打断。哨兵节点给头节点补上一个统一的前驱。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -51,13 +50,11 @@ def remove_nth_two_pass(head, n):
 
 两次遍历仍是 O(n)，但分支多。前后指针把“倒数距离”转成两个指针之间固定为 n 个节点的间隔，只需一遍。
 
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
-
 ## 3. 核心思想
 
-<div class="pattern-card"><strong>在原头前放 dummy；fast 先走 n 步，再让 fast 和 slow 同速，fast 到尾时 slow.next 就是目标。</strong></div>
+<div class="pattern-card"><strong>在原头前放 dummy；fast 先走 n 步，再让 fast 和 slow 同速，fast 到 None 时 slow.next 就是目标。</strong></div>
 
-`slow` 从 dummy 出发，保证目标即使是原头也有前驱。fast 与 slow 的间隔建立后保持不变，因此 fast 指向最后一个节点时，slow 恰好位于待删节点前一位。
+`slow` 从 dummy 出发，保证目标即使是原头也有前驱。fast 与 slow 的间隔建立后保持不变，因此 fast 走到 None 时，slow 恰好位于待删节点前一位。
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/08-linked-list-deletion/process.svg" alt="链表删除与前后指针执行过程图" loading="lazy">
@@ -126,7 +123,7 @@ def remove_nth_from_end(head, n):
 
 ## 7. 复杂度分析
 
-- **时间复杂度：O(n)**。fast 与 slow 都只沿链向前，不回退。
+- **时间复杂度：O(L)**。L 是链表长度，n 是倒数序号；两个指针都只沿链向前，不回退。
 - **空间复杂度：O(1)**。dummy 是一个固定新节点，其数量不随链表长度增长。
 
 ## 8. 什么时候想到这个算法？
@@ -171,7 +168,6 @@ return head
 ### `range(n)` 恰好执行 n 次
 
 `for _ in range(n)` 中下划线表示循环次数重要、循环变量本身不用。执行后 fast 恰好前进 n 条 next 边。
-
 
 
 ## 11. 典型练习题
@@ -231,6 +227,28 @@ def remove_nth_from_end(head, n):
 - [ ] 能独立写一次遍历删除。
 - [ ] 能检查 n=链长和单节点情况。
 - [ ] 完成 19 和 82。
+
+## 边界自测与迁移
+
+令 L 为链长、n 为倒数序号：要求 1 <= n <= L。空链和 n=0 不在这段模板的合法输入内。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert remove_nth_from_end(ListNode(7), 1) is None
+a = ListNode(1, ListNode(2))
+b = a.next
+assert remove_nth_from_end(a, 2) is b
+```
+
+**想一想：dummy 本身能否让任意非法 n 都安全？**
+
+<details>
+<summary>核对思路</summary>
+
+不能。它统一头部删除，但不验证序号；通用接口还需明确拒绝 n<=0 或 n>L。
+
+</details>
 
 ## 下一节
 

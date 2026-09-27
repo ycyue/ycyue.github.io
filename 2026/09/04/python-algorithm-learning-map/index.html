@@ -28,12 +28,12 @@
   document.documentElement.setAttribute('data-theme', mode);
   document.documentElement.style.colorScheme = mode;
 })();
-</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>Python 基础算法学习地图｜27 节主线 + 扩展篇</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span></span></p><div class="post-abstract"><p>这是一条给 <strong>Python 刚入门、算法基础较弱、准备 LeetCode 或面试</strong> 的学习路线。顺序参考灵茶山艾府《基础算法精讲》，但每篇教程都从问题、暴力解法和正确性推导重新组织，重点回答“为什么能这样做”。</p>
+</script><link rel="stylesheet" href="/css/notebook-layout.css"></head><body><a class="skip-content" href="#main-container">跳至正文</a><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav" role="navigation" aria-label="主导航"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container" id="main-container" tabindex="-1" role="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>Python 基础算法学习地图｜27 节主线 + 扩展篇</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-04</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/算法/" title="算法">算法</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/Python/" title="Python">Python</a><span>&nbsp;</span><a class="a-tag" href="/tags/LeetCode/" title="LeetCode">LeetCode</a><span>&nbsp;</span><a class="a-tag" href="/tags/算法基础/" title="算法基础">算法基础</a><span>&nbsp;</span></span></p><div class="post-abstract"><p>这是一条给 <strong>Python 刚入门、算法基础较弱、准备 LeetCode 或面试</strong> 的学习路线。顺序参考灵茶山艾府《基础算法精讲》，但每篇教程都从问题、暴力解法和正确性推导重新组织，重点回答“为什么能这样做”。</p>
 <span id="more"></span>
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/learning-map.svg" alt="Python 基础算法学习地图：27 节主线与前缀和、差分等扩展篇" loading="eager">
-  <figcaption>27 节经典主线已经完成，并从第 28 课起补充高频基础工具；可以按依赖顺序学习，也可以从当前薄弱模块开始。</figcaption>
+  <figcaption>27 节经典主线已经发布，并从第 28 课起补充高频基础工具；可以按依赖顺序学习，也可以从当前薄弱模块开始。</figcaption>
 </figure>
 
 <h2 id="怎么使用这套教程？"><a href="#怎么使用这套教程？" class="headerlink" title="怎么使用这套教程？"></a>怎么使用这套教程？</h2><ol>
@@ -41,7 +41,7 @@
 <li>对照图解，手动画一遍指针、队列、搜索树或 DP 表的变化。</li>
 <li>合上文章，独立写模板；不要背完整题解。</li>
 <li>完成 2 道代表题，并记录识别信号和最容易错的边界。</li>
-<li>第二天不看答案再写一次，能写出来才算掌握。</li>
+<li>隔天不看答案重写，再改变输入约束：解释正确性、复杂度和失败边界，比只复现代码更能检查理解。</li>
 </ol>
 <div class="algorithm-note"><strong>完成状态：</strong>28 篇正文、56 张课程图解、代码样例与上一篇/下一篇导航均已接入博客。</div>
 
@@ -60,7 +60,7 @@
 <td align="right">01</td>
 <td>相向双指针（一）：两数之和、三数之和</td>
 <td>入门</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>列表、排序、循环</td>
 <td><a href="/2026/09/04/algorithm-01-two-pointers/">开始学习</a></td>
 </tr>
@@ -68,7 +68,7 @@
 <td align="right">02</td>
 <td>容器与接雨水</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>01、有序数组双指针</td>
 <td><a href="/2026/09/04/algorithm-02-two-pointers-container-rainwater/">开始学习</a></td>
 </tr>
@@ -76,7 +76,7 @@
 <td align="right">03</td>
 <td>滑动窗口</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>双指针、字典</td>
 <td><a href="/2026/09/04/algorithm-03-sliding-window/">开始学习</a></td>
 </tr>
@@ -84,7 +84,7 @@
 <td align="right">04</td>
 <td>二分查找</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>有序数组、下标</td>
 <td><a href="/2026/09/04/algorithm-04-binary-search/">开始学习</a></td>
 </tr>
@@ -92,7 +92,7 @@
 <td align="right">05</td>
 <td>二分查找变形</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>04、lower_bound</td>
 <td><a href="/2026/09/04/algorithm-05-binary-search-advanced/">开始学习</a></td>
 </tr>
@@ -112,7 +112,7 @@
 <td align="right">06</td>
 <td>反转链表</td>
 <td>入门</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>节点、引用、None</td>
 <td><a href="/2026/09/04/algorithm-06-reverse-linked-list/">开始学习</a></td>
 </tr>
@@ -120,7 +120,7 @@
 <td align="right">07</td>
 <td>快慢指针</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>06、链表遍历</td>
 <td><a href="/2026/09/04/algorithm-07-fast-slow-pointers/">开始学习</a></td>
 </tr>
@@ -128,7 +128,7 @@
 <td align="right">08</td>
 <td>链表删除与前后指针</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>06、07</td>
 <td><a href="/2026/09/04/algorithm-08-linked-list-deletion/">开始学习</a></td>
 </tr>
@@ -148,7 +148,7 @@
 <td align="right">09</td>
 <td>二叉树递归基础</td>
 <td>入门</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>函数、递归概念</td>
 <td><a href="/2026/09/04/algorithm-09-binary-tree-recursion/">开始学习</a></td>
 </tr>
@@ -156,7 +156,7 @@
 <td align="right">10</td>
 <td>二叉树递归进阶</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>09、递归返回值</td>
 <td><a href="/2026/09/04/algorithm-10-binary-tree-recursion-advanced/">开始学习</a></td>
 </tr>
@@ -164,7 +164,7 @@
 <td align="right">11</td>
 <td>遍历与二叉搜索树</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>09、10</td>
 <td><a href="/2026/09/04/algorithm-11-bst-traversal/">开始学习</a></td>
 </tr>
@@ -172,7 +172,7 @@
 <td align="right">12</td>
 <td>最近公共祖先</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>09、11、后序递归</td>
 <td><a href="/2026/09/04/algorithm-12-lowest-common-ancestor/">开始学习</a></td>
 </tr>
@@ -180,7 +180,7 @@
 <td align="right">13</td>
 <td>二叉树 BFS</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>09、队列</td>
 <td><a href="/2026/09/04/algorithm-13-binary-tree-bfs/">开始学习</a></td>
 </tr>
@@ -200,7 +200,7 @@
 <td align="right">14</td>
 <td>子集型回溯</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>递归、DFS</td>
 <td><a href="/2026/09/04/algorithm-14-backtracking-subsets/">开始学习</a></td>
 </tr>
@@ -208,7 +208,7 @@
 <td align="right">15</td>
 <td>组合型回溯</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>14、子集型回溯</td>
 <td><a href="/2026/09/04/algorithm-15-backtracking-combinations/">开始学习</a></td>
 </tr>
@@ -216,7 +216,7 @@
 <td align="right">16</td>
 <td>排列型回溯</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>14、15</td>
 <td><a href="/2026/09/04/algorithm-16-backtracking-permutations/">开始学习</a></td>
 </tr>
@@ -236,7 +236,7 @@
 <td align="right">17</td>
 <td>动态规划入门</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>递归、数组</td>
 <td><a href="/2026/09/04/algorithm-17-dynamic-programming-intro/">开始学习</a></td>
 </tr>
@@ -244,7 +244,7 @@
 <td align="right">18</td>
 <td>背包 DP</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>17、DP 五步法</td>
 <td><a href="/2026/09/04/algorithm-18-knapsack/">开始学习</a></td>
 </tr>
@@ -252,7 +252,7 @@
 <td align="right">19</td>
 <td>最长公共子序列</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>17、二维数组</td>
 <td><a href="/2026/09/04/algorithm-19-longest-common-subsequence/">开始学习</a></td>
 </tr>
@@ -260,7 +260,7 @@
 <td align="right">20</td>
 <td>最长递增子序列</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>04、17</td>
 <td><a href="/2026/09/04/algorithm-20-longest-increasing-subsequence/">开始学习</a></td>
 </tr>
@@ -268,7 +268,7 @@
 <td align="right">21</td>
 <td>状态机 DP</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>17、状态定义</td>
 <td><a href="/2026/09/04/algorithm-21-state-machine-dp/">开始学习</a></td>
 </tr>
@@ -276,7 +276,7 @@
 <td align="right">22</td>
 <td>区间 DP</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>17、19</td>
 <td><a href="/2026/09/04/algorithm-22-interval-dp/">开始学习</a></td>
 </tr>
@@ -296,7 +296,7 @@
 <td align="right">23</td>
 <td>树形 DP：直径</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>09、17</td>
 <td><a href="/2026/09/04/algorithm-23-tree-dp-diameter/">开始学习</a></td>
 </tr>
@@ -304,7 +304,7 @@
 <td align="right">24</td>
 <td>树形 DP：最大独立集</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>23、后序递归</td>
 <td><a href="/2026/09/04/algorithm-24-tree-dp-independent-set/">开始学习</a></td>
 </tr>
@@ -312,7 +312,7 @@
 <td align="right">25</td>
 <td>树形 DP：最小支配集</td>
 <td>挑战</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>24、多状态 DP</td>
 <td><a href="/2026/09/04/algorithm-25-tree-dp-dominating-set/">开始学习</a></td>
 </tr>
@@ -332,7 +332,7 @@
 <td align="right">26</td>
 <td>单调栈</td>
 <td>标准</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>数组、栈、下标</td>
 <td><a href="/2026/09/04/algorithm-26-monotonic-stack/">开始学习</a></td>
 </tr>
@@ -340,7 +340,7 @@
 <td align="right">27</td>
 <td>单调队列</td>
 <td>进阶</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>03、26、deque</td>
 <td><a href="/2026/09/04/algorithm-27-monotonic-queue/">开始学习</a></td>
 </tr>
@@ -360,7 +360,7 @@
 <td align="right">28</td>
 <td>前缀和与差分：区间查询与区间修改</td>
 <td>入门</td>
-<td><span class="course-status course-status--ready">已完成</span></td>
+<td><span class="course-status course-status--ready">已发布</span></td>
 <td>列表、循环、下标</td>
 <td><a href="/2026/09/04/algorithm-28-prefix-sum-difference-array/">开始学习</a></td>
 </tr>
@@ -373,10 +373,12 @@
 <li>用“谁已经不可能成为答案”理解单调栈与单调队列。</li>
 <li>用“累计后相减”与“边界变化”理解前缀和与差分。</li>
 </ul>
+<h2 id="开始前与练习后怎样检查"><a href="#开始前与练习后怎样检查" class="headerlink" title="开始前与练习后怎样检查"></a>开始前与练习后怎样检查</h2><p>建议使用 Python 3.9 或更新版本；<code>functools.cache</code> 需要 3.9+。链表题复用第 06 课的 <code>ListNode</code>，二叉树题复用第 09 课的 <code>TreeNode</code>。把模板与“边界自测与迁移”代码放入同一文件，用 <code>python3 文件名.py</code> 执行。</p>
+<p>“已发布”指文章状态，不是学习者完成状态。难度不是严格线性：第 28 课可提前到滑动窗口之后学习。每课先运行最小例子，再验证边界，最后解释改变输入约束后模板是否仍成立。不能把复现代码或运行未报错直接当作掌握。</p>
 <h2 id="主要学习参考"><a href="#主要学习参考" class="headerlink" title="主要学习参考"></a>主要学习参考</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://space.bilibili.com/206214/lists/842776?type=season">灵茶山艾府《基础算法精讲》B 站合集</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/EndlessCheng/codeforces-go/blob/master/leetcode/README.md">课程作者维护的配套题目与多语言代码汇总</a></li>
 <li><a target="_blank" rel="noopener" href="https://leetcode.cn/problemset/">LeetCode 中国站题库</a></li>
 </ul>
 <p>本系列按公开课程主线组织学习顺序；正文、代码说明和 SVG 图解均重新编写与绘制，不复制视频字幕、截图或其他文章正文。</p>
-</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/python-algorithm-learning-map/%20plong's blog%20Python 基础算法学习地图｜27 节主线 + 扩展篇"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-28-prefix-sum-difference-array/" title="算法基础 28｜前缀和与差分：把区间操作压缩到 O(1)"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 28｜前缀和与差分：把区间操作压缩到 O(1)</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-27-monotonic-queue/" title="算法基础 27｜单调队列：同时淘汰过期与劣势候选">下一篇: 算法基础 27｜单调队列：同时淘汰过期与劣势候选&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io//2026/09/04/python-algorithm-learning-map/%20plong's blog%20Python 基础算法学习地图｜27 节主线 + 扩展篇"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-28-prefix-sum-difference-array/" title="算法基础 28｜前缀和与差分：把区间操作压缩到 O(1)"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 算法基础 28｜前缀和与差分：把区间操作压缩到 O(1)</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/09/04/algorithm-27-monotonic-queue/" title="算法基础 27｜单调队列：同时淘汰过期与劣势候选">下一篇: 算法基础 27｜单调队列：同时淘汰过期与劣势候选&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

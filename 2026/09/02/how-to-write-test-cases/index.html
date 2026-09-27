@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>怎么写测试用例？从需求分析到完整用例表 · plong's blog</title><meta name="description" content="面向零基础学习者，讲清楚如何从需求中提取测试点，使用正常、异常、边界、空值和场景思维，写出可执行、可判断的测试用例。"><link rel="canonical" href="https://ycyue.github.io/2026/09/01/how-to-write-test-cases/"><meta property="og:type" content="article"><meta property="og:title" content="怎么写测试用例？从需求分析到完整用例表"><meta property="og:description" content="面向零基础学习者，讲清楚如何从需求中提取测试点，使用正常、异常、边界、空值和场景思维，写出可执行、可判断的测试用例。"><meta property="og:url" content="https://ycyue.github.io/2026/09/01/how-to-write-test-cases/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="怎么写测试用例？从需求分析到完整用例表"><meta name="twitter:description" content="面向零基础学习者，讲清楚如何从需求中提取测试点，使用正常、异常、边界、空值和场景思维，写出可执行、可判断的测试用例。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="plong"><title>怎么写测试用例？从需求分析到完整用例表 · plong's blog</title><meta name="description" content="面向零基础学习者，讲清楚如何从需求中提取测试点，使用正常、异常、边界、空值和场景思维，写出可执行、可判断的测试用例。"><link rel="canonical" href="https://ycyue.github.io/2026/09/02/how-to-write-test-cases/"><meta property="og:type" content="article"><meta property="og:title" content="怎么写测试用例？从需求分析到完整用例表"><meta property="og:description" content="面向零基础学习者，讲清楚如何从需求中提取测试点，使用正常、异常、边界、空值和场景思维，写出可执行、可判断的测试用例。"><meta property="og:url" content="https://ycyue.github.io/2026/09/02/how-to-write-test-cases/"><meta property="og:site_name" content="plong's blog"><meta name="twitter:title" content="怎么写测试用例？从需求分析到完整用例表"><meta name="twitter:description" content="面向零基础学习者，讲清楚如何从需求中提取测试点，使用正常、异常、边界、空值和场景思维，写出可执行、可判断的测试用例。"><meta name="twitter:card" content="summary"><meta name="keywords" content="思考,成长,AI,Python"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css">
 <link rel="stylesheet" href="/css/theme-toggle.css">
 <link rel="stylesheet" href="/css/reading-ui.css">
@@ -28,7 +28,7 @@
   document.documentElement.setAttribute('data-theme', mode);
   document.documentElement.style.colorScheme = mode;
 })();
-</script></head><body><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container" id="main-container"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>怎么写测试用例？从需求分析到完整用例表</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-02</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/软件测试/" title="软件测试">软件测试</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/软件测试/" title="软件测试">软件测试</a><span>&nbsp;</span><a class="a-tag" href="/tags/测试用例/" title="测试用例">测试用例</a><span>&nbsp;</span><a class="a-tag" href="/tags/黑盒测试/" title="黑盒测试">黑盒测试</a><span>&nbsp;</span></span></p><div class="post-abstract"><p>刚开始学习软件测试时，很多人知道要写测试用例，却不知道面对一句需求该从哪里下手。要么只写“输入正确账号可以登录”这种正常情况，要么列了很多测试点，却没有写清操作步骤和预期结果。</p>
+</script><link rel="stylesheet" href="/css/notebook-layout.css"></head><body><a class="skip-content" href="#main-container">跳至正文</a><div class="container" id="stage"><div class="row"><div class="col-sm-3 col-xs-12 side-container" id="side-bar"><div class="vertical-text site-title"><h3 class="site-title-small" tabindex="-1"><a class="a-title" href="/">Plong's blog</a></h3><h1 class="site-title-large" tabindex="-1"><a class="a-title" href="/">潜的笔记</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div class="site-title-links" id="site-nav" role="navigation" aria-label="主导航"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="theme-toggle-item"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换夜间模式" aria-pressed="false" title="切换夜间模式"><i class="fa fa-moon-o" aria-hidden="true"></i><span class="theme-toggle-label">夜间</span></button></li><li class="soc"><a href="https://github.com/ycyue" target="_blank" rel="noopener noreferrer" aria-label="Github"><i class="fa fa-github">&nbsp;</i></a><a href="https://ycyue.github.io/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div class="col-sm-9 col-xs-12 main-container" id="main-container" tabindex="-1" role="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>怎么写测试用例？从需求分析到完整用例表</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2026-09-02</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a class="a-tag" href="/categories/软件测试/" title="软件测试">软件测试</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a class="a-tag" href="/tags/软件测试/" title="软件测试">软件测试</a><span>&nbsp;</span><a class="a-tag" href="/tags/测试用例/" title="测试用例">测试用例</a><span>&nbsp;</span><a class="a-tag" href="/tags/黑盒测试/" title="黑盒测试">黑盒测试</a><span>&nbsp;</span></span></p><div class="post-abstract"><p>刚开始学习软件测试时，很多人知道要写测试用例，却不知道面对一句需求该从哪里下手。要么只写“输入正确账号可以登录”这种正常情况，要么列了很多测试点，却没有写清操作步骤和预期结果。</p>
 <p>写测试用例的核心并不复杂：</p>
 <blockquote>
 <p>把需求拆成可以执行、可以观察、可以判断结果的检查项。</p>
@@ -124,10 +124,11 @@
 </tbody></table>
 <p>初学时不需要追求字段越多越好。最重要的是标题、前置条件、步骤、数据和预期结果都明确。</p>
 <h2 id="三、从需求到测试用例的四个步骤"><a href="#三、从需求到测试用例的四个步骤" class="headerlink" title="三、从需求到测试用例的四个步骤"></a>三、从需求到测试用例的四个步骤</h2><h3 id="第一步：读懂需求，找出规则"><a href="#第一步：读懂需求，找出规则" class="headerlink" title="第一步：读懂需求，找出规则"></a>第一步：读懂需求，找出规则</h3><p>不要看到页面就立刻开始写用例。先圈出需求中的对象、条件、限制、动作和结果。</p>
-<p>例如：</p>
+<p>以下是教学用的假设需求，不代表所有产品的登录规则。仅有 11 位不足以定义有效手机号；号段、字符集、空格处理和历史密码兼容策略都需要另行确认。</p>
 <blockquote>
 <p>用户使用中国大陆手机号登录。手机号必须为 11 位；密码为 8～20 个字符；连续输错 5 次后，账号锁定 30 分钟。</p>
 </blockquote>
+<p>为使下文预期可判断，另约定：必填检查在前端阻止提交；锁定期间正确密码也不能登录；第 5 次错误的服务端时间为锁定起点，满 1800 秒解除；错误提示采用表中约定文案。这些补充应在真实项目中经过需求确认。</p>
 <p>可以拆出四条规则：</p>
 <ol>
 <li>手机号只能使用规定格式；</li>
@@ -163,12 +164,12 @@
 <p>以“密码长度为 8～20 位”为例：</p>
 <ul>
 <li>有效等价类：8～20 位；</li>
-<li>无效等价类：少于 8 位；</li>
+<li>无效等价类：1～7 位；</li>
 <li>无效等价类：多于 20 位；</li>
 <li>无效等价类：空值。</li>
 </ul>
 <h4 id="2-边界值分析"><a href="#2-边界值分析" class="headerlink" title="2. 边界值分析"></a>2. 边界值分析</h4><p>错误最容易出现在范围边缘，所以要检查边界本身和边界相邻值。</p>
-<p>密码长度为 8～20 位时，重点数据是：</p>
+<p>密码长度为 8～20 位时，下表采用三值边界检查（边界及两侧相邻值）；两值边界检查可选 7、8、20、21：</p>
 <table>
 <thead>
 <tr>
@@ -205,6 +206,47 @@
 <h4 id="3-场景法"><a href="#3-场景法" class="headerlink" title="3. 场景法"></a>3. 场景法</h4><p>按用户完成业务的过程设计用例，既覆盖主流程，也覆盖中断和失败流程。</p>
 <p>登录的主流程是“输入账号密码—校验成功—进入首页”；异常流程可能包括密码错误、账号锁定、验证码失效和网络中断。</p>
 <h4 id="4-判定表"><a href="#4-判定表" class="headerlink" title="4. 判定表"></a>4. 判定表</h4><p>当多个条件组合会产生不同结果时，可以先列条件组合，再转成用例。例如“账号是否存在、密码是否正确、账号是否锁定”三个条件同时影响登录结果，使用判定表比凭感觉组合更不容易遗漏。</p>
+<p>按本例补充规则，可以得到以下压缩判定表（“—”表示不影响该列动作）：</p>
+<table>
+<thead>
+<tr>
+<th>条件或动作</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>账号存在</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>账号锁定</td>
+<td>—</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>密码正确</td>
+<td>—</td>
+<td>—</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>结果</td>
+<td>认证失败</td>
+<td>拒绝登录</td>
+<td>认证失败并累计错误</td>
+<td>登录成功</td>
+</tr>
+</tbody></table>
+<p>不存在账号时，“该账号密码正确”没有定义，不应机械展开成八种独立有效组合。账户枚举防护、提示内容和错误累计重置规则还需单独确认。</p>
 <h3 id="第四步：把测试点写成可执行用例"><a href="#第四步：把测试点写成可执行用例" class="headerlink" title="第四步：把测试点写成可执行用例"></a>第四步：把测试点写成可执行用例</h3><p>测试点只说明“要测什么”，测试用例还必须说明“怎么测”和“如何判断”。下面是一组简化后的登录用例：</p>
 <table>
 <thead>
@@ -282,6 +324,8 @@
 <td>页面给出网络异常提示，不出现无限加载或崩溃</td>
 </tr>
 </tbody></table>
+<h3 id="把锁定测试补成可复现步骤"><a href="#把锁定测试补成可复现步骤" class="headerlink" title="把锁定测试补成可复现步骤"></a>把锁定测试补成可复现步骤</h3><p><code>LOGIN_006</code> 的完整执行记录还应包含：需求版本、测试账号、服务端时间来源、错误计数重置方式和清理步骤。先在测试环境准备未锁定账号并清零错误计数；连续发送四次错误密码请求，核对仍未锁定；第五次错误后记录锁定起点 t0，再用正确密码分别在 t0+1799 秒和 t0+1800 秒验证拒绝与允许。使用可控测试时钟或环境提供的时间推进接口，避免用真实等待 30 分钟造成不稳定测试。每个时间点使用独立恢复的前置状态，最后清理账号锁定状态。</p>
+<p>如果环境不能控制时间，应记录这一限制并选择可重复的验证方式；尚未确认的到期语义不能直接当作缺陷。前置账号无法准备时记为 Blocked，执行成功但结果违背已确认需求时才记为 Fail。</p>
 <h2 id="四、怎样写好用例标题、步骤和预期结果"><a href="#四、怎样写好用例标题、步骤和预期结果" class="headerlink" title="四、怎样写好用例标题、步骤和预期结果"></a>四、怎样写好用例标题、步骤和预期结果</h2><h3 id="标题要包含条件和结果"><a href="#标题要包含条件和结果" class="headerlink" title="标题要包含条件和结果"></a>标题要包含条件和结果</h3><p>不推荐：</p>
 <blockquote>
 <p>测试登录功能</p>
@@ -338,4 +382,4 @@
 <p><strong>读需求 → 拆规则 → 找测试点 → 选设计方法 → 写步骤和预期结果 → 检查覆盖。</strong></p>
 </blockquote>
 <p>先把一个登录模块写清楚，再逐步扩展到注册、购物车和订单流程，比一次背完所有测试方法更有效。</p>
-</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io/2026/09/01/how-to-write-test-cases/%20plong's blog%20怎么写测试用例？从需求分析到完整用例表"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/02/python-basic-syntax/" title="Python 基础语法：零基础入门与实用速查"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: Python 基础语法：零基础入门与实用速查</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/08/30/ride-learning-method-principles-and-practice/" title="RIDE Learning Coach：原理、边界与 Chat ↔ Work 完整使用流程">下一篇: RIDE Learning Coach：原理、边界与 Chat ↔ Work 完整使用流程&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>
+</div></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></span><span class="soc"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></span><span class="soc"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=https://ycyue.github.io/2026/09/02/how-to-write-test-cases/%20plong's blog%20怎么写测试用例？从需求分析到完整用例表"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2026/09/02/python-basic-syntax/" title="Python 基础语法：零基础入门与实用速查"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: Python 基础语法：零基础入门与实用速查</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2026/08/30/ride-learning-method-principles-and-practice/" title="RIDE Learning Coach：原理、边界与 Chat ↔ Work 完整使用流程">下一篇: RIDE Learning Coach：原理、边界与 Chat ↔ Work 完整使用流程&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2026&nbsp;<a target="_blank" href="https://ycyue.github.io" rel="noopener noreferrer">plong</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/theme-toggle.js"></script><script src="/js/reading-ui.js"></script></body></html>

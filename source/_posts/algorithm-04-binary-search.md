@@ -1,5 +1,6 @@
 ---
 title: 算法基础 04｜二分查找：用区间不变量消灭边界错误
+updated: 2026-09-27
 date: 2026-09-04 10:00:00
 permalink: 2026/09/04/algorithm-04-binary-search/
 categories:
@@ -19,8 +20,6 @@ description: 用红蓝染色和左闭右开区间理解 lower_bound，解释为�
 </nav>
 
 二分查找最难的不是算 `mid`，而是回答：循环开始时，答案究竟被保证在哪个区间里？只要区间定义始终一致，`<`、`<=` 和返回值就不需要猜。
-
-这节仍然从最容易想到的方法出发，再把“为什么可以少算”推导清楚。模板只放在证明之后。
 
 <!-- more -->
 
@@ -43,13 +42,11 @@ def lower_bound_brute(nums, target):
 
 线性扫描时间为 O(n)。由于 `nums[i] >= target` 在升序数组上形成一段连续的 True，答案其实是 False 区与 True 区的分界线。
 
-暴力法并不是“错误答案”：它给出了完整搜索空间。优化的任务，是找到一个可靠规则，让我们不用逐个检查其中的所有状态。
-
 ## 3. 核心思想
 
 <div class="pattern-card"><strong>把不满足条件的位置染成红色、满足条件的位置染成蓝色；二分寻找第一个蓝色位置。</strong></div>
 
-使用左闭右开区间 `[left, right)`：`left` 是尚未确定的最左位置，`right` 可以等于 `len(nums)`，表示答案可能在数组末尾之后。每轮用 `mid` 的颜色决定保留左半还是右半。
+使用 `[left, right)` 表示尚未检查的元素区间，不变量是：left 左侧都小于 target，right 及其右侧的已有元素都大于等于 target。**答案作为分界位置位于闭区间 `[left,right]`**，可以等于 n。令 right=mid 后虽然 mid 不再待查，它仍保留为可能的答案边界。
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/04-binary-search/process.svg" alt="二分查找执行过程图" loading="lazy">
@@ -68,7 +65,7 @@ def lower_bound_brute(nums, target):
 
 ### 3. 为什么返回 left
 
-循环终止条件是 `left == right`，候选区间长度变为 0。根据不变量，`left` 左侧全不满足、`left` 及右侧满足或已越过数组，因此 `left` 正是分界点。
+循环终止条件是 `left == right`，待查元素区间长度变为 0。根据不变量，`left` 左侧全不满足、`left` 及右侧满足或已越过数组，因此 `left` 正是分界点。
 
 <figure class="algorithm-figure">
   <img src="/images/algorithms/04-binary-search/proof.svg" alt="二分查找正确性推导图" loading="lazy">
@@ -150,7 +147,6 @@ left = mid
 `(left + right) // 2` 得到整数下标。Python 整数不会溢出；在固定宽度整数语言中常写 `left + (right-left)//2`。
 
 
-
 ## 11. 典型练习题
 
 先根据提示独立画状态，再看代码。不要把练习变成复制模板。
@@ -200,6 +196,27 @@ def lower_bound(nums, target):
 - [ ] 能独立写 lower_bound。
 - [ ] 能由 lower_bound 推出上界。
 - [ ] 完成 35 和 34。
+
+## 边界自测与迁移
+
+lower_bound 返回插入位置，范围是 0..len(nums)，不保证该位置存在或等于 target。
+
+把上文函数（涉及节点时也复制节点类）放在同一文件中，再运行：
+
+```python
+assert lower_bound([], 2) == 0
+assert lower_bound([1, 2, 2, 4], 2) == 1
+assert lower_bound([1, 2], 3) == 2
+```
+
+**想一想：如何用 lower_bound 判断目标存在？**
+
+<details>
+<summary>核对思路</summary>
+
+令 i=lower_bound(nums,target)，再检查 i < len(nums) 且 nums[i] == target；不能直接访问 nums[i]。
+
+</details>
 
 ## 下一节
 
