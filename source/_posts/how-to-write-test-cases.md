@@ -2,6 +2,7 @@
 title: 怎么写测试用例？从需求分析到完整用例表
 updated: 2026-09-27
 date: 2026-09-02 01:20:00
+permalink: 2026/09/02/how-to-write-test-cases/
 categories:
   - 软件测试
 tags:
